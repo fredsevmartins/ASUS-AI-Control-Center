@@ -1,6 +1,7 @@
 'use strict';
 const DEMO = new URLSearchParams(location.search).get('demo') === '1';
-let modelFilter='all', connectionHealthy=false, submitting=false, modalTrigger=null, failNextDemo=false;
+const modelDetails=new Map();
+let modelFilter='all', connectionHealthy=false, submitting=false, modalTrigger=null, failNextDemo=false, actionError='';
 const TOKEN=document.querySelector('meta[name="session-token"]').content;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 let state=null, library=null, activePage='dashboard', libraryView='groups', modalData=null, lastOperation='';
@@ -9,7 +10,7 @@ function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;',
 function gib(n){return Number.isFinite(n)?(n/1073741824).toFixed(1)+' GiB':'—';}
 function pct(n,total){return total?Math.min(100,Math.max(0,100*n/total)):0;}
 function toast(message,ms=5000){const x=$('#toast');x.textContent=message;x.style.display='block';clearTimeout(x._timer);x._timer=setTimeout(()=>x.style.display='none',ms);}
-async function request(path,opts={}){if(DEMO)return demoRequest(path,opts);const r=await fetch(path,{...opts,headers:{'X-Session-Token':TOKEN,...opts.headers}});const d=await r.json();if(!r.ok)throw Error(d.error||`HTTP ${r.status}`);return d;}
+async function request(path,opts={}){if(DEMO)return demoRequest(path,opts);const r=await fetch(path,{signal:AbortSignal.timeout(25000),...opts,headers:{'X-Session-Token':TOKEN,...opts.headers}});const d=await r.json();if(!r.ok)throw Error(d.error||`HTTP ${r.status}`);return d;}
 function setPage(p){activePage=p;$$('.page').forEach(e=>e.classList.toggle('active',e.id===p));$$('.nav-item').forEach(e=>(e.classList.toggle('active',e.dataset.page===p),e.setAttribute('aria-current',e.dataset.page===p?'page':'false')));$('#breadcrumb').textContent=pages[p][0];$('#page-title').textContent=pages[p][1];$('#page-desc').textContent=pages[p][2];if(p==='library'&&!library)scanNAS();if(p==='activity')refreshActivity();if(p==='performance')renderPerformance();drawCharts();}
 $$('.nav-item').forEach(b=>b.onclick=()=>setPage(b.dataset.page));$$('[data-link]').forEach(b=>b.onclick=()=>setPage(b.dataset.link));
 $('#theme-btn').onclick=()=>{document.body.classList.toggle('dark');localStorage.setItem('ai-manager-theme',document.body.classList.contains('dark')?'dark':'light');drawCharts();};
@@ -74,7 +75,43 @@ function renderStatus(){if(!state)return;const g=gpuValues(),loaded=state.models
 $('#loaded-main').textContent=loaded;$('#loaded-sub').textContent=`${state.models.length} registered models`;$('#runtime-summary').innerHTML=statusSummary();$('#storage-summary').innerHTML=storageRows();$('#system-state').textContent=state.operation.busy?`Running: ${state.operation.job}`:state.errors.length?'Some runtime checks unavailable':'Monitoring local system';$('#refresh-tag').textContent=`Updated ${new Date(state.time*1000).toLocaleTimeString()}`;$('#connection-dot').style.background=state.errors.length?'#db9d36':'#39cea2';renderModels();renderPerformance();drawCharts();
 const current=JSON.stringify(state.operation);if(current!==lastOperation){if(lastOperation&&state.operation.error)toast('Operation failed: '+state.operation.error,9000);else if(lastOperation&&!state.operation.busy&&state.operation.message!=='Ready')toast(state.operation.message,7000);lastOperation=current;}}
 function modelBlocked(model) {
-  return !connectionHealthy || submitting || state.operation.busy || model.uncertain;
+  return !connectionHealthy || submitting || state.operation.busy || model.uncertain || ['starting','stopping','unknown','busy'].includes(model.state) || (model.state==='error'&&!model.loaded);
+}
+const phaseLabels={precheck:'Preparing',confirmation:'Awaiting confirmation',unload:'Unloading',load:'Loading model',readiness:'Checking readiness',complete:'Completed',failure:'Failed',recovery:'Recovering',verification:'Verifying state',failed:'Failed'};
+function modelState(m){return m.state||(m.uncertain?'unknown':m.loaded?'loaded':'unloaded');}
+function matchingModels(models,search,filter){
+  return models.filter(m=>(m.name+' '+m.runtime).toLowerCase().includes(search.toLowerCase())).filter(m=>filter==='all'||(filter==='loaded'&&m.loaded)||(filter==='unloaded'&&!m.loaded&&!m.uncertain)||(filter==='attention'&&(m.uncertain||modelState(m)==='error')));
+}
+function metadataValue(key, evidence){
+  const v=evidence?.value;
+  if(v===undefined||v===null||v==='')return 'Unavailable';
+  if(key.endsWith('_bytes'))return gib(v);
+  if(Array.isArray(v))return v.join(', ');
+  if(typeof v==='object')return 'Unavailable';
+  return String(v);
+}
+function evidenceHTML(label,key,evidence){
+  return `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(metadataValue(key,evidence))}<small class="metadata-source">${escapeHTML(evidence?.confidence||'Unavailable')}${evidence?.source?' · '+escapeHTML(evidence.source):''}</small></dd></div>`;
+}
+function detailHTML(m){
+  const meta=m.metadata||{};
+  const fields=[['Model name','name'],['Runtime','runtime'],['Family','family'],['Parameters','parameters'],['Architecture','architecture'],['Quantization','quantization'],['Weight format','format'],['Stored size','weight_bytes'],['Storage / model identifier','storage'],['Maximum context','context_window'],['Active / configured context','configured_context'],['Runtime allocation','loaded_bytes'],['Compatibility','compatibility']];
+  const config=Object.entries(m.runtime_config||{}).map(([k,v])=>`<div><dt>${escapeHTML(k)}</dt><dd>${escapeHTML(v??'Unavailable')}</dd></div>`).join('');
+  return `<dl class="metadata-list">${fields.map(([label,key])=>evidenceHTML(label,key,meta[key])).join('')}</dl>${m.loading?'<p role="status">Retrieving model metadata…</p>':''}${m.metadata_error?`<p class="card-warning">Metadata discovery: ${escapeHTML(m.metadata_error)}</p>`:''}<h4>Runtime configuration</h4><dl class="metadata-list">${config||'<dt>Unavailable</dt>'}</dl><h4>Resource requirement</h4><p>${escapeHTML(m.requirement?.kind||'Unknown requirement')} · ${gib(m.requirement?.bytes)}</p><p>${escapeHTML(m.requirement?.method||'Open details to retrieve available runtime metadata.')}</p><h4>Operational status</h4><p>${escapeHTML(m.health?.readiness||'Not verified')} · State: ${escapeHTML(modelState(m))}</p><p>Evidence: ${escapeHTML(m.health?.source||'Runtime observations; inference execution is not probed')}</p><p>Last successful check: ${escapeHTML(m.health?.last_success||'Unavailable')}</p>${m.health?.failure_reason?`<p class="card-warning">${escapeHTML(m.health.failure_reason)}</p>`:''}<h4>Recent operations</h4>${(m.recent_operations||[]).map(e=>`<p>${escapeHTML(e.time)} · ${escapeHTML(e.operation)} · ${escapeHTML(e.stage)}${e.detail?' · '+escapeHTML(e.detail):''}</p>`).join('')||'<p>No recorded operations in the recent history.</p>'}`;
+}
+function modelCardHTML(m,expanded=false){
+  const detail=modelDetails.get(m.key),meta={...(m.metadata||{}),...(detail?.metadata||{})};
+  const facts=[['Parameters','parameters'],['Quantization','quantization'],['Context window','context_window']];
+  const status=modelState(m),disabled=modelBlocked(m),canAct=!['starting','stopping','unknown','busy'].includes(status)&&(status!=='error'||m.loaded);
+  return `<article class="model-card ${m.loaded?'is-loaded':''}"><div class="model-header"><span class="pill ${m.uncertain||status==='error'?'attention':m.loaded?'':'off'}">${escapeHTML(status.charAt(0).toUpperCase()+status.slice(1))}</span><span class="runtime-label">${escapeHTML(m.runtime)}</span></div><h3>${escapeHTML(m.name)}</h3><p>${m.embedding?(m.capabilities?.value?.includes('embedding')?'Embedding model':'Embedding model (inferred from name)'):'Registered inference model'}</p><dl class="model-facts">${facts.map(([l,k])=>evidenceHTML(l,k,meta[k])).join('')}<div><dt>Runtime memory</dt><dd>${escapeHTML(m.memory||'Unavailable')}</dd></div><div><dt>Readiness</dt><dd>${escapeHTML(m.health?.readiness||'Not verified')}</dd></div><div><dt>Last health check</dt><dd>${escapeHTML(m.health?.checked_at?new Date(m.health.checked_at).toLocaleTimeString():'Unavailable')}</dd></div><div><dt>Storage / identifier</dt><dd>${escapeHTML(metadataValue('storage',meta.storage))}</dd></div></dl>${m.health?.failure_reason?`<p class="card-warning">${escapeHTML(m.health.failure_reason)}</p>`:''}<details data-key="${escapeHTML(m.key)}" ${expanded?'open':''}><summary>Model details</summary><div class="detail-content">${detailHTML({...m,...detail,health:m.health,state:m.state,metadata:meta})}</div></details><div class="model-actions">${canAct?`<button class="${m.loaded?'secondary':'primary'} small model-action" data-id="${escapeHTML(m.key)}" data-action="${m.loaded?'unload':'load'}" ${disabled?'disabled':''}>${m.loaded?'Unload':'Load'} model</button>${!m.loaded?`<button class="secondary small model-action" data-id="${escapeHTML(m.key)}" data-action="switch" ${disabled?'disabled':''}>Switch to…</button>`:''}`:'<span class="card-warning">Refresh runtime status before operating.</span>'}</div></article>`;
+}
+async function loadDetails(key){
+  const cached=modelDetails.get(key);
+  if(cached&&(cached.loading||Date.now()-(cached._fetchedAt||0)<60000))return;
+  modelDetails.set(key,{loading:true,_fetchedAt:Date.now()});
+  try{modelDetails.set(key,{...await request('/api/model?key='+encodeURIComponent(key)),_fetchedAt:Date.now()});}
+  catch(e){modelDetails.set(key,{metadata_error:e.message,_fetchedAt:Date.now()});}
+  renderModels();
 }
 function renderModels(){
   if(!state){$('#operation-status').innerHTML='<strong>Waiting for workstation data</strong><span>If the connection is unavailable, use Refresh to reconnect. Model actions remain disabled.</span>';return;}
@@ -82,42 +119,68 @@ function renderModels(){
   const focusKey=focus?.dataset.id, focusAction=focus?.dataset.action;
   const focusedDetail=focus?.tagName==='SUMMARY'?focus.parentElement.dataset.key:null;
   const expanded=new Set($$('#model-cards details[open]').map(e=>e.dataset.key));
-  const search=($('#model-search').value||'').toLowerCase();
-  const models=state.models.filter(m=>(m.name+' '+m.runtime).toLowerCase().includes(search)).filter(m=>modelFilter==='all'||(modelFilter==='loaded'&&m.loaded)||(modelFilter==='unloaded'&&!m.loaded&&!m.uncertain)||(modelFilter==='attention'&&m.uncertain));
+  const models=matchingModels(state.models,$('#model-search').value||'',modelFilter);
   $('#model-count').textContent=`${models.length} of ${state.models.length}`;
   const mem=memoryGaugeReading(state.memory);
   $('#manager-capacity').innerHTML=`<div><strong>Unified memory</strong><span>${mem?gib(mem.used)+' used / '+gib(mem.total):'Unavailable'}</span></div>${mem?`<progress max="100" value="${mem.percent}" aria-label="System unified memory used"></progress>`:''}<span>System-wide · Not per-model allocation</span>`;
-  const op=state.operation;
+  const op={...state.operation,error:actionError||state.operation.error};
   $('#operation-status').classList.toggle('has-error',!!op.error||!connectionHealthy);
-  $('#operation-status').innerHTML=!connectionHealthy?'<strong>Connection unavailable — model actions paused</strong><span>Use Refresh to reconnect before taking action.</span>':op.busy?`<strong>${escapeHTML(op.job||'Operation in progress')}</strong><progress aria-label="Operation in progress"></progress><span>Waiting for runtime confirmation. Completion percentage is unavailable.</span>`:op.error?`<strong>Operation failed</strong><span>${escapeHTML(op.error)}</span><span>Review Activity and refresh process state before retrying. Recovery is not guaranteed.</span>`:`<strong>${escapeHTML(op.message||'Ready')}</strong><span>${DEMO?'Simulation only':'Process monitoring connected'} · Inference readiness is not verified</span>`;
-  $('#model-cards').innerHTML=models.length?models.map(m=>`<article class="model-card ${m.loaded?'is-loaded':''}"><div class="model-header"><span class="pill ${m.uncertain?'attention':m.loaded?'':'off'}">${m.uncertain?'Needs attention':m.loaded?'Loaded':'Unloaded'}</span><span class="runtime-label">${escapeHTML(m.runtime)}</span></div><h3>${escapeHTML(m.name)}</h3><p>${m.embedding?'Embedding model':'Registered inference model'}</p><dl class="model-facts"><div><dt>Runtime memory</dt><dd>${escapeHTML(m.memory||'Unavailable')}</dd></div><div><dt>Readiness</dt><dd>Not verified</dd></div></dl><details data-key="${escapeHTML(m.key)}" ${expanded.has(m.key)?'open':''}><summary>Model details</summary><dl><dt>Runtime identifier</dt><dd>${escapeHTML(m.key)}</dd><dt>Observed process state</dt><dd>${escapeHTML(m.status||(m.loaded?'Loaded':'Unloaded'))}</dd></dl><p>Memory is runtime-reported when available. Required capacity and connected clients are unknown.</p></details><div class="model-actions"><button class="${m.loaded?'secondary':'primary'} small model-action" data-id="${escapeHTML(m.key)}" data-action="${m.loaded?'unload':'load'}" ${modelBlocked(m)?'disabled':''}>${m.loaded?'Unload':'Load'} model</button>${!m.loaded?`<button class="secondary small model-action" data-id="${escapeHTML(m.key)}" data-action="switch" ${modelBlocked(m)?'disabled':''}>Switch to…</button>`:''}</div>${m.uncertain?'<p class="card-warning">Refresh process state before operating this model.</p>':''}</article>`).join(''):'<div class="empty-state"><h3>No models found</h3><p>Try another search or filter. If the inventory is empty, refresh and inspect runtime status in Overview.</p></div>';
+  $('#operation-status').innerHTML=!connectionHealthy?'<strong>Connection unavailable — model actions paused</strong><span>Use Refresh to reconnect before taking action.</span>':op.busy?`<strong>${escapeHTML(phaseLabels[op.phase]||'Operation in progress')} · ${escapeHTML(op.job||'')}</strong><progress aria-label="Operation in progress"></progress><span>Runtime evidence is being checked. You can refresh this page while the operation continues.</span>`:op.error?`<strong>Operation failed</strong><span>${escapeHTML(op.error)}</span><span>Review Activity and refresh runtime state before retrying.</span>`:`<strong>${escapeHTML(op.message||'Ready')}</strong><span>${DEMO?'Simulation only':'Runtime monitoring connected'} · Loaded and inference-ready states are distinct</span>`;
+  $('#model-cards').innerHTML=models.length?models.map(m=>modelCardHTML(m,expanded.has(m.key))).join(''):'<div class="empty-state"><h3>No models found</h3><p>Try another search or filter. If the inventory is empty, refresh and inspect runtime status in Overview.</p></div>';
   $$('.model-action').forEach(b=>b.onclick=()=>showModal(b.dataset.action,b.dataset.id));
+  $$('#model-cards details').forEach(d=>d.ontoggle=()=>{if(d.open)loadDetails(d.dataset.key);});
   if(focusedDetail)$$('#model-cards details').find(d=>d.dataset.key===focusedDetail)?.querySelector('summary').focus();
   if(focusKey)$$('.model-action').find(b=>b.dataset.id===focusKey&&b.dataset.action===focusAction)?.focus();
 }
 $$('[data-filter]').forEach(b=>b.onclick=()=>{modelFilter=b.dataset.filter;$$('[data-filter]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b));});renderModels();});
 $('#model-search').oninput=renderModels;
-function showModal(action,id){if(!state||!connectionHealthy||submitting||state.operation.busy)return;const target=state.models.find(x=>x.key===id);if(!target||target.uncertain)return;modalTrigger={element:document.activeElement,key:id,action};modalData={action,target};$('#modal-title').textContent=action==='switch'?'Switch active model':`${action==='load'?'Load':'Unload'} model`;$('#modal-desc').textContent=action==='switch'?`Select the loaded models you explicitly agree to stop before loading ${target.name}. Any models left unchecked will remain active.`:`${action==='unload'?'Unloading may interrupt connected applications.':'This model will be loaded into unified memory.'} Confirm ${action} for ${target.name}.`;
-$('#modal-options').innerHTML=action==='switch'?`<p>Models to unload (optional):</p>${state.models.filter(x=>x.loaded&&x.key!==id).map(x=>`<label class="check-line"><input type="checkbox" class="stop-checkbox" data-id="${escapeHTML(x.key)}"> ${escapeHTML(x.name)} (${escapeHTML(x.runtime)})</label>`).join('')}<small class="warning-text">If loading fails, recovery is attempted but is not guaranteed.</small>`:'<small>No other models will be changed.</small>';
-$('#modal-accept').textContent=action==='switch'?'Confirm switch':'Confirm';$('#modal').classList.remove('modal-hidden');$('#app').inert=true;$('#modal-cancel').focus();}
+function planHTML(plan){
+  return `<dl class="plan-facts"><div><dt>Available memory</dt><dd>${gib(plan.available_bytes)}</dd></div><div><dt>Target requirement</dt><dd>${gib(plan.requirement?.bytes)} · ${escapeHTML(plan.requirement?.kind||'Unknown requirement')}</dd></div><div><dt>System reserve</dt><dd>${gib(plan.reserve_bytes)}</dd></div></dl>${plan.blocked?`<p class="card-warning">${escapeHTML(plan.reasons.join(' '))}</p>`:''}<p>${escapeHTML(plan.expected_outcome)}</p><details><summary>Memory uncertainty and operational risks</summary><p>${escapeHTML(plan.requirement?.method||'Requirement unavailable')}</p><p>Currently loaded: ${escapeHTML(plan.loaded_models.map(m=>m.name).join(', ')||'None observed')}</p><p>Authorized stops: ${escapeHTML(plan.stops.map(key=>plan.loaded_models.find(m=>m.key===key)?.name||key).join(', ')||'None')}</p><p>Estimated allocation released: ${gib(plan.estimated_release_bytes)}. Projected available: ${gib(plan.projected_available_bytes)}. Actual reclaimed memory may differ.</p>${plan.warnings.map(w=>`<p>${escapeHTML(w)}</p>`).join('')}</details>`;
+}
+async function refreshPlan(){
+  if(!modalData)return;
+  const data=modalData,revision=(data.revision||0)+1;
+  data.revision=revision;data.plan=null;
+  $('#modal-accept').disabled=true;$('#risk-ack').checked=false;
+  $('#modal-plan').innerHTML='<p role="status">Checking runtime state and memory…</p>';
+  const stops=$$('.stop-checkbox:checked').map(e=>e.dataset.id);
+  try{
+    const plan=await request('/api/preflight',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:data.action,target:data.target.key,stops})});
+    if(modalData!==data||data.revision!==revision)return;
+    data.plan=plan;$('#modal-plan').innerHTML=planHTML(plan);
+  }catch(e){if(modalData===data&&data.revision===revision)$('#modal-plan').textContent='Preflight unavailable: '+e.message+'. Close this dialog and refresh before retrying.';}
+}
+function showModal(action,id){
+  if(!state||!connectionHealthy||submitting||state.operation.busy)return;
+  const target=state.models.find(x=>x.key===id);if(!target||modelBlocked(target))return;
+  modalTrigger={element:document.activeElement,key:id,action};modalData={action,target};
+  $('#modal-title').textContent=action==='switch'?'Switch active model':`${action==='load'?'Load':'Unload'} model`;
+  $('#modal-desc').textContent=action==='switch'?`Choose which models may be stopped before loading ${target.name}. Review the memory plan before confirming.`:`Review ${action} for ${target.name}. Unloading can interrupt connected applications.`;
+  $('#modal-options').innerHTML=(action==='switch'?`<p>Models to unload (optional):</p>${state.models.filter(x=>x.loaded&&x.key!==id).map(x=>`<label class="check-line"><input type="checkbox" class="stop-checkbox" data-id="${escapeHTML(x.key)}" ${x.uncertain?'disabled':''}> ${escapeHTML(x.name)} (${escapeHTML(x.runtime)})</label>`).join('')}`:'')+'<div id="modal-plan" aria-live="polite"></div><label class="check-line risk-ack"><input id="risk-ack" type="checkbox"> I accept memory uncertainty and possible client interruption for this operation and its selected recovery attempts.</label>';
+  $$('.stop-checkbox').forEach(x=>x.onchange=refreshPlan);
+  $('#risk-ack').onchange=()=>{$('#modal-accept').disabled=!$('#risk-ack').checked||!modalData?.plan||modalData.plan.blocked;};
+  $('#modal-accept').textContent=action==='switch'?'Confirm switch':'Confirm';$('#modal-accept').disabled=true;
+  $('#modal').classList.remove('modal-hidden');$('#app').inert=true;$('#modal-cancel').focus();refreshPlan();
+}
 function closeModal(){modalData=null;$('#modal').classList.add('modal-hidden');$('#app').inert=false;const trigger=$$('.model-action').find(b=>b.dataset.id===modalTrigger?.key&&b.dataset.action===modalTrigger?.action);if(trigger&&!trigger.disabled)trigger.focus();else if(modalTrigger?.element?.isConnected)modalTrigger.element.focus();else $('#model-search').focus();}
 $('#modal-cancel').onclick=closeModal;$('#modal-backdrop').onclick=closeModal;
 $('#modal').addEventListener('keydown',e=>{
   if(e.key==='Escape'){e.preventDefault();closeModal();}
-  if(e.key==='Tab'){const items=$$('#modal button, #modal input').filter(x=>!x.disabled);const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
+  if(e.key==='Tab'){const items=$$('#modal button, #modal input, #modal summary').filter(x=>!x.disabled);const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
 });
 $('#modal-accept').onclick=async()=>{
-  if(!modalData||submitting)return;
-  const {action,target}=modalData,stops=$$('.stop-checkbox:checked').map(e=>e.dataset.id);
+  if(!modalData||submitting||!modalData.plan||modalData.plan.blocked||!$('#risk-ack').checked)return;
+  const {action,target,plan}=modalData,stops=plan.stops;
+  if(plan.expires_at*1000<=Date.now()){toast('Plan expired. Review the refreshed preflight.');refreshPlan();return;}
   if(!connectionHealthy||state.operation.busy||!state.models.some(m=>m.key===target.key&&!m.uncertain)){closeModal();toast('State changed. Refresh and review the model before retrying.');return;}
-  submitting=true;closeModal();renderModels();
-  try{await request('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,target:target.key,stops})});toast(DEMO?'Simulated operation started.':'Operation started. Status will update automatically.');await update();}
-  catch(e){$('#operation-status').textContent='Request failed: '+e.message+'. Refresh state before retrying.';toast(e.message,8000);}
-  finally{submitting=false;$$('.model-action').forEach(b=>{const m=state.models.find(m=>m.key===b.dataset.id);b.disabled=!m||modelBlocked(m);});}
+  actionError='';submitting=true;closeModal();renderModels();
+  try{await request('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,target:target.key,stops,plan_id:plan.id,confirmed:true,acknowledge_risks:true})});modelDetails.delete(target.key);stops.forEach(k=>modelDetails.delete(k));toast(DEMO?'Simulated operation started.':'Operation started. Status will update automatically.');await update();}
+  catch(e){actionError='Request failed: '+e.message+'. Refresh state before retrying.';toast(e.message,8000);}
+  finally{submitting=false;renderModels();}
 };
 let updating=false;
 async function update(){if(updating)return;updating=true;try{state=await request('/api/status');connectionHealthy=true;renderStatus();if(DEMO){$('#refresh-tag').textContent='Simulated telemetry';$('#system-state').textContent='Prototype · No runtime connection';}}catch(e){connectionHealthy=false;renderGauges(null,null,null);$('#system-state').textContent='Connection unavailable';$('#refresh-tag').textContent='Telemetry stale';$('#connection-dot').style.background='#ed7272';renderModels();toast('Cannot reach local manager: '+e.message);}finally{updating=false;}}
-$('#refresh-btn').onclick=update;
+$('#refresh-btn').onclick=()=>{actionError='';modelDetails.clear();update();};
 const chartSelection = {};
 const GIB = 1024 ** 3, CHART_MAX_GIB = 128, CHART_LEFT = 75;
 function chartSamples(history) {
@@ -205,27 +268,54 @@ setupTimeline($('#memory-chart')); setupTimeline($('#performance-chart'));
 window.addEventListener('resize',drawCharts);
 function renderPerformance(){if(!state)return;const g=gpuValues();$('#hardware-details').innerHTML=[['Unified memory',gib(state.memory.total)],['Memory in use',gib(state.memory.used)],['Available memory',gib(state.memory.available)],['GPU utilization',Number.isFinite(g.load)?g.load+'%':'Unavailable'],['GPU temperature',Number.isFinite(g.temp)?g.temp+'°C':'Unavailable'],['CPU utilization',state.cpu===null?'Collecting…':state.cpu+'%']].map(([k,v])=>`<div class="detail-row"><span>${k}</span><strong>${v}</strong></div>`).join('');$('#storage-detail').innerHTML=storageRows();}
 async function scanNAS(){try{$('#nas-summary').textContent='Scanning NAS metadata…';library=await request('/api/library');renderLibrary();}catch(e){$('#nas-summary').textContent='NAS scan failed: '+e.message;}}
-function renderLibrary(){if(!library)return;const items=libraryView==='groups'?library.groups:library.files;$('#nas-summary').textContent=`${library.files.length} weight files · ${library.groups.length} collections · ${library.status}`;$('#library-content').innerHTML=items.length?items.map(x=>libraryView==='groups'?`<div class="library-item"><em>${escapeHTML(x.category)}</em><strong>${escapeHTML(x.name)}</strong><small>${x.files} weight file(s) · ${gib(x.bytes)} stored</small><small>Formats: ${escapeHTML(x.formats.join(', '))}</small><small>Asset group · Not automatically loadable</small></div>`:`<div class="library-item"><em>${escapeHTML(x.format)}</em><strong>${escapeHTML(x.path)}</strong><small>${gib(x.size)} · Stored on NAS</small></div>`).join(''):'<p>No model weights were discovered in the scanned directories.</p>';}
+function renderLibrary(){if(!library)return;const items=libraryView==='groups'?library.groups:library.files;$('#nas-summary').textContent=`${library.files.length} asset files · ${library.groups.length} collections · ${library.status}`;$('#library-content').innerHTML=items.length?items.map(x=>libraryView==='groups'?`<div class="library-item"><em>${escapeHTML(x.category)}</em><strong>${escapeHTML(x.name)}</strong><small>${x.files} asset file(s) · ${gib(x.bytes)} stored</small><small>Formats: ${escapeHTML(x.formats.join(', '))}</small><small>${escapeHTML(x.classification||'Asset group')} · No executable adapter</small>${x.compatibility_hint?`<small>${escapeHTML(x.compatibility_hint.value)} · ${escapeHTML(x.compatibility_hint.confidence)}</small>`:''}${(x.missing_components||[]).map(reason=>`<small>${escapeHTML(reason)}</small>`).join('')}</div>`:`<div class="library-item"><em>${escapeHTML(x.kind||x.format)}</em><strong>${escapeHTML(x.path)}</strong><small>${gib(x.size)} · Stored on NAS</small></div>`).join(''):'<p>No model weights were discovered in the scanned directories.</p>';}
 $('#scan-btn').onclick=scanNAS;$$('[data-library]').forEach(b=>b.onclick=()=>{$$('[data-library]').forEach(x=>x.classList.toggle('selected',x===b));libraryView=b.dataset.library;renderLibrary();});
 const presets=[['⌘','Coding','Software engineering and code assistance','Suggested: Qwen3-Coder-Next'],['⌁','Scientific Research','Scientific reasoning and analysis','Suggested: reasoning-oriented LLM'],['✦','General AI','Everyday reasoning and productivity','Suggested: Qwen 3.8 / Qwen3.5'],['◩','Image Studio','Creative image workflows','Requires a compatible image runtime'],['▤','Video Studio','Generation and post-production','Requires a compatible video workflow'],['◉','Voice Studio','Text-to-speech and audio','Requires a compatible audio runtime']];$('#workspace-grid').innerHTML=presets.map(([icon,title,desc,note])=>`<article class="workspace-card glass"><div class="symbol">${icon}</div><h2>${title}</h2><p>${desc}</p><small>${note}</small></article>`).join('');
 async function refreshActivity(){try{const events=await request('/api/activity');$('#activity-list').innerHTML=events.length?events.map(e=>`<div class="activity-entry"><i></i><div><strong>${escapeHTML(e.operation)} · ${escapeHTML(e.stage)}</strong><small>${escapeHTML(e.model||'System')} · ${escapeHTML(e.time||'')}</small>${e.detail?`<small>${escapeHTML(e.detail)}</small>`:''}</div></div>`).join(''):'<p style="color:var(--sub)">No operations recorded yet.</p>';}catch(e){toast(e.message);}}
 $('#activity-refresh').onclick=refreshActivity;
-const demoState={time:Date.now()/1000,memory:{total:128*1073741824,used:52*1073741824,available:76*1073741824},cpu:14,gpu:'GPU: 28% · 46°C',errors:[],storage:[{name:'Local storage',online:true,total:2000*1073741824,free:1350*1073741824}],history:Array.from({length:30},(_,i)=>({time:Date.now()/1000-(29-i)*5,memory:(48+Math.sin(i/4)*4)*1073741824})),operation:{busy:false,job:null,message:'Ready',error:null},models:[{key:'sglang',name:'Qwen3-Coder-Next',runtime:'SGLang',memory:'Not available',loaded:true},{key:'qwen3:8b',name:'qwen3:8b',runtime:'Ollama',memory:'—',loaded:false},{key:'nomic-embed-text',name:'nomic-embed-text',runtime:'Ollama',memory:'0.3 GiB',loaded:true,embedding:true},{key:'example-unavailable',name:'Example unavailable model',runtime:'SGLang',memory:'Not available',loaded:false,uncertain:true}]};
-const demoEvents=[];
+const demoState={time:Date.now()/1000,memory:{total:128*1073741824,used:52*1073741824,available:76*1073741824},cpu:14,gpu:'GPU: 28% · 46°C',errors:[],storage:[{name:'Local storage',online:true,total:2000*1073741824,free:1350*1073741824}],history:Array.from({length:30},(_,i)=>({time:Date.now()/1000-(29-i)*5,memory:(48+Math.sin(i/4)*4)*1073741824})),operation:{busy:false,job:null,message:'Ready',error:null},models:[{key:'sglang',name:'Qwen 3.8-27B NVFP4',runtime:'SGLang',memory:'Not available',loaded:true},{key:'qwen3:8b',name:'qwen3:8b',runtime:'Ollama',memory:'—',loaded:false},{key:'nomic-embed-text',name:'nomic-embed-text',runtime:'Ollama',memory:'0.3 GiB',loaded:true,embedding:true},{key:'example-unavailable',name:'Example unavailable model',runtime:'SGLang',memory:'Not available',loaded:false,uncertain:true}]};
+const demoEvents=[],demoPlans=new Map();let demoPlanSequence=0;
+demoState.models.forEach((m,i)=>{
+  m.state=m.uncertain?'unknown':m.loaded?'loaded':'unloaded';
+  const f=value=>({value,confidence:value==null?'Unavailable':'Estimated',source:'Representative demo fixture'});
+  m.metadata={parameters:f(i===0?'27B':i===1?'8B':null),quantization:f(i===0?'NVFP4':i===1?'Q4_K_M':null),context_window:f(i===0?131072:32768),storage:f('Example runtime-managed storage'),weight_bytes:f((i===0?18:5)*1073741824)};
+  m.health={readiness:m.loaded?'Simulated resident model':'Not ready',checked_at:new Date().toISOString(),last_success:new Date().toISOString()};
+});
 async function demoRequest(path,opts={}){
   if(path==='/api/status'){demoState.time=Date.now()/1000;return structuredClone(demoState);}
+  if(path.startsWith('/api/model?')){
+    const key=new URLSearchParams(path.split('?')[1]).get('key'),model=demoState.models.find(m=>m.key===key);
+    if(!model)throw Error('Model not registered');
+    return {...structuredClone(model),recent_operations:demoEvents.filter(e=>e.model===model.name),requirement:{kind:'Estimated runtime requirement',bytes:12*1073741824,method:'Representative simulation; no live resource planning.'}};
+  }
   if(path==='/api/activity')return structuredClone(demoEvents);
-  if(path==='/api/library')return {status:'Representative inventory · No NAS access',groups:[{name:'Research collection',category:'Language',files:2,bytes:32*1073741824,formats:['safetensors']}],files:[{path:'Example / research / model-00001.safetensors',format:'safetensors',size:16*1073741824},{path:'Example / research / model-00002.safetensors',format:'safetensors',size:16*1073741824}]};
-  if(path!=='/api/action')throw Error('Unknown prototype request');
+  if(path==='/api/library')return {status:'Representative inventory · No NAS access',groups:[{name:'Research collection',category:'Language',files:2,bytes:32*1073741824,formats:['safetensors'],classification:'Requires additional configuration'}],files:[{path:'Example / research / model-00001.safetensors',format:'safetensors',size:16*1073741824},{path:'Example / research / model-00002.safetensors',format:'safetensors',size:16*1073741824}]};
+  if(!['/api/action','/api/preflight'].includes(path))throw Error('Unknown prototype request');
   if(demoState.operation.busy)throw Error('An operation is already running');
-  const {action,target,stops=[]}=JSON.parse(opts.body),m=demoState.models.find(x=>x.key===target);
+  const body=JSON.parse(opts.body),{action,target,stops=[]}=body,m=demoState.models.find(x=>x.key===target);
   if(!m||m.uncertain)throw Error('Model state is unavailable');
+  if(!['load','unload','switch'].includes(action)||!Array.isArray(stops)||stops.includes(target)||new Set(stops).size!==stops.length||(action!=='switch'&&stops.length))throw Error('Invalid operation');
+  if(stops.some(k=>!demoState.models.some(x=>x.key===k&&x.loaded&&!x.uncertain)))throw Error('Invalid stop selection');
+  if(path==='/api/preflight'){
+    const plan={id:'demo-'+(++demoPlanSequence),expires_at:Math.floor(Date.now()/1000)+120,action,target,stops,
+      available_bytes:demoState.memory.available,total_bytes:demoState.memory.total,reserve_bytes:6.4*1073741824,
+      estimated_release_bytes:stops.length*8*1073741824,projected_available_bytes:demoState.memory.available+stops.length*8*1073741824,
+      requirement:{bytes:12*1073741824,kind:'Estimated runtime requirement',method:'Representative demo estimate. No runtime was contacted.'},
+      loaded_models:demoState.models.filter(x=>x.loaded).map(x=>({key:x.key,name:x.name,runtime:x.runtime})),blocked:false,reasons:[],
+      warnings:['Simulation only. Live operations require runtime preflight, memory uncertainty and client interruption acknowledgement.'],expected_outcome:'Simulated model state update'};
+    demoPlans.set(plan.id,plan);return structuredClone(plan);
+  }
+  const plan=demoPlans.get(body.plan_id);
+  if(body.confirmed!==true||body.acknowledge_risks!==true)throw Error('Explicit confirmation required');
+  if(!plan||plan.expires_at*1000<=Date.now()||plan.action!==action||plan.target!==target||JSON.stringify(plan.stops)!==JSON.stringify(stops))throw Error('Review a new preflight plan');
+  demoPlans.delete(body.plan_id);
   const fail=failNextDemo&&action!=='unload';failNextDemo=false;$('#demo-failure').setAttribute('aria-pressed','false');
-  demoState.operation={busy:true,job:action+': '+m.name,message:'Waiting for simulated runtime',error:null};
+  demoState.operation={busy:true,phase:action==='unload'?'unload':'load',model:target,job:action+': '+m.name,message:'Waiting for simulated runtime',error:null};
   setTimeout(()=>{
     if(!fail){if(action==='switch')demoState.models.forEach(x=>{if(stops.includes(x.key))x.loaded=false;});m.loaded=action!=='unload';}
+    demoState.models.forEach(x=>{x.state=x.uncertain?'unknown':x.loaded?'loaded':'unloaded';x.health.readiness=x.loaded?'Simulated resident model':'Not ready';});
     const message=fail?'Simulated load failed. Previous models remain unchanged.':'Simulated operation complete';
-    demoState.operation={busy:false,job:null,message,error:fail?message:null};demoEvents.unshift({operation:action,stage:fail?'Failed':'Complete',model:m.name,time:new Date().toLocaleTimeString(),detail:message});update();
+    demoState.operation={busy:false,phase:fail?'failed':'complete',job:null,message,error:fail?message:null};demoEvents.unshift({operation:action,stage:fail?'Failed':'Complete',model:m.name,time:new Date().toLocaleTimeString(),detail:message});update();
   },2400);
   return {message:'Simulation accepted'};
 }

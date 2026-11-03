@@ -11,12 +11,15 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 import core
+import intelligence as intel
 
 BASE = Path(__file__).resolve().parent
 TOKEN = secrets.token_urlsafe(32)
 PORT = int(os.environ.get('AI_MANAGER_PORT', '0'))
 LOCK = threading.Lock()
 STATE = {'busy': False, 'job': None, 'message': 'Ready', 'error': None}
+PLANS = {}
+PLAN_TTL = 120
 HISTORY = deque(maxlen=180)
 CPU_SAMPLE = None
 
@@ -47,7 +50,7 @@ def disk_info(path, label):
 
 def telemetry():
     rows, total, free, gpu, errors, _, _ = core.snapshot(False)
-    out = {'models': rows, 'memory': {'total': total, 'available': free, 'used': total-free},
+    out = {'models': rows, 'memory': {'total': total, 'available': free, 'used': total-free if total is not None and free is not None else None},
            'gpu': gpu, 'cpu': cpu_usage(), 'errors': errors, 'time': int(time.time()),
            'storage': [disk_info(str(Path.home()), 'ASUS system'),
                        disk_info('/mnt/ai-models', 'External NVMe'),
@@ -55,22 +58,62 @@ def telemetry():
                        disk_info('/mnt/nas/Storage', 'NAS archive')]}
     with LOCK:
         out['operation'] = dict(STATE)
+        for row in rows:
+            row['state'] = intel.model_state(row, STATE)
         HISTORY.append({'time': out['time'], 'memory': out['memory']['used'], 'cpu': out['cpu']})
         out['history'] = list(HISTORY)
     return out
 
 def activity():
     try:
-        lines = core.LOG_PATH.read_text(encoding='utf8').splitlines()[-65:]
-        return [json.loads(line) for line in reversed(lines) if line.strip()]
+        with core.LOG_PATH.open('rb') as stream:
+            stream.seek(0, os.SEEK_END)
+            stream.seek(max(0, stream.tell() - 131072))
+            lines = stream.read(131072).decode('utf8', errors='replace').splitlines()[-65:]
+        events = []
+        for line in reversed(lines):
+            try:
+                event = json.loads(line)
+                if isinstance(event, dict):
+                    events.append(event)
+            except json.JSONDecodeError:
+                continue
+        return events
     except (OSError, json.JSONDecodeError):
         return []
 
-def run_job(action, target, stops):
+def prepare(action, target, stops):
+    rows, total, available, _, errors, _, _ = core.snapshot(False, fresh=True)
+    rows = [core.model_details(r) if r['key'] == target else r for r in rows]
+    plan = intel.preflight(rows, total, available, errors, action, target, stops)
+    return plan, {r['key']: r for r in rows}
+
+
+def progress(phase, **detail):
+    if phase not in intel.PHASES:
+        raise ValueError('Invalid operation phase')
+    with LOCK:
+        STATE.update(phase=phase, updated_at=int(time.time()), **detail)
+
+
+def check_load_memory(row):
+    estimate = intel.runtime_requirement(row)['bytes']
+    total, available = core.memory()
+    if estimate is not None and available < estimate + max(4 * intel.GIB, total * .05):
+        raise RuntimeError('Available memory changed or unload reclaimed less than expected; loading blocked.')
+
+
+def _run_job(action, target, stops, confirmed_plan=None):
     global STATE
     ok = False
     try:
-        rows = {r['key']: r for r in core.snapshot(False)[0]}
+        progress('precheck')
+        if confirmed_plan is not None:
+            current, rows = prepare(action, target, stops)
+            if current['blocked'] or current['fingerprint'] != confirmed_plan['fingerprint']:
+                raise RuntimeError('Runtime state or memory changed after confirmation; review a new preflight.')
+        else:
+            rows = {r['key']: r for r in core.snapshot(False)[0]}
         if target not in rows:
             raise RuntimeError('Model no longer registered; refresh the dashboard.')
         if rows[target].get('uncertain'):
@@ -84,7 +127,8 @@ def run_job(action, target, stops):
                 for s in stops:
                     if not core.is_loaded(rows[s]):
                         raise ValueError(f'Model is no longer loaded: {rows[s]["name"]}')
-                ok, msg = core.swap_with_rollback([rows[s] for s in stops], rows[target])
+                ok, msg = core.swap_with_rollback([rows[s] for s in stops], rows[target], progress,
+                                                  lambda: check_load_memory(rows[target]), check_load_memory)
             else:
                 raise RuntimeError('Target already loaded.')
         else:
@@ -92,17 +136,32 @@ def run_job(action, target, stops):
             if core.is_loaded(rows[target]) == desired:
                 raise RuntimeError('Model state changed; please refresh.')
             core.log_event(action, 'started', rows[target]['name'])
+            if desired:
+                check_load_memory(rows[target])
+            progress('load' if desired else 'unload', model=target)
             core.execute(rows[target], desired)
+            progress('readiness' if desired else 'verification')
             ok = core.verify(rows[target], desired, 150 if desired else 60)
             if not ok:
                 raise RuntimeError('Command ran, but actual runtime state was not verified.')
-            msg = f'{rows[target]["name"]}: {"loaded" if desired else "unloaded"} and verified.'
+            msg = f'{rows[target]["name"]}: {"resident" if desired else "unloaded"} and verified. Inference execution was not probed.'
             core.log_event(action, 'verified', rows[target]['name'])
     except Exception as exc:
         msg = str(exc)
         core.log_event(action, 'failed', target, msg)
     with LOCK:
-        STATE.update(busy=False, message=msg, error=None if ok else msg, job=None)
+        STATE.update(busy=False, message=msg, error=None if ok else msg, job=None,
+                     phase='complete' if ok else 'failed', finished_at=int(time.time()))
+    intel.CACHE.clear()
+
+def run_job(action, target, stops, confirmed_plan=None):
+    try:
+        with core.lifecycle_lock():
+            _run_job(action, target, stops, confirmed_plan)
+    except Exception as exc:
+        with LOCK:
+            STATE.update(busy=False, job=None, phase='failed', error=str(exc), message=str(exc), finished_at=int(time.time()))
+
 
 class Handler(BaseHTTPRequestHandler):
     server_version = 'ASUSModelManager/5.0'
@@ -153,9 +212,19 @@ class Handler(BaseHTTPRequestHandler):
             return self.respond(200, {'files': files, 'groups': groups, 'status': info})
         if parsed.path == '/api/activity':
             return self.respond(200, activity())
+        if parsed.path == '/api/model':
+            key = parse_qs(parsed.query).get('key', [''])[0]
+            rows = core.snapshot(False)[0]
+            row = next((r for r in rows if r['key'] == key), None)
+            if row is None:
+                return self.respond(404, {'error': 'Model not registered'})
+            detail = core.model_details(row)
+            detail['recent_operations'] = [e for e in activity() if e.get('model') in (row['name'], key)][:8]
+            return self.respond(200, detail)
         return self.respond(404, {'error': 'Not found'})
     def do_POST(self):
-        if urlparse(self.path).path != '/api/action':
+        path = urlparse(self.path).path
+        if path not in ('/api/action', '/api/preflight'):
             return self.respond(404, {'error': 'Not found'})
         if not self.authorized():
             return self.respond(403, {'error': 'Unauthorized'})
@@ -172,17 +241,48 @@ class Handler(BaseHTTPRequestHandler):
             if (action not in ('load', 'unload', 'switch') or not isinstance(target, str)
                     or not target or not isinstance(stops, list)
                     or any(not isinstance(stop, str) or not stop for stop in stops)
-                    or len(stops) != len(set(stops))):
+                    or len(stops) > 128 or len(target) > 512
+                    or len(stops) != len(set(stops)) or (action != 'switch' and stops)):
                 raise ValueError('Invalid operation')
+            if path == '/api/preflight':
+                with LOCK:
+                    if STATE['busy']:
+                        return self.respond(409, {'error': 'An operation is already running'})
+                plan, _ = prepare(action, target, stops)
+                plan['id'] = secrets.token_urlsafe(24)
+                plan['phase'] = 'confirmation'
+                plan['expires_at'] = int(time.time()) + PLAN_TTL
+                with LOCK:
+                    # A plan never authorizes execution by itself.
+                    for key in list(PLANS):
+                        if PLANS[key]['expires_at'] <= time.time():
+                            del PLANS[key]
+                    if len(PLANS) >= 64:
+                        del PLANS[next(iter(PLANS))]
+                    PLANS[plan['id']] = plan
+                return self.respond(200, plan)
+            if body.get('confirmed') is not True or body.get('acknowledge_risks') is not True:
+                raise ValueError('Explicit plan confirmation and risk acknowledgement required')
+            plan_id = body.get('plan_id')
+            if not isinstance(plan_id, str):
+                raise ValueError('Preflight plan required')
             with LOCK:
                 if STATE['busy']:
                     return self.respond(409, {'error': 'An operation is already running'})
-                STATE.update(busy=True, job=f'{action}: {target}', error=None, message='Operation started')
+                plan = PLANS.pop(plan_id, None)
+                if not plan or plan['expires_at'] <= time.time() or plan['blocked']:
+                    return self.respond(409, {'error': 'Plan expired, consumed or blocked; review a new preflight'})
+                if any(plan[k] != v for k, v in [('action', action), ('target', target), ('stops', stops)]):
+                    raise ValueError('Operation does not match the reviewed plan')
+                STATE.clear()
+                STATE.update(busy=True, job=f'{action}: {target}', id=secrets.token_urlsafe(16),
+                             action=action, target=target, stops=stops, phase='precheck',
+                             started_at=int(time.time()), error=None, message='Operation started')
             try:
-                threading.Thread(target=run_job, args=(action, target, stops), daemon=True).start()
+                threading.Thread(target=run_job, args=(action, target, stops, plan), daemon=True).start()
             except RuntimeError:
                 with LOCK:
-                    STATE.update(busy=False, job=None, message='Could not start operation', error='Could not start operation')
+                    STATE.update(busy=False, job=None, phase='failed', message='Could not start operation', error='Could not start operation')
                 return self.respond(503, {'error': 'Could not start operation'})
             return self.respond(202, {'message': 'Accepted. Monitor the operation status.'})
         except (ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:

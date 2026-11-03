@@ -40,3 +40,15 @@ Breakpoints: 1500px three model columns; default two; 1000px one and stacked too
 Motion: 140ms color/border feedback, existing 700ms gauge interpolation only when valid values change. No page entrance animation. Reduced-motion preference suppresses transitions and animations globally.
 
 Accessibility target: WCAG 2.2 AA, 4.5:1 normal text, 3:1 large text and essential graphics, visible keyboard focus, named controls, 44px main navigation targets, status announcements without moving focus. Browser-native controls and system fonts are intentional. Rendered contrast and assistive-technology checks remain release gates.
+
+## Intelligent Model Manager increment — 2026-11-03
+
+The Astra shell, palette, gauges, layout and native disclosure pattern are retained. Cards add parameters, quantization, context, storage/model identifier, health time, readiness and runtime errors. Technical values carry source/confidence text; unknown values remain Unavailable. Loaded and Ready have distinct words. Runtime allocation is not presented as a proven model requirement. A known resident model whose readiness endpoint rejects requests can still be explicitly unloaded; uncertain identity blocks mutation.
+
+Model details remain an inline disclosure, with technical evidence, allowlisted configuration, resource estimate, operational observations and recent operations. Rich metadata loads automatically with a controlled budget, and immediately on disclosure. Frontend details are refreshed after one minute or manual Refresh. Errors remain readable across status refreshes; failed action requests persist in the operation banner until review/Refresh.
+
+Confirmation retains the existing protected modal, Cancel-first focus, inert background, Escape, focus return and Tab trap. The trap includes advanced disclosure summaries. Switch stop boxes start unchecked. Changing selection invalidates the previous plan and acknowledgement; asynchronous stale preflight responses are ignored. Available memory, requirement type and system reserve are always visible. Advanced disclosure holds loaded/selected model lists, projected reclamation, estimation assumptions, client risk and recovery limitations. A separate risk checkbox and valid unblocked plan enable Confirm; expired plans require review again.
+
+Operation feedback displays observed workflow phases, without percentage estimates. Browser refresh leaves the backend job active. Demo Mode simulates detail, preflight, confirmation, failure and operation endpoints with no fetch calls. Asset Library displays structural completeness and inferred compatibility while preserving its non-executable boundary.
+
+New evidence/plan styling uses existing semantic tokens in both themes, wraps long identifiers and stacks memory facts within the existing modal width. The mechanical design detector returned no findings. VM/DOM regressions are not rendered accessibility or visual evidence: desktop/mobile, both themes, 200% zoom, focus order, screen-reader announcements and contrast remain release gates because no browser surface was available.

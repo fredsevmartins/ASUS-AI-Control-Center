@@ -31,20 +31,21 @@ class RuntimeStateTests(unittest.TestCase):
                 core.is_loaded({'runtime': 'SGLang'})
 
     def test_failed_switch_restores_and_verifies_stopped_model(self):
-        old = {'name': 'old', 'runtime': 'Ollama'}
-        target = {'name': 'new', 'runtime': 'Ollama'}
+        old = {'name': 'old', 'key': 'old', 'runtime': 'Ollama'}
+        target = {'name': 'new', 'key': 'new', 'runtime': 'Ollama'}
         def execute(row, load):
             if row is target:
                 raise RuntimeError('load failed')
         with patch.object(core, 'execute', side_effect=execute) as operation, \
              patch.object(core, 'verify', return_value=True) as verify, \
+             patch.object(core, 'is_loaded', side_effect=lambda r: r is old), \
              patch.object(core, 'log_event'):
             ok, message = core.swap_with_rollback([old], target)
         self.assertFalse(ok)
         self.assertIn('1 verified', message)
         self.assertIn('target may be partially loaded', message)
         self.assertEqual(operation.call_args_list[-1].args, (old, True))
-        self.assertEqual(verify.call_args_list[-1].args, (old, True, 120))
+        self.assertEqual(verify.call_args_list[-1].args, (old, True, 4))
 
     def test_cpu_excludes_guest_time(self):
         from io import StringIO
@@ -92,9 +93,10 @@ class ApiTests(unittest.TestCase):
     def test_worker_start_failure_releases_operation_lock(self):
         server.STATE.update(busy=False, job=None, message='Ready', error=None)
         try:
+            server.PLANS['test-plan'] = {'action': 'load', 'target': 'x', 'stops': [], 'expires_at': server.time.time()+120, 'blocked': False}
             with patch.object(server.threading, 'Thread') as thread:
                 thread.return_value.start.side_effect = RuntimeError('thread unavailable')
-                status, _ = self.request('POST', '/api/action', '{"action":"load","target":"x"}',
+                status, _ = self.request('POST', '/api/action', '{"action":"load","target":"x","plan_id":"test-plan","confirmed":true,"acknowledge_risks":true}',
                     {'X-Session-Token': server.TOKEN, 'Content-Type': 'application/json'})
             self.assertEqual(status, 503)
             self.assertFalse(server.STATE['busy'])

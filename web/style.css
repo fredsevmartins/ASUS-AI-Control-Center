@@ -54,3 +54,20 @@ body{line-height:1.5;accent-color:var(--indigo);caret-color:var(--indigo)}button
 @media(max-width:720px){#app{display:block}.sidebar{position:static;width:100%;height:auto;padding:16px;border-right:0;border-bottom:1px solid var(--line)}.brand{margin:0 0 16px}.brand>div:last-child{display:block}.sidebar-label,.sidebar-bottom{display:none}nav{display:flex;overflow-x:auto;gap:6px}.nav-item,.nav-item.active,.nav-item:not(.active){font-size:12px;white-space:nowrap;padding:10px;min-height:44px}.nav-item span{display:none}.topbar{height:56px}.breadcrumb{display:none}.top-actions{width:100%;justify-content:flex-end}.content{padding:24px 16px 40px}.hero h1{font-size:27px}.model-card,body.dark .model-card{padding:22px}.capacity-strip{gap:12px}.capacity-strip>span{width:100%}.settings-row{align-items:flex-start;flex-direction:column}.detail-row{flex-wrap:wrap}.detail-row strong{text-align:left}.demo-banner button{margin-left:0}.metrics{grid-template-columns:1fr}.gauge-feature{grid-column:auto}.hero-status{display:none}}
 
 .badge{color:var(--green);background:var(--success-bg)}.icon-button{display:grid;place-items:center}.quick-grid b{display:block;height:24px}
+
+/* Model evidence extends the incumbent Model Manager tokens and spacing. */
+.metadata-source{display:block;font-size:11px;font-weight:400;color:var(--sub);line-height:1.5;margin-top:4px;overflow-wrap:anywhere}
+.metadata-list>div,.plan-facts>div{margin-block:12px}
+.metadata-list dd,.plan-facts dd{margin-inline-start:0;overflow-wrap:anywhere}
+.model-card .model-facts dd{overflow-wrap:anywhere}
+.model-card h4{font-size:14px;margin:24px 0 8px}
+.model-card details p{overflow-wrap:anywhere}
+#modal-plan{margin-block:20px}
+#modal-plan details{margin-block:16px;color:var(--sub)}
+#modal-plan summary{cursor:pointer;color:var(--ink);padding-block:8px}
+.plan-facts{display:grid;grid-template-columns:1fr;gap:4px}
+.plan-facts dt{font-size:12px;color:var(--sub)}
+.plan-facts dd{margin-top:6px;font-variant-numeric:tabular-nums}
+.risk-ack{padding-block:16px;border-top:1px solid var(--line);align-items:flex-start}
+.check-line input{flex-shrink:0;margin-top:3px;accent-color:var(--indigo)}
+@media(max-width:720px){.plan-facts{grid-template-columns:1fr;gap:4px}.modal-card{max-height:90vh;overflow:auto}}

@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — Intelligent model management (2026-11-03)
+
+- Add provenance-aware runtime metadata, dynamic Ollama inventory/enrichment, SGLang configuration/identity inspection and non-generating readiness observations.
+- Add explicit model states, independent health evidence and last successful check; preserve unknown/unverified inference readiness.
+- Add expiring single-use preflight plans, memory/KV allowances, explicit risk confirmation, identity/state revalidation and exact authorized stop lists.
+- Prevent lifecycle overlap across browser sessions and Control Center instances; expose operation IDs/phases and verify selected recovery state without automatic partial-target cleanup.
+- Enhance Astra Model Manager cards, details and confirmation with evidence, resource uncertainty and persistent errors; preserve design tokens, charts, navigation and isolated demo behavior.
+- Classify NAS structure/config/tokenizer/index assets without executable registration; bound enumeration and JSON reads. Use structured Ollama unload and empty embedding preload.
+- Add 32 Python regressions (46 total), a frontend intelligence/confirmation suite, expanded prototype tests and complete architecture/security/testing documentation.
+- Keep v5 installation, live services, model files, NAS paths and automations unchanged. Browser/hardware release validation remains outstanding.
+
+
 ## Unreleased
 
 - Add compact Overview GPU and CPU gauges and show measured GPU temperature and available memory on the gauges.

@@ -11,8 +11,13 @@ from datetime import datetime, timezone
 import shutil
 import subprocess
 import threading
+import fcntl
+from contextlib import contextmanager
 import time
-from urllib.request import Request, urlopen
+from urllib.request import Request
+from urllib.request import build_opener, HTTPRedirectHandler, ProxyHandler
+from urllib.error import HTTPError
+import intelligence as intel
 
 OLLAMA = os.environ.get('OLLAMA_HOST', 'http://127.0.0.1:11434').rstrip('/')
 NAS_MODELS = Path('/mnt/nas/AI-Models')
@@ -23,6 +28,46 @@ MODEL_FILES = {'.gguf', '.safetensors', '.onnx', '.pt', '.pth', '.bin', '.ckpt'}
 MAX_NAS_ENTRIES = 1800
 STATE_DIR = Path.home() / '.local/state/asus-ai-model-manager'
 LOG_PATH = STATE_DIR / 'operations.jsonl'
+QWEN_UNIT = Path('/etc/systemd/system/qwen38-sglang.service')
+HEALTH_SUCCESS = {}
+HEALTH_LOCK = threading.Lock()
+
+
+@contextmanager
+def lifecycle_lock():
+    """Coordinate lifecycle workers across copies of this application (Linux)."""
+    STATE_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
+    fd = os.open(STATE_DIR / 'lifecycle.lock', os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+    try:
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise RuntimeError('Another Control Center instance is running a lifecycle operation') from None
+        yield
+    finally:
+        os.close(fd)
+
+
+class NoRedirect(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def runtime_http(origin, path, payload=None, timeout=2, health=False):
+    origin = intel.local_url(origin)
+    data = None if payload is None else json.dumps(payload).encode('utf-8')
+    req = Request(origin + path, data=data, headers={'Content-Type': 'application/json'})
+    # Local APIs must not go through environment proxies or redirect elsewhere.
+    with build_opener(ProxyHandler({}), NoRedirect()).open(req, timeout=timeout) as response:
+        if health:
+            return response.status == 200
+        raw = response.read(2 * 1024 * 1024 + 1)
+        if len(raw) > 2 * 1024 * 1024:
+            raise ValueError('Runtime metadata exceeds response limit')
+        result = json.loads(raw)
+        if not isinstance(result, dict):
+            raise ValueError('Malformed runtime response')
+        return result
 
 
 def log_event(operation, stage, model=None, detail=None):
@@ -73,20 +118,20 @@ def group_nas_files(files):
         category, name = classify_nas_file(f['path'])
         key = (category, name)
         group = groups.setdefault(key, {'category': category, 'name': name,
-                                         'files': 0, 'bytes': 0, 'formats': set(), 'paths': []})
+                                         'files': 0, 'bytes': 0, 'formats': set(), 'paths': [], 'evidence': []})
         group['files'] += 1
         group['bytes'] += f['size']
         group['formats'].add(f['format'])
         group['paths'].append(f['path'])
+        group['evidence'].append(f)
+    for group in groups.values():
+        group.update(intel.nas_classification(group.pop('evidence')))
     return sorted(groups.values(), key=lambda g: (g['category'].casefold(), g['name'].casefold()))
 
 
 
 def api(path, payload=None, timeout=8):
-    data = None if payload is None else json.dumps(payload).encode('utf-8')
-    req = Request(OLLAMA + path, data=data, headers={'Content-Type': 'application/json'})
-    with urlopen(req, timeout=timeout) as response:
-        return json.load(response)
+    return runtime_http(OLLAMA, path, payload, timeout)
 
 
 def command(args, timeout=12):
@@ -96,14 +141,14 @@ def command(args, timeout=12):
 def sglang_state():
     """Return process state only when both independent observations agree."""
     try:
-        service = command(['systemctl', 'is-active', QWEN_SERVICE])
+        service = command(['systemctl', 'is-active', QWEN_SERVICE], timeout=2)
         value = service.stdout.strip()
         service_state = True if service.returncode == 0 and value == 'active' else (
             False if service.returncode == 3 and value in ('inactive', 'failed') else None)
     except (OSError, subprocess.TimeoutExpired):
         service_state = None
     try:
-        container = command(['docker', 'inspect', '-f', '{{.State.Running}}', 'qwen38-sglang'])
+        container = command(['docker', 'inspect', '-f', '{{.State.Running}}', 'qwen38-sglang'], timeout=2)
         value = container.stdout.strip()
         container_state = (value == 'true') if container.returncode == 0 and value in ('true', 'false') else None
     except (OSError, subprocess.TimeoutExpired):
@@ -150,12 +195,15 @@ def _nas_scan():
         return [], 'NAS share is not mounted'
     found = []
     examined = 0
+    metadata_reads = 0
     stack = [(NAS_MODELS, 0)]
     try:
         while stack and examined < MAX_NAS_ENTRIES:
             directory, depth = stack.pop()
             with os.scandir(directory) as iterator:
-                entries = sorted(list(iterator), key=lambda e: e.name.casefold())
+                # Consume only the remaining budget, including hidden entries.
+                import itertools
+                entries = list(itertools.islice(iterator, MAX_NAS_ENTRIES - examined))
             for item in entries:
                 if examined >= MAX_NAS_ENTRIES:
                     break
@@ -163,8 +211,27 @@ def _nas_scan():
                 if item.name.startswith(('.', '#')):
                     continue
                 relative = str(Path(item.path).relative_to(NAS_MODELS))
-                if item.is_file(follow_symlinks=False) and Path(item.name).suffix.lower() in MODEL_FILES:
-                    found.append({'path': relative, 'format': Path(item.name).suffix.lower()[1:].upper(), 'size': item.stat(follow_symlinks=False).st_size, 'kind': 'Weight file'})
+                if item.is_file(follow_symlinks=False):
+                    suffix = Path(item.name).suffix.lower()
+                    kind = ('Weight file' if suffix in MODEL_FILES else
+                            'Weight index' if item.name.endswith(('.safetensors.index.json', '.bin.index.json')) else
+                            'Configuration' if item.name in ('config.json', 'model_index.json', 'adapter_config.json') else
+                            'Tokenizer' if item.name in ('tokenizer.json', 'tokenizer.model', 'tokenizer_config.json', 'vocab.json', 'merges.txt', 'special_tokens_map.json') else None)
+                    if kind:
+                        evidence = {'path': relative, 'format': suffix[1:].upper(),
+                                    'size': item.stat(follow_symlinks=False).st_size, 'kind': kind}
+                        if kind in ('Configuration', 'Weight index') and evidence['size'] <= 262144 and metadata_reads < 32:
+                            try:
+                                metadata_reads += 1
+                                # Reject file symlinks even if replaced after scandir.
+                                fd = os.open(item.path, os.O_RDONLY | os.O_NOFOLLOW)
+                                with os.fdopen(fd, 'r', encoding='utf8') as fp:
+                                    value = json.loads(fp.read(262145))
+                                if isinstance(value, dict):
+                                    evidence['config'] = {k: value[k] for k in ('model_type', 'architectures', 'max_position_embeddings', 'quantization_config', 'weight_map') if k in value}
+                            except (OSError, ValueError):
+                                evidence['metadata_error'] = 'Unreadable or malformed metadata'
+                        found.append(evidence)
                 elif item.is_dir(follow_symlinks=False) and depth < 3:
                     stack.append((Path(item.path), depth + 1))
         return sorted(found, key=lambda x: x['path'].casefold()), ('NAS scan limit reached; results are partial' if examined >= MAX_NAS_ENTRIES else 'NAS inventory (read-only)')
@@ -172,28 +239,171 @@ def _nas_scan():
         return found, f'NAS scan incomplete: {exc}'
 
 
-def snapshot(include_nas=False):
-    total, available = memory()
-    errors = []
-    running = sglang_state()
-    qwen_status = 'Loaded / active' if running is True else ('Unloaded' if running is False else 'Check service')
-    rows = [{'name': QWEN_NAME, 'runtime': 'SGLang', 'status': qwen_status, 'memory': 'Not available', 'key': 'sglang', 'loaded': running is True, 'uncertain': running is None}]
-    if running is None:
-        errors.append('SGLang process state could not be established; actions are blocked.')
+def health_record(key, available, loaded, ready, reason=None, service=None):
+    now = datetime.now(timezone.utc).isoformat()
+    with HEALTH_LOCK:
+        if available and (ready is True or (key == 'ollama' and loaded is not None)):
+            HEALTH_SUCCESS[key] = now
+        last = HEALTH_SUCCESS.get(key)
+    return {'runtime_available': available, 'service_status': service,
+            'model_loaded': loaded, 'endpoint_health': ready,
+            'checked_at': now, 'last_success': last, 'failure_reason': reason,
+            'readiness': 'Ready to accept requests' if ready is True else
+                         ('Resident; inference not verified' if loaded else 'Not ready')}
+
+
+def qwen_configuration():
     try:
-        installed = api('/api/tags').get('models', [])
-        ps = api('/api/ps').get('models', [])
-        loaded = {m.get('name') or m.get('model'): m for m in ps}
-        for m in installed:
-            name = m.get('name') or m.get('model')
-            if not name:
-                continue
-            process = loaded.get(name)
-            rows.append({'name': name, 'runtime': 'Ollama', 'status': 'Loaded' if process else 'Unloaded',
-                         'memory': human(process.get('size_vram') or process.get('size')) if process else '—',
-                         'key': name, 'loaded': bool(process), 'embedding': ('embed' in name.lower() or 'nomic' in name.lower()), 'uncertain': False})
+        with QWEN_UNIT.open(encoding='utf8') as unit:
+            text = unit.read(65536)
+        config = intel.sglang_config(text)
+        # Never guess a container port mapping. This adapter supports the existing
+        # host-network unit, or an explicitly configured loopback origin.
+        endpoint = os.environ.get('SGLANG_URL')
+        if not endpoint and ('--network host' in text or '--network=host' in text):
+            port = config.get('port')
+            if port and port.isdigit():
+                endpoint = 'http://127.0.0.1:' + port
+        return config, intel.local_url(endpoint) if endpoint else None
+    except (OSError, ValueError):
+        return {}, None
+
+
+def sglang_observation():
+    process = sglang_state()
+    config, endpoint = qwen_configuration()
+    info, ready, reason, available = {}, None, None, False
+    identity = config.get('model-path')
+    if endpoint:
+        try:
+            info = runtime_http(endpoint, '/get_model_info', timeout=2)
+            if not isinstance(info.get('model_path'), str):
+                raise ValueError('SGLang metadata is missing model_path')
+            available = True
+            if not identity or info['model_path'] != identity:
+                raise ValueError('SGLang endpoint model identity differs from the registered configuration')
+            try:
+                ready = runtime_http(endpoint, '/ready', timeout=2, health=True)
+            except HTTPError as exc:
+                if exc.code == 404:
+                    reason = 'Non-generating /ready endpoint unsupported; inference readiness is unverified'
+                else:
+                    ready, reason = False, f'Readiness endpoint HTTP {exc.code}'
+        except Exception as exc:
+            reason = str(exc)[:300]
+    else:
+        reason = 'Local SGLang endpoint could not be established from existing configuration'
+    identity_ok = bool(identity and info.get('model_path') == identity)
+    loaded = process is True and identity_ok
+    uncertain = process is None or (process is False and available) or (process is True and not identity_ok)
+    state = ('unknown' if uncertain else 'unloaded' if process is False else
+             'ready' if ready is True else 'error' if ready is False else 'loaded')
+    health = health_record('sglang', available, loaded if not uncertain else None, ready, reason,
+                           'active' if process is True else 'inactive' if process is False else 'unknown')
+    metadata = intel.sglang_metadata(config, info if identity_ok else {})
+    return {'name': QWEN_NAME, 'runtime': 'SGLang', 'key': 'sglang',
+            'installed': True if loaded else None,
+            'loaded': loaded, 'uncertain': uncertain, 'state': state, 'status': state.capitalize(),
+            'memory': 'Unavailable', 'metadata': metadata, 'health': health,
+            'identity': identity, 'runtime_config': {'endpoint': endpoint, **config}}
+
+
+def discover_models():
+    qwen = sglang_observation()
+    rows, errors = [qwen], []
+    if qwen['uncertain']:
+        errors.append('SGLang state is uncertain; actions are blocked until observations agree.')
+    try:
+        installed = intel.model_list(api('/api/tags', timeout=2))
     except Exception as exc:
-        errors.append(f'Ollama unavailable: {exc}')
+        return rows, errors + [f'Ollama unavailable: {exc}']
+    try:
+        processes = intel.model_list(api('/api/ps', timeout=2))
+        loaded = {m.get('name') or m.get('model'): m for m in processes}
+        ps_error = None
+    except Exception as exc:
+        loaded, ps_error = {}, f'Ollama loaded state unavailable: {exc}'
+        errors.append(ps_error)
+    # Include residents absent from tags: never silently omit a potential conflict.
+    known = {m.get('name') or m.get('model') for m in installed}
+    installed += [dict(m, _resident_only=True) for n, m in loaded.items() if n not in known]
+    metadata_budget = 1
+    for model in installed:
+        name = model.get('name') or model.get('model')
+        if not name:
+            continue
+        process = loaded.get(name)
+        metadata = intel.ollama_metadata(model, process)
+        state = 'unknown' if ps_error else 'loaded' if process else 'unloaded'
+        row = {'name': name, 'runtime': 'Ollama', 'key': 'ollama:' + name, 'loaded': bool(process),
+                     'installed': True if not model.get('_resident_only') or process else None,
+                     'registration_observed': not model.get('_resident_only', False),
+                     'uncertain': bool(ps_error), 'state': state, 'status': state.capitalize(),
+                     'memory': human(metadata['loaded_bytes']['value']), 'metadata': metadata,
+                     'embedding': ('embed' in name.lower() or 'nomic' in name.lower()),
+                     'identity': model.get('digest'),
+                     'health': health_record('ollama', not ps_error, None if ps_error else bool(process), None, ps_error),
+                     'runtime_config': {'endpoint': OLLAMA}}
+        cache_key = ('show', row['key'], row.get('identity'))
+        if intel.CACHE.peek(cache_key, 300) is not None:
+            row = model_details(row)
+        elif metadata_budget:
+            metadata_budget -= 1
+            row = model_details(row)
+        rows.append(row)
+    return rows, errors
+
+
+def model_details(row):
+    if row['runtime'] != 'Ollama':
+        return row
+    result = dict(row)
+    show = intel.CACHE.get(('show', row['key'], row.get('identity')), 300,
+                           lambda: api('/api/show', {'model': row['name']}, timeout=2))
+    if not isinstance(show, dict):
+        show = {'_error': 'Malformed model information'}
+    if show.get('_error'):
+        result['metadata_error'] = show['_error']
+    else:
+        # Preserve installed and resident evidence without another polling pass.
+        synthetic = {'name': row['name'], 'size': row['metadata']['weight_bytes']['value'],
+                     'details': {}, '_resident_only': not row.get('registration_observed', True)}
+        result['metadata'] = intel.ollama_metadata(synthetic, show=show)
+        for k, v in row['metadata'].items():
+            if result['metadata'][k]['value'] is None:
+                result['metadata'][k] = v
+        info = show.get('model_info', {})
+        if isinstance(info, dict):
+            arch = info.get('general.architecture', '')
+            heads = intel.positive(info.get(arch + '.attention.head_count'))
+            embedding = intel.positive(info.get(arch + '.embedding_length'))
+            result['kv_geometry'] = {'layers': info.get(arch + '.block_count'),
+                                     'kv_heads': info.get(arch + '.attention.head_count_kv'),
+                                     'head_dim': embedding / heads if embedding and heads else None}
+        capabilities = show.get('capabilities')
+        if isinstance(capabilities, list) and capabilities:
+            result['embedding'] = 'embedding' in capabilities
+            result['capabilities'] = intel.field(capabilities, 'Ollama /api/show')
+    result['requirement'] = intel.runtime_requirement(result)
+    return result
+
+
+def snapshot(include_nas=False, fresh=False):
+    errors = []
+    try:
+        total, available = memory()
+    except (OSError, ValueError, KeyError) as exc:
+        total, available = None, None
+        errors.append(f'Memory unavailable: {exc}')
+    if fresh:
+        rows, runtime_errors = discover_models()
+    else:
+        result = intel.CACHE.get('inventory', 10, discover_models)
+        if isinstance(result, dict) and '_error' in result:
+            rows, runtime_errors = [], ['Runtime discovery unavailable: ' + result['_error']]
+        else:
+            rows, runtime_errors = result
+    errors += runtime_errors
     nas, nas_status = _nas_scan() if include_nas else (None, None)
     return rows, total, available, gpu_info(), errors, nas, nas_status
 
@@ -204,7 +414,7 @@ def is_loaded(row):
         if state is None:
             raise RuntimeError('SGLang state is uncertain; service and container must both be observable and agree.')
         return state
-    models = api('/api/ps', timeout=15).get('models', [])
+    models = intel.model_list(api('/api/ps', timeout=2))
     return any((m.get('name') or m.get('model')) == row['name'] for m in models)
 
 
@@ -217,13 +427,11 @@ def execute(row, load):
             raise RuntimeError((out.stderr or out.stdout).strip() or f'Controller exited {out.returncode}')
     elif load:
         if row.get('embedding'):
-            api('/api/embed', {'model': row['name'], 'input': 'health check', 'keep_alive': -1}, timeout=600)
+            api('/api/embed', {'model': row['name'], 'input': [], 'keep_alive': -1}, timeout=600)
         else:
             api('/api/generate', {'model': row['name'], 'prompt': '', 'keep_alive': -1, 'stream': False}, timeout=600)
     else:
-        out = command(['ollama', 'stop', row['name']], timeout=90)
-        if out.returncode:
-            raise RuntimeError((out.stderr or out.stdout).strip() or f'Ollama stop exited {out.returncode}')
+        api('/api/generate', {'model': row['name'], 'keep_alive': 0, 'stream': False}, timeout=90)
 
 
 def verify(row, expected, timeout=150):
@@ -232,63 +440,97 @@ def verify(row, expected, timeout=150):
     while time.monotonic() < deadline:
         try:
             if is_loaded(row) == expected:
-                return True
+                if row['runtime'] == 'SGLang':
+                    observed = sglang_observation()
+                    if observed['state'] == ('ready' if expected else 'unloaded') and not observed['uncertain']:
+                        return True
+                else:
+                    return True
         except Exception:
             pass
         time.sleep(2)
     return False
 
 
-def swap_with_rollback(stops, target):
-    """Best-effort compensating rollback; includes partially stopped model."""
-    stopped = []
-    attempted = None
+def swap_with_rollback(stops, target, progress=None, before_load=None, before_restore=None):
+    """Compensating recovery of authorized stops, with explicit state verification."""
+    progress = progress or (lambda phase, **kw: None)
+    stopped, attempted = [], None
     log_event('switch', 'started', target['name'], f'{len(stops)} stop(s) requested')
     try:
         for row in stops:
+            if not is_loaded(row):
+                raise RuntimeError(f'Model is no longer loaded: {row["name"]}')
             attempted = row
-            log_event('unload', 'started', row['name'])
+            progress('unload', model=row['key'])
             execute(row, False)
             if not verify(row, False, 45):
                 raise RuntimeError(f'Unable to verify unload: {row["name"]}')
             stopped.append(row)
             attempted = None
             log_event('unload', 'verified', row['name'])
-        log_event('load', 'started', target['name'])
+        if before_load:
+            before_load()
+        progress('load', model=target['key'])
         execute(target, True)
+        progress('readiness', model=target['key'])
         if not verify(target, True, 120):
-            raise RuntimeError(f'Unable to verify load: {target["name"]}')
+            raise RuntimeError(f'Unable to verify target residency/readiness: {target["name"]}')
         log_event('switch', 'completed', target['name'])
-        return True, f'Loaded {target["name"]}. Unloaded: {", ".join(r["name"] for r in stopped)}.'
+        return True, f'Loaded {target["name"]}. Runtime evidence verified; Ollama inference execution is not probed.'
     except Exception as exc:
+        progress('failure', model=target['key'])
         log_event('switch', 'failed', target['name'], exc)
-        problems = []
-        restore = list(stopped)
-        # A failed stop command can stop a model before returning an error.
-        # Restore it only if it was active in the initial snapshot and is now down.
+        progress('recovery', model=target['key'])
+        problems, restore, restored = [], list(stopped), []
         if attempted is not None:
             try:
                 if not is_loaded(attempted):
                     restore.append(attempted)
             except Exception as state_exc:
                 problems.append(f'{attempted["name"]}: cannot establish state: {state_exc}')
-        restored = 0
-        for row in reversed(restore):
+        try:
+            target_absent = not is_loaded(target)
+        except Exception as state_exc:
+            target_absent = False
+            problems.append(f'Target state unavailable: {state_exc}')
+        if not target_absent:
+            problems.append('Target may be partially loaded; restoration skipped to avoid additional memory pressure. Target cleanup requires a new explicit operation.')
+        else:
+            for row in reversed(restore):
+                try:
+                    log_event('rollback', 'started', row['name'])
+                    if before_restore:
+                        before_restore(row)
+                    execute(row, True)
+                    if verify(row, True, 120):
+                        restored.append(row)
+                        log_event('rollback', 'verified', row['name'])
+                    else:
+                        problems.append(f'{row["name"]}: restart not confirmed')
+                except Exception as error:
+                    problems.append(f'{row["name"]}: {error}')
+        progress('verification', model=target['key'])
+        # Verify again after all restoration commands: residency may change during recovery.
+        verified = []
+        for row in stops:
             try:
-                log_event('rollback', 'started', row['name'])
-                execute(row, True)
-                if verify(row, True, 120):
-                    restored += 1
-                    log_event('rollback', 'verified', row['name'])
+                if verify(row, True, 4):
+                    verified.append(row['name'])
                 else:
-                    problems.append(f'{row["name"]}: restart not confirmed')
-                    log_event('rollback', 'unverified', row['name'])
-            except Exception as restoration_error:
-                problems.append(f'{row["name"]}: {restoration_error}')
-                log_event('rollback', 'failed', row['name'], restoration_error)
-        return False, (f'Switch failed: {exc}\nThe target may be partially loaded; its state has not been cleaned up. '
-                       f'Restoration attempted for {len(restore)} model(s); '
-                       f'{restored} verified. '
-                       + ('Restoration issues: ' + '; '.join(problems) if problems else 'No restoration errors detected.')
-                       + '\nCheck the actual runtime state before relying on the services.')
-
+                    problems.append(f'{row["name"]}: final recovery verification failed')
+            except Exception as error:
+                problems.append(f'{row["name"]}: {error}')
+        try:
+            target_absent = not is_loaded(target)
+        except Exception:
+            target_absent = False
+        recovered = target_absent and len(verified) == len(stops) and not problems
+        recovery = {'verified': recovered, 'restored': [r['name'] for r in restored if r['name'] in verified],
+                    'verified_previous': verified, 'issues': problems, 'target_absent': target_absent}
+        progress('verification', recovery=recovery)
+        log_event('rollback', 'verified' if recovered else 'incomplete', target['name'], json.dumps(recovery))
+        return False, (f'Switch failed: {exc}. The target may be partially loaded; it is never automatically removed. '
+                       f'{len(verified)} verified previous model(s). '
+                       + ('Previous selected state verified.' if recovered else 'Recovery incomplete: ' + '; '.join(problems))
+                       + ' Check actual runtime state before relying on services.')

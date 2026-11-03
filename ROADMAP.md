@@ -38,3 +38,27 @@
 The user confirmed that the earlier Memory Timeline renders in Firefox and that Overview and Performance display live telemetry on GX10. Browser validation of the new storage bars and chart interactions, responsive layouts, contrast, and both themes remains outstanding: this development sandbox cannot bind localhost and has no browser surface.
 
 The existing Performance gauges were visually validated in Firefox on the GX10. The new Overview gauges and additional telemetry labels still need browser validation across themes and viewport sizes.
+
+## Intelligent management increment — 2026-11-03
+
+Completed on the development branch:
+
+- Preserve the existing Astra interface and application shell, with evidence-rich cards, inline details, health timestamps/errors and NAS structural classification.
+- Add dynamic structured Ollama metadata, controlled cached enrichment, SGLang configuration/identity inspection and non-generating readiness checks.
+- Separate installed evidence, residency, readiness, lifecycle intent and uncertainty; retain missing values and explicit provenance.
+- Require server-issued preflight, explicit confirmation, risk acknowledgement and exact stop selection; bind plans to current runtime evidence and recheck memory before target/recovery loads.
+- Serialize lifecycle workers within and across Control Center instances, retain job phase/ID across browser refresh, and verify every selected previous model before claiming recovery.
+- Use structured Ollama unload, skip unsafe restoration with partial target residency, bound NAS enumeration/JSON reads and make activity parsing bounded/malformed-record tolerant.
+- Pass 46 mocked Python tests, three JavaScript suites and syntax/whitespace checks; document actual implementation and limits.
+
+Next development phase, before release:
+
+1. Validate read-only runtime inventory, deployed SGLang endpoint support and metadata on GX10. Do not upgrade or reconfigure services to satisfy readiness probes.
+2. Run rendered desktop/mobile validation in both themes, keyboard/screen-reader testing, zoom, contrast and browser E2E with mocked adapters.
+3. Calibrate memory estimates for actual context, KV dtype, parallelism and SGLang reservations; keep unknowns explicit and avoid treating size as an upper bound.
+4. Add a bounded durable operation journal/log rotation and a crash-interruption report, without automatically resuming mutations after restart.
+5. Add workload/connected-client evidence only through supported cheap interfaces. Busy remains unavailable until verified.
+6. Isolate NAS filesystem discovery in a time-bounded worker and extend configuration variants without weakening its non-executable boundary.
+7. Only after separate explicit approval, validate controlled load/unload/switch/recovery in a client interruption window. No such live approval was provided for this development pass.
+
+Release assessment: implementation and mocked regression are ready for review; hardware integration and browser acceptance remain gates. The installed v5 application has not been overwritten and live runtimes/storage were not changed.

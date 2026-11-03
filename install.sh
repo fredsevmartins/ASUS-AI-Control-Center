@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-python3 -m compileall -q "$BASE/server.py" "$BASE/core.py"
+python3 -m compileall -q "$BASE/server.py" "$BASE/core.py" "$BASE/intelligence.py"
 DEST="$HOME/.local/share/asus-ai-model-manager-v5"
 mkdir -p "$DEST" "$HOME/.local/share/applications"
 # Never overwrite the working v4 release. Backup existing v5 only.
@@ -9,6 +9,7 @@ if [[ -d "$DEST/web" ]]; then
   cp -a "$DEST" "$DEST.previous.$(date +%Y%m%d%H%M%S)"
 fi
 install -m 644 "$BASE/core.py" "$DEST/core.py"
+install -m 644 "$BASE/intelligence.py" "$DEST/intelligence.py"
 install -m 755 "$BASE/server.py" "$DEST/server.py"
 mkdir -p "$DEST/web"
 cp "$BASE/web/"* "$DEST/web/"
