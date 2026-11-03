@@ -2,6 +2,13 @@
 
 ## Completed in this pass
 
+- Add responsive memory, GPU and CPU gauges using observed telemetry and dynamic memory capacity.
+
+- Show both memory charts with a fixed GiB scale, local timestamps, and sample inspection.
+
+- Correct storage bar rendering under the existing content security policy and validate capacity values.
+- Add memory chart axes and sample inspection with mouse, touch, and keyboard.
+
 - Prevent high-density memory chart backing height from growing on repeated redraws, with a simulated canvas regression.
 - Clarify process-state and informational workspace copy.
 
@@ -26,4 +33,4 @@
 - Add compatibility analysis based on runtime-specific requirements and metadata, with explicit unknown results; file existence alone is not evidence of executability.
 - Introduce supported multimodal runtime adapters only after defining readiness, resource preflight, recovery and permission boundaries. Do not modify runtime configuration.
 
-Browser validation of all pages, both themes, responsive layouts, accessibility, and live chart updates remains outstanding: the development sandbox cannot bind localhost and has no browser surface.
+The user confirmed that the earlier Memory Timeline renders in Firefox and that Overview and Performance display live telemetry on GX10. Browser validation of the new storage bars and chart interactions, responsive layouts, contrast, and both themes remains outstanding: this development sandbox cannot bind localhost and has no browser surface.
