@@ -87,3 +87,17 @@ Do not run the legacy installer for this integration. Installation and real GX10
 window validation are **BLOCKED / NOT VERIFIED** in the development sandbox.
 See [desktop experience](docs/design/DESKTOP-EXPERIENCE.md) for security,
 compatibility, troubleshooting and the exact acceptance procedure.
+
+Desktop recheck: executable shortcuts already exist in the Applications directory
+and GNOME's localized desktop directory. Actual window launch remains **NOT
+VERIFIED** under this sandbox. Shutdown errors now distinguish an unreachable
+owner from an absent backend; see the desktop experience document for evidence.
+
+## Final UI layout
+
+Six sections: Overview, Model Manager, Model Library, Workspaces, Activity and
+Settings. Overview consolidates performance gauges, memory history, hardware,
+storage and runtime telemetry. Emerald accents, deep blue and black surfaces
+support both themes. Compact model cards retain Details and confirmed operations;
+Library uses NAS asset rows with expandable evidence, and Workspaces shows six
+informational cards. Browser validation remains BLOCKED in this environment.

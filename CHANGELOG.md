@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Midnight Blue + Graphite glass redesign (2026-11-03)
+
+- Replace pale-green/emerald identity with independently authored neutral light and midnight/graphite dark themes; consolidate five competing token layers into one theme pair and remove obsolete purple, flat utility, Performance and master-detail CSS.
+- Add layered translucent materials, static reflections, illuminated edges and distinct navigation/instrument/secondary/dialog elevations. Limit blur to selected layers; retain solid, reduced-transparency, reduced-motion and forced-colors fallbacks.
+- Align semicircular instruments while keeping memory largest; preserve calculations, utilization bands, unknown values and the 184px real-GiB keyboard-inspectable history, now blue.
+- Put Runtime, Storage, Hardware and Quick Actions in one four-column desktop strip, two columns at medium widths and one on narrow screens. Correct four-disk fixture height from 248px to 154px without clipping; show concise GiB capacity with full utilization on hover/native progress.
+- Restyle compact model cards, strengthen the read-only Details reading layer, surface existing NAS compatibility and unify workspaces, Activity and Settings. Preserve all lifecycle/authentication/backend behavior.
+- Add a guarded socket-free Firefox visual runner and responsive/source regressions. Final 119 Python tests, all three JavaScript suites, syntax and whitespace checks pass. Capture 71 real Firefox Demo screenshots; retain 25 plus results; inspect, correct and revalidate four rendered defects.
+- UI acceptance PARTIAL: Firefox fixture visuals validated; Chromium app and authenticated HTTP browser acceptance remain BLOCKED by environment permissions. No live model operations or infrastructure/launcher changes. See `docs/design/MIDNIGHT_VISUAL_ACCEPTANCE.md`.
+
 ## Unreleased — Public release security audit (2026-11-03)
 
 - Reject linked, non-regular or unsafe-owner state/log files and pin state/NAS directory traversal; prevent NAS directory-swap escape and blocking FIFO metadata opens.
@@ -104,3 +114,24 @@
 - Expanded guarded screenshot matrix; source-review cascade defects corrected.
 - 117 Python tests and three JS suites pass. Visual acceptance remains BLOCKED;
   classification IMPLEMENTED_NOT_VISUALLY_VALIDATED. No screenshots fabricated.
+
+## Desktop launch verification follow-up — 2026-11-03
+
+- Preserve the existing Chromium app-window / Firefox fallback implementation and
+  premium frontend; verify existing localized desktop/menu shortcut presence.
+- Report unreachable-owner and empty control replies as shutdown errors instead
+  of treating a timeout as successful shutdown.
+- Add two mocked regressions: 119 Python tests and three JavaScript suites pass.
+  Real desktop/browser acceptance remains BLOCKED / NOT VERIFIED; no installation
+  or AI runtime changes were performed.
+
+## Final emerald UI consolidation — 2026-11-03
+
+- Apply emerald accents and deep-blue/black foundations to shared light/dark
+  materials, controls, chart traces and status surfaces.
+- Remove Performance; retain gauges, history, hardware and storage in Overview.
+- Preserve compact model cards and Details; simplify Library to NAS rows with
+  optional evidence and render six responsive workspace planning cards.
+- Update six-page navigation and guarded browser coverage. All 119 Python tests
+  and three JavaScript suites pass; real rendered acceptance remains blocked.
+- Preserve backend, runtime adapters, NAS protections and desktop launcher.

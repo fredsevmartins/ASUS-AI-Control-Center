@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
 import {mkdir, writeFile} from 'node:fs/promises';
 import {createInterface} from 'node:readline';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath,pathToFileURL} from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
 
@@ -16,7 +16,7 @@ const artifactDir=process.env.AI_MANAGER_E2E_ARTIFACTS||path.join(os.tmpdir(),'a
 
 try {
   let playwright;
-  try {playwright=await import('playwright');}
+  try {playwright=await import(process.env.AI_MANAGER_E2E_PLAYWRIGHT_MODULE ? pathToFileURL(path.resolve(process.env.AI_MANAGER_E2E_PLAYWRIGHT_MODULE)).href : 'playwright');}
   catch {throw Object.assign(Error('Playwright is not installed; no browser tests ran.'),{blocked:true});}
   child=spawn('python3',['-u','tests/browser_server.py'],{cwd:root,stdio:['ignore','pipe','pipe']});
   let serverDenied=false;
@@ -50,17 +50,18 @@ try {
   assert.equal((await context.request.get(origin+'/api/status',{headers:{'X-Session-Token':token,Origin:'http://invalid.example'}})).status(),403);
   checks.push('Session and Origin rejection over real HTTP');
 
-  for(const section of ['dashboard','models','library','performance','workspaces','activity','settings']){
+  for(const section of ['dashboard','models','library','workspaces','activity','settings']){
     await page.locator(`.nav-item[data-page="${section}"]`).click();
     assert.equal(await page.locator('#'+section).isVisible(),true);
   }
+  assert.equal(await page.locator('[data-page="performance"]').count(),0);
   // Complete visual matrix before simulated lifecycle changes alter the fixture.
   await mkdir(artifactDir,{recursive:true});
   for (const theme of ['light','dark']) {
     if ((await page.locator('body').getAttribute('class')||'').includes('dark') !== (theme==='dark')) await page.locator('#theme-btn').click();
     for (const width of [1440,1024,768,390,320]) {
       await page.setViewportSize({width,height:1000});
-      for (const section of ['dashboard','models','library','performance','workspaces','activity','settings']) {
+      for (const section of ['dashboard','models','library','workspaces','activity','settings']) {
         await page.locator(`.nav-item[data-page="${section}"]`).click();
         assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${section} overflow at ${theme}/${width}`);
         await page.screenshot({path:path.join(artifactDir,`fixture-${section}-${theme}-${width}.png`),fullPage:true});
@@ -73,29 +74,44 @@ try {
       await page.locator('#model-search').fill('');
       await page.locator('[data-details-key="qwen3:8b"]').click();
       await page.waitForFunction(()=>document.querySelector('#details-content')?.textContent.includes('Representative'));
-      await page.screenshot({path:path.join(artifactDir,`fixture-details-${theme}-${width}.png`),fullPage:true});
+      await page.evaluate(()=>window.scrollTo(0,0));
+      await page.screenshot({path:path.join(artifactDir,`fixture-details-${theme}-${width}.png`),fullPage:false});
       await page.locator('#details-close').press('Escape');
       await page.locator('.model-action[data-id="qwen3:8b"][data-action="switch"]').click();
-      await page.screenshot({path:path.join(artifactDir,`fixture-confirmation-${theme}-${width}.png`),fullPage:true});
+      await page.evaluate(()=>window.scrollTo(0,0));
+      await page.screenshot({path:path.join(artifactDir,`fixture-confirmation-${theme}-${width}.png`),fullPage:false});
       await page.locator('#modal-cancel').click();
     }
   }
-  checks.push('Seven-page screenshot matrix, search, empty, details and confirmation: both themes at five widths');
+  checks.push('Six-page screenshot matrix, search, empty, details and confirmation: both themes at five widths');
   await page.setViewportSize({width:1440,height:1000});
   await page.locator('.nav-item[data-page="settings"]').click();
-  assert.equal(await page.locator('#workspace-grid .workspace-card').count(),6);
+  assert.equal(await page.locator('#workspace-grid article.workspace-card').count(),6);
+  await page.locator('.nav-item[data-page="workspaces"]').click();
+  assert.equal(await page.locator('#workspace-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),3);
+  await page.locator('.nav-item[data-page="settings"]').click();
   await page.locator('#settings-theme').click();
-  checks.push('All seven sections, fixture library/activity and informational workspaces');
+  checks.push('All six sections, fixture library/activity and informational workspaces');
   await page.locator('.nav-item[data-page="dashboard"]').click();
   for (const theme of ['light','dark']) {
     if ((await page.locator('body').getAttribute('class')||'').includes('dark') !== (theme==='dark')) await page.locator('#theme-btn').click();
     for (const width of [1440,1024,768,390,320]) {
       await page.setViewportSize({width,height:1000});
       assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`Overview overflow at ${theme}/${width}`);
+      const columns=await page.locator('.overview-records').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
+      assert.equal(columns,width>1250?4:width>600?2:1,`${theme}/${width}: monitoring strip columns`);
+      const strip=await page.locator('.overview-records > article').evaluateAll(items=>items.map(el=>({top:el.getBoundingClientRect().top,height:el.getBoundingClientRect().height,scroll:el.scrollHeight,client:el.clientHeight})));
+      assert.equal(strip.length,4);
+      assert(strip.every(item=>item.scroll<=item.client+1),'strip must not clip content');
+      if(width===1440) assert(strip.every(item=>Math.abs(item.top-strip[0].top)<1),'four modules share a desktop row');
+      assert.equal(await page.locator('#hardware-details .detail-row').count(),4);
+      for (const selector of ['#theme-btn','#refresh-btn','.quick-grid button']) {
+        if(width<=720) assert(await page.locator(selector).first().evaluate(el=>el.getBoundingClientRect().height)>=44,'narrow controls have 44px targets');
+      }
       for (const instrument of ['memory','gpu','cpu']) assert(await page.locator(`#overview-${instrument}-gauge svg`).isVisible());
       assert(await page.locator('#loaded-main').isVisible());
       assert.equal(await page.locator('#memory-chart').evaluate(el=>el.getBoundingClientRect().height),184);
-      for (const selector of ['.overview-instruments','.overview-history','.overview-runtime','.overview-storage','.overview-shortcuts .panel']) {
+      for (const selector of ['.overview-instruments','.overview-history','.overview-runtime','.overview-storage','.overview-shortcuts']) {
         const surface=await page.locator('#dashboard '+selector).evaluate(el=>{const s=getComputedStyle(el);return {radius:parseFloat(s.borderTopLeftRadius),shadow:s.boxShadow,background:s.backgroundColor,border:s.borderTopStyle};});
         assert(surface.radius>=16 && surface.shadow!=='none' && surface.background!=='rgba(0, 0, 0, 0)' && surface.border!=='none',`${theme}/${width}: ${selector} lacks surface depth`);
       }
@@ -104,12 +120,13 @@ try {
     await mkdir(artifactDir,{recursive:true});
     await page.screenshot({path:path.join(artifactDir,`fixture-overview-${theme}.png`),fullPage:true});
   }
+  assert.equal(await page.locator('.gauge-arc').first().evaluate(el=>getComputedStyle(el).transitionDuration),'0s');
   await page.locator('#memory-chart').focus();
   await page.locator('#memory-chart').press('End');
   assert((await page.locator('#overview-timeline-selection').textContent()).includes('GiB'));
   assert.equal(await page.locator('#runtime-summary .status-line').count(),2);
   assert.equal(await page.locator('#storage-summary progress').count(),1);
-  for (const destination of ['models','library','performance','activity']) {
+  for (const destination of ['models','library','activity']) {
     await page.locator(`#dashboard .quick-grid [data-link="${destination}"]`).click();
     assert(await page.locator('#'+destination).isVisible());
     await page.locator('.nav-item[data-page="dashboard"]').click();
@@ -120,7 +137,7 @@ try {
     await page.locator('.nav-item[data-page="dashboard"]').click();
   }
   await page.setViewportSize({width:1440,height:1000});
-  checks.push('Overview light/dark responsive gauges, compact history keyboard selection, storage and all six navigation links');
+  checks.push('Overview light/dark responsive gauges, compact history keyboard selection, storage and all five navigation links');
   await page.locator('.nav-item[data-page="models"]').click();
   await page.locator('#model-search').fill('does not exist');
   assert.equal(await page.locator('.empty-state').isVisible(),true);
@@ -133,7 +150,8 @@ try {
   await details.click();
   assert(await page.locator('#details-modal').isVisible());
   await page.waitForFunction(()=>document.querySelector('#details-content')?.textContent.includes('Representative'));
-  await page.screenshot({path:path.join(artifactDir,'fixture-model-details.png'),fullPage:true});
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.screenshot({path:path.join(artifactDir,'fixture-model-details.png'),fullPage:false});
   await page.locator('#details-close').press('Tab');
   assert(await page.locator('#details-content').evaluate(el=>el===document.activeElement));
   await page.locator('#details-content').press('Shift+Tab');
@@ -158,18 +176,18 @@ try {
   await page.screenshot({path:path.join(artifactDir,'fixture-models-mobile.png'),fullPage:true});
   checks.push('Light/dark, 1440/390/320 widths, high-DPI and reduced-motion emulation');
   await page.setViewportSize({width:1440,height:1000});
-  await page.locator('.nav-item[data-page="performance"]').click();
-  const chart=page.locator('#performance-chart');
+  await page.locator('.nav-item[data-page="dashboard"]').click();
+  const chart=page.locator('#memory-chart');
   await chart.tap({position:{x:100,y:50}});
   await chart.focus();await chart.press('End');
-  assert((await page.locator('#timeline-selection').textContent()).includes('GiB'));
+  assert((await page.locator('#overview-timeline-selection').textContent()).includes('GiB'));
   const initial=await chart.getAttribute('height');
   await page.locator('#theme-btn').click();await page.locator('#theme-btn').click();
   assert.equal(await chart.getAttribute('height'),initial);
-  assert.equal(await page.locator('#performance-memory-gauge .gauge-value').textContent(),'52.0');
-  assert.equal(await page.locator('#performance-gpu-gauge .gauge-value').textContent(),'28.0');
-  assert.equal(await page.locator('#storage-detail progress').count(),1);
-  await page.screenshot({path:path.join(artifactDir,'fixture-performance.png'),fullPage:true});
+  assert.equal(await page.locator('#overview-memory-gauge .gauge-value').textContent(),'52.0');
+  assert.equal(await page.locator('#overview-gpu-gauge .gauge-value').textContent(),'28.0');
+  assert.equal(await page.locator('#storage-summary progress').count(),1);
+  await page.screenshot({path:path.join(artifactDir,'fixture-overview-telemetry.png'),fullPage:true});
   checks.push('Gauges, timeline keyboard selection, stable high-DPI canvas and storage progress');
 
   await page.locator('.nav-item[data-page="models"]').click();
@@ -187,7 +205,8 @@ try {
   await page.locator('#risk-ack').check();
   await page.locator('#modal-accept').focus();await page.locator('#modal-accept').press('Tab');
   assert.equal(await page.locator('.stop-checkbox').first().evaluate(el=>el===document.activeElement),true);
-  await page.screenshot({path:path.join(artifactDir,'fixture-confirmation.png'),fullPage:true});
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.screenshot({path:path.join(artifactDir,'fixture-confirmation.png'),fullPage:false});
   await page.locator('#modal-accept').click();
   await page.waitForFunction(()=>document.querySelector('#operation-status')?.textContent.includes('Simulated operation complete'));
   assert.equal(await page.locator('.model-action[data-id="sglang"][data-action="load"]').count(),1);

@@ -89,7 +89,10 @@ def request(path, command):
         client.settimeout(4)
         client.connect(str(path / 'control.sock'))
         client.sendall(command.encode('ascii'))
-        return client.recv(512).decode('utf8')
+        response = client.recv(512).decode('utf8')
+        if not response:
+            raise RuntimeError('Desktop backend closed the control connection without a reply.')
+        return response
 
 
 def serve(path):
@@ -191,9 +194,12 @@ def serve(path):
 def launch(path, command='OPEN'):
     try:
         return request(path, command)
-    except (OSError, TimeoutError):
+    except (FileNotFoundError, ConnectionRefusedError):
         if command == 'STOP':
             return 'OK'
+    except OSError as exc:
+        if command == 'STOP':
+            raise RuntimeError('Could not confirm backend shutdown. Retry when the desktop backend responds.') from exc
     child = subprocess.Popen([sys.executable, str(BASE / 'desktop_launcher.py'), '--serve'],
                              stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                              stderr=subprocess.DEVNULL, start_new_session=True)

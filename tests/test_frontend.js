@@ -6,15 +6,15 @@ const source = fs.readFileSync('web/app.js', 'utf8');
 const setPage = source.match(/function setPage\(p\)\{[^\n]+\}/)[0];
 let visible = false, drawn = false;
 const sessionHistory = [{time: 1, memory: 42}];
-const page = {id: 'performance', classList: {toggle: (name, value) => { visible = value; }}};
+const page = {id: 'dashboard', classList: {toggle: (name, value) => { visible = value; }}};
 const element = {textContent: ''};
-const context = {activePage: '', pages: {performance: ['Performance', 'Performance', 'Details']},
+const context = {activePage: '', pages: {dashboard: ['Overview', 'Workstation', 'Telemetry']},
   $$: selector => selector === '.page' ? [page] : [],
   $: () => element, renderPerformance: () => {},
   state: {history: sessionHistory},
   drawCharts: () => { assert(visible, 'chart must be visible before drawing'); drawn = true; }};
-vm.runInNewContext(setPage + "\nsetPage('performance');", context);
-assert(drawn, 'opening Performance should draw its chart');
+vm.runInNewContext(setPage + "\nsetPage('dashboard');", context);
+assert(drawn, 'opening Overview should draw its chart');
 assert.strictEqual(context.state.history, sessionHistory, 'navigation must preserve history');
 assert(source.includes('setInterval(update,5000)'), 'status must refresh every five seconds');
 console.log('Frontend navigation regression passed');
@@ -50,7 +50,7 @@ const ctx = {scale: noop, clearRect: noop, beginPath: noop, moveTo: noop, lineTo
   stroke: noop, closePath: noop, fill: noop, arc: noop, fillRect: noop,
   save: noop, restore: noop, translate: noop, rotate: noop,
   fillText: text => labels.push(text), measureText: text => ({width: text.length*6})};
-const canvas = {id:'performance-chart', dataset: {}, width: 0, height: 250, getClientRects: () => [1],
+const canvas = {id:'memory-chart', dataset: {}, width: 0, height: 250, getClientRects: () => [1],
   getBoundingClientRect: () => ({width: 400}),
   getAttribute: function (name) { return name === 'height' ? String(this.height) : null; },
   getContext: () => ctx};
@@ -90,26 +90,21 @@ chartContext.drawChart(canvas, history);
 const localTime = new Date(history[0].time*1000);
 const expectedTime = [localTime.getHours(),localTime.getMinutes(),localTime.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':');
 assert.strictEqual(chartContext.chartTime(history[0].time), expectedTime);
-vm.runInNewContext("chartSelection['performance-chart']=1700000010", chartContext);
+vm.runInNewContext("chartSelection['memory-chart']=1700000010", chartContext);
 chartContext.drawChart(canvas, history);
 assert(descriptions.textContent.includes('40.0 GiB used'));
 assert(labels.some(x => x.includes('40.0 GiB used')), 'selected sample tooltip must be rendered');
 console.log('Memory timeline regressions passed');
 
 // Pointer and keyboard selection use the same observed samples.
-const handlers = {}, overviewHandlers = {}, overviewDescription = {textContent:''};
+const handlers = {};
 canvas.addEventListener = (type, handler) => { handlers[type] = handler; };
-const overview = {...canvas, id:'memory-chart', dataset:{}, addEventListener: (type, handler) => { overviewHandlers[type] = handler; }};
 canvas.getBoundingClientRect = () => ({width:400, left:0});
-overview.getBoundingClientRect = () => ({width:400, left:0});
-const controlsSource = source.slice(source.indexOf('function drawCharts()'), source.indexOf('function renderPerformance()'));
+const controlsSource = source.slice(source.indexOf('function drawCharts()'), source.indexOf('function renderHardware()'));
 chartContext.window.addEventListener = noop;
 chartContext.state.history = history;
-// The dashboard chart is not visible in this simulated Performance view.
-chartContext.$ = selector => selector === '#performance-chart' ? canvas : selector === '#memory-chart' ? overview : selector === '#timeline-selection' ? descriptions : selector === '#overview-timeline-selection' ? overviewDescription : selector === '#chart-note' ? {textContent:''} : null;
+chartContext.$ = selector => selector === '#memory-chart' ? canvas : selector === '#overview-timeline-selection' ? descriptions : selector === '#chart-note' ? {textContent:''} : null;
 vm.runInNewContext(controlsSource, chartContext);
-overviewHandlers.pointermove({clientX:385});
-assert(overviewDescription.textContent.includes('40.0 GiB used'), 'Overview tooltip uses the selected sample');
 handlers.pointermove({clientX:385});
 assert(descriptions.textContent.includes('40.0 GiB used'));
 let prevented = false;
@@ -124,7 +119,7 @@ console.log('Timeline interaction regressions passed');
 // Gauges use telemetry only; invalid values never become plausible measurements.
 const gaugeSource = source.slice(source.indexOf('function gaugePercent('), source.indexOf('initGauges();'));
 const cards = {};
-for (const id of ['overview-memory-gauge','overview-gpu-gauge','overview-cpu-gauge','performance-memory-gauge','performance-gpu-gauge','performance-cpu-gauge']) {
+for (const id of ['overview-memory-gauge','overview-gpu-gauge','overview-cpu-gauge']) {
   const fields = {};
   for (const selector of ['.gauge-arc','.gauge-value','.gauge-unit','.gauge-percent','.gauge-detail','.gauge-accessible']) fields[selector] = {textContent:'',style:{}};
   cards[id] = {fields, dataset:{}, classList:{toggle:noop}, querySelector:selector=>fields[selector]};
@@ -140,10 +135,10 @@ for (const percent of [0,50,100]) {
   assert.strictEqual(card.fields['.gauge-detail'].textContent,`120.0 GiB total · ${(120*(100-percent)/100).toFixed(1)} GiB available`);
   assert.strictEqual(card.fields['.gauge-arc'].style.strokeDashoffset,String(100-percent));
   assert.strictEqual(card.fields['.gauge-arc'].style.visibility,percent ? 'visible' : 'hidden');
-  assert.strictEqual(cards['performance-cpu-gauge'].fields['.gauge-value'].textContent,percent.toFixed(1));
+  assert.strictEqual(cards['overview-cpu-gauge'].fields['.gauge-value'].textContent,percent.toFixed(1));
   assert.strictEqual(cards['overview-cpu-gauge'].fields['.gauge-value'].textContent,percent.toFixed(1));
   assert.strictEqual(cards['overview-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: 53°C');
-  assert.strictEqual(cards['performance-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: 53°C');
+  assert.strictEqual(cards['overview-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: 53°C');
 }
 for (const reading of [null, {total:0,used:0}, {total:100,used:-1}, {total:100,used:101}, {total:100,used:NaN}, {total:Infinity,used:1}]) {
   gaugeContext.renderGauges(reading,{load:-1,temp:NaN},101);
@@ -158,15 +153,15 @@ assert(cards['overview-memory-gauge'].fields['.gauge-detail'].textContent.includ
 assert.strictEqual(cards['overview-gpu-gauge'].fields['.gauge-value'].textContent,'—');
 assert.strictEqual(cards['overview-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: 0°C');
 gaugeContext.renderGauges({total:120*unit,used:40*unit,available:80*unit},{load:50,temp:NaN},40);
-assert.strictEqual(cards['performance-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: Unavailable');
+assert.strictEqual(cards['overview-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: Unavailable');
 assert.strictEqual(gaugeContext.gaugePercent(null),null);
 assert.strictEqual(gaugeContext.gaugePercent(Infinity),null);
 const css = fs.readFileSync('web/style.css','utf8');
 assert(gaugeContext.gaugeMarkup('test','Test').includes('viewBox="0 0 240 140"'), 'gauge should use scalable vector graphics');
-assert(css.includes('.gauge-compact .gauge-visual,.gauge-compact .gauge-scale{width:min(100%,190px)}'), 'Overview gauges must be compact');
+assert(css.includes('width:min(100%,310px)') && css.includes('width:min(100%,220px)'), 'Memory remains the larger instrument');
 assert(css.includes('body.dark .gauge-card'), 'gauge colors must support dark mode');
 assert(css.includes('prefers-reduced-motion:reduce') && css.includes('.gauge-animated .gauge-arc{transition:none}'));
-assert(css.includes('grid-template-columns:repeat(auto-fit,minmax(220px,1fr))') && css.includes('.gauge-grid{grid-template-columns:1fr}'), 'gauges must have responsive layouts');
+assert(css.includes('@media(max-width:1100px)') && css.includes('@media(max-width:600px)') && css.includes('#overview-memory-gauge { grid-column:1/-1; }'), 'instruments reflow at narrower widths');
 console.log('Telemetry gauge regressions passed');
 
 const gpuSource = source.match(/function gpuValues\(\)\{[^\n]+\}/)[0];
@@ -239,3 +234,58 @@ console.log('Appearance preference and accessible toggle state regressions passe
   assert(css.includes('data-band=low') && css.includes('data-band=medium') && css.includes('data-band=high') && css.includes('body.dark'));
   assert(css.includes('repeat(3,minmax(0,1fr))') && css.includes('repeat(2,minmax(0,1fr))'));
 }
+
+const destinations=[...html.matchAll(/class="nav-item[^"]*" data-page="([^"]+)"/g)].map(m=>m[1]);
+assert.deepStrictEqual(destinations,['dashboard','models','library','workspaces','activity','settings']);
+assert(!html.includes('id="performance"') && !source.includes('performance-chart'));
+assert(html.includes('id="hardware-details"') && html.includes('id="storage-summary"'));
+assert(!html.includes('registered-library'), 'Library avoids duplicating Model Manager');
+vm.runInNewContext(setPage + "\nsetPage('performance');", context);
+assert.strictEqual(context.activePage,'dashboard','retired routes return to Overview');
+const workspaceTarget={innerHTML:''};
+vm.runInNewContext(source.slice(source.indexOf('const presets='),source.indexOf('\n',source.indexOf('const presets='))), {$:()=>workspaceTarget});
+assert.strictEqual((workspaceTarget.innerHTML.match(/<article class="workspace-card">/g)||[]).length,6);
+assert(!workspaceTarget.innerHTML.includes('<details'), 'workspace cards show their requirements without expansion');
+console.log('Six-page navigation, consolidated telemetry, simplified Library and workspace cards passed');
+// Simplified inventory retains evidence and escapes discovered metadata.
+const libraryElements={'#nas-summary':{textContent:''},'#library-content':{innerHTML:''}};
+const libraryContext={libraryView:'groups',library:{status:'Synthetic fixture',files:[],groups:[{name:'<asset>',category:'Language',files:2,bytes:1073741824,formats:['safetensors'],classification:'Requires additional configuration',compatibility_hint:{value:'<hint>',confidence:'low'},missing_components:['<missing shard>']}]},$:id=>libraryElements[id]};
+vm.runInNewContext(escapeSource+gibSource+source.match(/function renderLibrary\(\)\{[^\n]+\}/)[0],libraryContext);
+libraryContext.renderLibrary();
+const assetMarkup=libraryElements['#library-content'].innerHTML;
+assert(assetMarkup.includes('<details class="asset-evidence"><summary>Asset details</summary>'));
+for(const evidence of ['&lt;asset&gt;','&lt;hint&gt;','&lt;missing shard&gt;','No executable adapter','low','2 asset file(s)'])assert(assetMarkup.includes(evidence));
+assert(!assetMarkup.includes('<button'), 'NAS assets cannot initiate model operations');
+libraryContext.libraryView='files';libraryContext.renderLibrary();
+assert(libraryElements['#library-content'].innerHTML.includes('No model weights'));
+console.log('Simplified Library evidence, escaping and empty-state regressions passed');
+
+// Source contracts are deliberately separate from computed browser acceptance.
+assert.equal((css.match(/:root\s*\{/g)||[]).length,1,'one light token authority');
+assert.equal((css.match(/body\.dark\s*\{/g)||[]).length,1,'one dark token authority');
+for(const token of ['--bg:#f5f7fa','--bg:#0b1120','--surface:#172235','--blue:#407bbd','--ink:#222831','--ink:#f1f5f9']) assert(css.includes(token),token);
+for(const token of ['--nav-glass:','--instrument-glass:','--material:','--dialog-glass:','--reflection:','--panel-shadow:','--modal-shadow:']) assert(css.includes(token),token);
+assert(css.includes('prefers-reduced-transparency:reduce') && css.includes('@supports not'), 'solid material fallbacks');
+assert(css.includes('.overview-records { display:grid; grid-template-columns:repeat(4,minmax(0,1fr))'));
+assert(css.includes('@media(max-width:1250px)') && css.includes('.overview-records { grid-template-columns:repeat(2,minmax(0,1fr)); }'));
+assert(css.includes('.overview-records { grid-template-columns:1fr; }'));
+assert(!/emerald|#e9f0ef|#087653|master-detail|#performance/.test(css),'obsolete presentation layers removed');
+assert(source.includes("ctx.strokeStyle = dark ? '#74b5e8' : '#407bbd'"),'blue history in both themes');
+const telemetryTarget={innerHTML:''};
+const hardwareContext={state:{memory:{used:52*unit,available:76*unit},cpu:14},gpuValues:()=>({temp:46}),$:()=>telemetryTarget};
+vm.runInNewContext(gibSource+source.match(/function renderHardware\(\)\{[^\n]+\}/)[0],hardwareContext);
+hardwareContext.renderHardware();
+assert.equal((telemetryTarget.innerHTML.match(/class="detail-row"/g)||[]).length,4);
+for(const text of ['Memory in use','52.0 GiB','Available memory','76.0 GiB','GPU temperature','46°C','CPU utilization','14%']) assert(telemetryTarget.innerHTML.includes(text));
+hardwareContext.state.memory.available=null;hardwareContext.state.cpu=null;hardwareContext.gpuValues=()=>({temp:NaN});
+hardwareContext.renderHardware();assert(telemetryTarget.innerHTML.includes('Unavailable') && telemetryTarget.innerHTML.includes('Collecting…'));
+const runtimeContext={state:{models:[{runtime:'SGLang',loaded:true},{runtime:'Ollama',loaded:false}],errors:[]}};
+vm.runInNewContext(escapeSource+source.match(/function statusSummary\(\)\{[^\n]+\}/)[0],runtimeContext);
+for(const text of ['SGLang','Ollama','1 registered · 1 loaded','1 registered · 0 loaded','ACTIVE','IDLE']) assert(runtimeContext.statusSummary().includes(text));
+runtimeContext.state.errors=['Ollama unavailable: synthetic fixture'];assert(runtimeContext.statusSummary().includes('UNKNOWN'));
+storageContext.state.storage=['ASUS system','NAS model library','NAS archive','External NVMe'].map((name,i)=>({name,online:i!==3,total:100*unit,free:40*unit}));
+const disks=storageContext.storageRows();
+assert.equal((disks.match(/class="disk-line"/g)||[]).length,4);assert.equal((disks.match(/<progress/g)||[]).length,3);
+for(const text of ['ASUS system','NAS model library','NAS archive','External NVMe','OFFLINE','ONLINE','60.0% used']) assert(disks.includes(text));
+assert(assetMarkup.includes('library-compatibility'),'collection compatibility visible without disclosure');
+console.log('Midnight glass, responsive strip, telemetry, runtime and storage source contracts passed');

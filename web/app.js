@@ -5,13 +5,13 @@ let modelFilter='all', connectionHealthy=false, submitting=false, modalTrigger=n
 const TOKEN=document.querySelector('meta[name="session-token"]').content;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 let state=null, library=null, activePage='dashboard', libraryView='groups', modalData=null, lastOperation='';
-const pages={dashboard:['Overview','Workstation','Memory, compute and runtime observations.'],models:['Model Manager','Model Manager','Manage local AI models with clear, deliberate actions.'],library:['Model Library','Model Library','Discover and inspect model assets on your NAS.'],performance:['Performance','Performance','System instrumentation · Current session'],workspaces:['Workspaces','Workspaces','Planning profiles for local AI workflows.'],activity:['Activity','Activity','Inspect local operations and recovery attempts.'],settings:['Settings','Settings','Personalize your local control center.']};
+const pages={dashboard:['Overview','Workstation','Memory, compute and runtime observations.'],models:['Model Manager','Model Manager','Manage local AI models with clear, deliberate actions.'],library:['Model Library','Model Library','Discover and inspect model assets on your NAS.'],workspaces:['Workspaces','Workspaces','Planning profiles for local AI workflows.'],activity:['Activity','Activity','Inspect local operations and recovery attempts.'],settings:['Settings','Settings','Personalize your local control center.']};
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function gib(n){return Number.isFinite(n)?(n/1073741824).toFixed(1)+' GiB':'—';}
 function pct(n,total){return total?Math.min(100,Math.max(0,100*n/total)):0;}
 function toast(message,ms=5000){const x=$('#toast');x.textContent=message;x.style.display='block';clearTimeout(x._timer);x._timer=setTimeout(()=>x.style.display='none',ms);}
 async function request(path,opts={}){if(DEMO)return demoRequest(path,opts);const r=await fetch(path,{signal:AbortSignal.timeout(25000),...opts,headers:{'X-Session-Token':TOKEN,...opts.headers}});const d=await r.json();if(!r.ok)throw Error(d.error||`HTTP ${r.status}`);return d;}
-function setPage(p){activePage=p;$$('.page').forEach(e=>e.classList.toggle('active',e.id===p));$$('.nav-item').forEach(e=>(e.classList.toggle('active',e.dataset.page===p),e.setAttribute('aria-current',e.dataset.page===p?'page':'false')));$('#breadcrumb').textContent=pages[p][0];$('#page-title').textContent=pages[p][1];$('#page-desc').textContent=pages[p][2];if(p==='library'&&!library)scanNAS();if(p==='activity')refreshActivity();if(p==='performance')renderPerformance();drawCharts();}
+function setPage(p){if(!Object.hasOwn(pages,p))p='dashboard';activePage=p;$$('.page').forEach(e=>e.classList.toggle('active',e.id===p));$$('.nav-item').forEach(e=>(e.classList.toggle('active',e.dataset.page===p),e.setAttribute('aria-current',e.dataset.page===p?'page':'false')));$('#breadcrumb').textContent=pages[p][0];$('#page-title').textContent=pages[p][1];$('#page-desc').textContent=pages[p][2];if(p==='library'&&!library)scanNAS();if(p==='activity')refreshActivity();drawCharts();}
 $$('.nav-item').forEach(b=>b.onclick=()=>setPage(b.dataset.page));$$('[data-link]').forEach(b=>b.onclick=()=>setPage(b.dataset.link));
 $('#theme-btn').onclick=()=>{document.body.classList.toggle('dark');localStorage.setItem('ai-manager-theme',document.body.classList.contains('dark')?'dark':'light');syncThemeControls();drawCharts();};
 function syncThemeControls(){const dark=document.body.classList.contains('dark');$('#theme-btn').setAttribute('aria-pressed',String(dark));$('#settings-theme').setAttribute('aria-pressed',String(dark));}
@@ -25,7 +25,8 @@ function storageRows() {
   return (state?.storage || []).map(d => {
     const progress = d.online ? storagePercent(d.total, d.free) : null;
     const size = progress === null ? 'Unavailable' : `${gib(d.total-d.free)} of ${gib(d.total)} · ${progress.toFixed(1)}% used`;
-    return `<div class="disk-line"><div class="disk-info"><strong>${escapeHTML(d.name)}</strong><small>${escapeHTML(size)}</small>${progress === null ? '' : `<progress class="disk-track" max="100" value="${progress}" aria-label="${escapeHTML(d.name)} storage used"></progress>`}</div><span class="pill ${d.online ? '' : 'off'}">${d.online ? 'ONLINE' : 'OFFLINE'}</span></div>`;
+    const compactSize = progress === null ? size : `${gib(d.total-d.free).replace(' GiB','')} / ${gib(d.total)}`;
+    return `<div class="disk-line"><div class="disk-info"><strong>${escapeHTML(d.name)}</strong><small title="${escapeHTML(size)}">${escapeHTML(compactSize)}</small>${progress === null ? '' : `<progress class="disk-track" max="100" value="${progress}" aria-label="${escapeHTML(d.name)} storage used"></progress>`}</div><span class="pill ${d.online ? '' : 'off'}">${d.online ? 'ONLINE' : 'OFFLINE'}</span></div>`;
   }).join('');
 }
 function statusSummary(){const names=['SGLang','Ollama'];return names.map(runtime=>{const matching=(state.models||[]).filter(m=>m.runtime===runtime),loaded=matching.filter(m=>m.loaded).length,unknown=matching.some(m=>m.uncertain)||(runtime==='Ollama'&&state.errors.some(e=>e.startsWith('Ollama unavailable:')));return `<div class="status-line"><div><strong>${runtime}</strong><small>${matching.length} registered · ${loaded} loaded</small></div><span class="pill ${loaded&&!unknown?'':'off'}">${unknown?'UNKNOWN':loaded?'ACTIVE':'IDLE'}</span></div>`}).join('')+(state.errors?.length?`<div class="note">${escapeHTML(state.errors.join(' · '))}</div>`:'');}
@@ -39,10 +40,10 @@ function memoryGaugeReading(memory) {
 }
 function gaugeBand(value) { return gaugePercent(value) === null ? 'unavailable' : value < 60 ? 'low' : value < 85 ? 'medium' : 'high'; }
 function gaugeMarkup(id, title) {
-  return `<div class="gauge-heading"><h2>${title}</h2><span aria-hidden="true"></span></div><div class="gauge-visual"><svg viewBox="0 0 240 140" aria-hidden="true" focusable="false"><path class="gauge-ticks" d="M 12 118 h 5 M 26 65 l 5 3 M 65 26 l 3 5 M 120 10 v 5 M 175 26 l -3 5 M 214 65 l -5 3 M 228 118 h -5"/><path class="gauge-track" d="M 24 118 A 96 96 0 0 1 216 118" pathLength="100"/><path class="gauge-arc" d="M 24 118 A 96 96 0 0 1 216 118" pathLength="100" stroke="currentColor" stroke-dasharray="100 100"/></svg><div class="gauge-center"><strong class="gauge-value">—</strong><span class="gauge-unit"></span><small class="gauge-percent">Waiting for telemetry</small></div></div><div class="gauge-scale" aria-hidden="true"><span>0%</span><span>50%</span><span>100%</span></div><div class="gauge-detail">Telemetry unavailable</div><span class="gauge-accessible sr-only" role="status"></span>`;
+  return `<div class="gauge-heading"><h2>${title}</h2><span aria-hidden="true"></span></div><div class="gauge-visual"><svg viewBox="0 0 240 140" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><path class="gauge-ticks" d="M 12 118 h 5 M 26 65 l 5 3 M 65 26 l 3 5 M 120 10 v 5 M 175 26 l -3 5 M 214 65 l -5 3 M 228 118 h -5"/><path class="gauge-track" d="M 24 118 A 96 96 0 0 1 216 118" pathLength="100"/><path class="gauge-arc" d="M 24 118 A 96 96 0 0 1 216 118" pathLength="100" stroke="currentColor" stroke-dasharray="100 100"/></svg><div class="gauge-center"><strong class="gauge-value">—</strong><span class="gauge-unit"></span><small class="gauge-percent">Waiting for telemetry</small></div></div><div class="gauge-scale" aria-hidden="true"><span>0%</span><span>50%</span><span>100%</span></div><div class="gauge-detail">Telemetry unavailable</div><span class="gauge-accessible sr-only" role="status"></span>`;
 }
 function initGauges() {
-  for (const [id,title] of [['overview-memory-gauge','Unified Memory'],['overview-gpu-gauge','GPU Utilization'],['overview-cpu-gauge','CPU Utilization'],['performance-memory-gauge','Unified Memory'],['performance-gpu-gauge','GPU Utilization'],['performance-cpu-gauge','CPU Utilization']]) {
+  for (const [id,title] of [['overview-memory-gauge','Unified Memory'],['overview-gpu-gauge','GPU Utilization'],['overview-cpu-gauge','CPU Utilization']]) {
     document.getElementById(id).innerHTML = gaugeMarkup(id,title);
   }
 }
@@ -64,19 +65,19 @@ function renderGauges(memory, gpu, cpu) {
   const m = memoryGaugeReading(memory);
   const available = Number.isFinite(memory?.available) && memory.available >= 0 && Number.isFinite(memory?.total) && memory.available <= memory.total ? gib(memory.available) : null;
   const memoryDetail = m ? `${gib(m.total)} total · ${available === null ? 'Available memory unavailable' : available + ' available'}` : 'Telemetry unavailable';
-  for (const id of ['overview-memory-gauge','performance-memory-gauge']) {
+  for (const id of ['overview-memory-gauge']) {
     updateGauge(id,'Unified Memory',m?.percent ?? null,m ? (m.used/1073741824).toFixed(1) : '', 'GiB', memoryDetail);
   }
   const temp = Number.isFinite(gpu?.temp) ? `${gpu.temp}°C` : 'Unavailable';
   const gpuDetail = `GPU temperature: ${temp}`;
-  for (const [id,title,reading,detail] of [['overview-gpu-gauge','GPU Utilization',gpu?.load,gpuDetail],['performance-gpu-gauge','GPU Utilization',gpu?.load,gpuDetail],['overview-cpu-gauge','CPU Utilization',cpu,'System-wide utilization'],['performance-cpu-gauge','CPU Utilization',cpu,'System-wide utilization']]) {
+  for (const [id,title,reading,detail] of [['overview-gpu-gauge','GPU Utilization',gpu?.load,gpuDetail],['overview-cpu-gauge','CPU Utilization',cpu,'System-wide utilization']]) {
     const value = gaugePercent(reading);
     updateGauge(id,title,value,value === null ? '' : value.toFixed(1),'%', value === null && title === 'CPU Utilization' ? 'Telemetry unavailable' : detail);
   }
 }
 initGauges();
 function renderStatus(){if(!state)return;const g=gpuValues(),loaded=state.models.filter(x=>x.loaded).length;renderGauges(state.memory,g,state.cpu);
-$('#loaded-main').textContent=loaded;$('#loaded-sub').textContent=`${state.models.length} registered models`;$('#runtime-summary').innerHTML=statusSummary();$('#storage-summary').innerHTML=storageRows();$('#system-state').textContent=state.operation.busy?`Running: ${state.operation.job}`:state.errors.length?'Some runtime checks unavailable':'Monitoring local system';$('#refresh-tag').textContent=`Updated ${new Date(state.time*1000).toLocaleTimeString()}`;$('#connection-dot').style.background=state.errors.length?'#db9d36':'#39cea2';renderModels();renderPerformance();drawCharts();
+$('#loaded-main').textContent=loaded;$('#loaded-sub').textContent=`${state.models.length} registered models`;$('#runtime-summary').innerHTML=statusSummary();$('#storage-summary').innerHTML=storageRows();$('#system-state').textContent=state.operation.busy?`Running: ${state.operation.job}`:state.errors.length?'Some runtime checks unavailable':'Monitoring local system';$('#refresh-tag').textContent=`Updated ${new Date(state.time*1000).toLocaleTimeString()}`;$('#connection-dot').style.background=state.errors.length?'#db9d36':'#39cea2';renderModels();renderHardware();drawCharts();
 const current=JSON.stringify(state.operation);if(current!==lastOperation){if(lastOperation&&state.operation.error)toast('Operation failed: '+state.operation.error,9000);else if(lastOperation&&!state.operation.busy&&state.operation.message!=='Ready')toast(state.operation.message,7000);lastOperation=current;}}
 let selectedModelKey=null, renderedModelKey=null;
 function modelBlocked(model) {
@@ -136,12 +137,6 @@ function selectModel(key) {
   loadDetails(key);
   renderModels();
 }
-function renderRegisteredLibrary() {
-  const focusedRegistration=document.activeElement?.dataset?.registeredKey;
-  $('#registered-library').innerHTML=(state?.models||[]).map(m=>`<button class="registered-row" data-registered-key="${escapeHTML(m.key)}"><strong>${escapeHTML(m.name)}</strong><span>${escapeHTML(m.runtime)}</span><span>${escapeHTML(modelState(m))}</span><span>Inspect model →</span></button>`).join('')||'<p>No registered models observed.</p>';
-  $$('[data-registered-key]').forEach(b=>b.onclick=()=>{modelFilter='all';$('#model-search').value='';$$('[data-filter]').forEach(x=>{x.classList.toggle('selected',x.dataset.filter==='all');x.setAttribute('aria-pressed',String(x.dataset.filter==='all'));});selectModel(b.dataset.registeredKey);setPage('models');$$('.model-details-button').find(row=>row.dataset.detailsKey===b.dataset.registeredKey)?.focus();});
-  if(focusedRegistration)$$('[data-registered-key]').find(b=>b.dataset.registeredKey===focusedRegistration)?.focus();
-}
 function renderModels(){
   if(!state){$('#operation-status').innerHTML='<strong>Waiting for workstation data</strong><span>If the connection is unavailable, use Refresh to reconnect. Model actions remain disabled.</span>';return;}
   const focus=document.activeElement;
@@ -159,7 +154,6 @@ function renderModels(){
   $('#operation-status').classList.toggle('has-error',!!op.error||!connectionHealthy);
   $('#operation-status').innerHTML=!connectionHealthy?'<strong>Connection unavailable — model actions paused</strong><span>Use Refresh to reconnect before taking action.</span>':op.busy?`<strong>${escapeHTML(phaseLabels[op.phase]||'Operation in progress')} · ${escapeHTML(op.job||'')}</strong><progress aria-label="Operation in progress"></progress><span>Runtime evidence is being checked. You can refresh this page while the operation continues.</span>`:op.error?`<strong>Operation failed</strong><span>${escapeHTML(op.error)}</span><span>Review Activity and refresh runtime state before retrying.</span>`:`<strong>${escapeHTML(op.message||'Ready')}</strong><span>${DEMO?'Simulation only':'Runtime monitoring connected'} · Loaded and inference-ready states are distinct</span>`;
   $('#model-cards').innerHTML=models.length?models.map(m=>modelCardHTML(m)).join(''):'<div class="empty-state"><h3>No models found</h3><p>Try another search or filter.</p></div>';
-  renderRegisteredLibrary();
   $$('.model-action').forEach(b=>b.onclick=()=>showModal(b.dataset.action,b.dataset.id));
   $$('.model-details-button').forEach(b=>b.onclick=()=>openModelDetails(b.dataset.detailsKey));
   if(focusKey)$$('.model-action').find(b=>b.dataset.id===focusKey&&b.dataset.action===focusAction&&!b.disabled)?.focus();
@@ -265,7 +259,7 @@ function drawChart(canvas, history) {
   ctx.save(); ctx.translate(12,(top+bottom)/2); ctx.rotate(-Math.PI/2);
   ctx.textAlign='center'; ctx.fillText('Used Memory (GiB)',0,0); ctx.restore();
   ctx.textAlign='center'; ctx.textBaseline='bottom'; ctx.fillText('Time',(left+right)/2,h-2);
-  const selectionText = canvas.id === 'performance-chart' ? '#timeline-selection' : '#overview-timeline-selection';
+  const selectionText = '#overview-timeline-selection';
   if (!samples.length) {
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('Waiting for memory samples', (left+right)/2, (top+bottom)/2);
     $(selectionText).textContent = 'Waiting for memory samples.';
@@ -277,14 +271,14 @@ function drawChart(canvas, history) {
   ctx.textBaseline = 'top'; ctx.textAlign = first === last ? 'center' : 'left'; ctx.fillText(chartTime(first), first === last ? (left+right)/2 : left, bottom+10);
   if (first !== last) {ctx.textAlign='right'; ctx.fillText(chartTime(last), right, bottom+10);}
   ctx.beginPath(); points.forEach((p,i) => i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y));
-  ctx.lineWidth = 2.5; ctx.strokeStyle = dark ? '#91baff' : '#245fc4'; ctx.stroke();
+  ctx.lineWidth = 2.5; ctx.strokeStyle = dark ? '#74b5e8' : '#407bbd'; ctx.stroke();
   if (points.length === 1) {ctx.beginPath(); ctx.arc(points[0].x,points[0].y,3,0,2*Math.PI); ctx.fillStyle=ctx.strokeStyle; ctx.fill();}
   {
     const selected = points.find(p => p.sample.time === chartSelection[canvas.id]);
     const description = selected ? `${chartTime(selected.sample.time)} · ${gib(selected.sample.memory)} used${selected.sample.memory/GIB > CHART_MAX_GIB ? ' (above chart scale)' : ''}` : `${samples.length} samples.${samples.some(s => s.memory/GIB > CHART_MAX_GIB) ? ' Values above 128 GiB are clipped.' : ''} Hover, tap, or use arrow keys to inspect.`;
     $(selectionText).textContent = description;
     if (selected) {
-      ctx.beginPath(); ctx.arc(selected.x,selected.y,4,0,2*Math.PI); ctx.fillStyle=dark?'#b9d2ff':'#1d53b1'; ctx.fill();
+      ctx.beginPath(); ctx.arc(selected.x,selected.y,4,0,2*Math.PI); ctx.fillStyle=dark?'#a7d4f5':'#285e99'; ctx.fill();
       ctx.font='12px sans-serif'; const width=Math.min(w-8,ctx.measureText(description).width+16);
       const x=Math.max(4,Math.min(w-width-4,selected.x-width/2)), y=Math.max(2,selected.y-34);
       ctx.fillStyle=dark?'#edf0f5':'#202329'; ctx.fillRect(x,y,width,24);
@@ -292,7 +286,7 @@ function drawChart(canvas, history) {
     }
   }
 }
-function drawCharts(){if(!state)return;drawChart($('#memory-chart'),state.history);drawChart($('#performance-chart'),state.history);$('#chart-note').textContent=state.history.length+' samples in session';}
+function drawCharts(){if(!state)return;drawChart($('#memory-chart'),state.history);$('#chart-note').textContent=state.history.length+' samples in session';}
 function setupTimeline(timeline) {
   function selectAt(clientX) {
     const samples = chartSamples(state?.history);
@@ -316,13 +310,13 @@ function setupTimeline(timeline) {
     chartSelection[timeline.id]=samples[i].time; drawCharts();
   });
 }
-setupTimeline($('#memory-chart')); setupTimeline($('#performance-chart'));
+setupTimeline($('#memory-chart'));
 window.addEventListener('resize',drawCharts);
-function renderPerformance(){if(!state)return;const g=gpuValues();$('#hardware-details').innerHTML=[['Unified memory',gib(state.memory.total)],['Memory in use',gib(state.memory.used)],['Available memory',gib(state.memory.available)],['GPU utilization',gaugePercent(g.load)!==null?g.load+'%':'Unavailable'],['GPU temperature',Number.isFinite(g.temp)?g.temp+'°C':'Unavailable'],['CPU utilization',state.cpu===null?'Collecting…':state.cpu+'%']].map(([k,v])=>`<div class="detail-row"><span>${k}</span><strong>${v}</strong></div>`).join('');$('#storage-detail').innerHTML=storageRows();}
+function renderHardware(){if(!state)return;const g=gpuValues();$('#hardware-details').innerHTML=[['Memory in use',gib(state.memory.used)],['Available memory',gib(state.memory.available)],['GPU temperature',Number.isFinite(g.temp)?g.temp+'°C':'Unavailable'],['CPU utilization',state.cpu===null?'Collecting…':state.cpu+'%']].map(([k,v])=>`<div class="detail-row"><span>${k}</span><strong>${v}</strong></div>`).join('');}
 async function scanNAS(){try{$('#nas-summary').textContent='Scanning NAS metadata…';library=await request('/api/library');renderLibrary();}catch(e){$('#nas-summary').textContent='NAS scan failed: '+e.message;}}
-function renderLibrary(){if(!library)return;const items=libraryView==='groups'?library.groups:library.files;$('#nas-summary').textContent=`${library.files.length} asset files · ${library.groups.length} collections · ${library.status}`;$('#library-content').innerHTML=items.length?items.map(x=>libraryView==='groups'?`<div class="library-item"><em>${escapeHTML(x.category)}</em><strong>${escapeHTML(x.name)}</strong><small>${x.files} asset file(s) · ${gib(x.bytes)} stored</small><small>Formats: ${escapeHTML(x.formats.join(', '))}</small><small>${escapeHTML(x.classification||'Asset group')} · No executable adapter</small>${x.compatibility_hint?`<small>${escapeHTML(x.compatibility_hint.value)} · ${escapeHTML(x.compatibility_hint.confidence)}</small>`:''}${(x.missing_components||[]).map(reason=>`<small>${escapeHTML(reason)}</small>`).join('')}</div>`:`<div class="library-item"><em>${escapeHTML(x.kind||x.format)}</em><strong>${escapeHTML(x.path)}</strong><small>${gib(x.size)} · Stored on NAS</small></div>`).join(''):'<p>No model weights were discovered in the scanned directories.</p>';}
+function renderLibrary(){if(!library)return;const items=libraryView==='groups'?library.groups:library.files;$('#nas-summary').textContent=`${library.files.length} asset files · ${library.groups.length} collections · ${library.status}`;$('#library-content').innerHTML=items.length?items.map(x=>libraryView==='groups'?`<div class="library-item"><em>${escapeHTML(x.category)}</em><strong>${escapeHTML(x.name)}</strong><small>${x.files} asset file(s) · ${gib(x.bytes)} stored</small><span class="library-compatibility subtle">${escapeHTML(x.classification||'Asset group')} · No executable adapter</span><details class="asset-evidence"><summary>Asset details</summary><small>Formats: ${escapeHTML(x.formats.join(', '))}</small><small>${escapeHTML(x.classification||'Asset group')} · No executable adapter</small>${x.compatibility_hint?`<small>${escapeHTML(x.compatibility_hint.value)} · ${escapeHTML(x.compatibility_hint.confidence)}</small>`:''}${(x.missing_components||[]).map(reason=>`<small>${escapeHTML(reason)}</small>`).join('')}</details></div>`:`<div class="library-item"><em>${escapeHTML(x.kind||x.format)}</em><strong>${escapeHTML(x.path)}</strong><small>${gib(x.size)} · Stored on NAS</small></div>`).join(''):'<p>No model weights were discovered in the scanned directories.</p>';}
 $('#scan-btn').onclick=scanNAS;$$('[data-library]').forEach(b=>b.onclick=()=>{$$('[data-library]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b));});libraryView=b.dataset.library;renderLibrary();});
-const presets=[['⌘','Coding','Software engineering and code assistance','Suggested: Qwen3-Coder-Next'],['⌁','Scientific Research','Scientific reasoning and analysis','Suggested: reasoning-oriented LLM'],['✦','General AI','Everyday reasoning and productivity','Suggested: Qwen 3.8 / Qwen3.5'],['◩','Image Studio','Creative image workflows','Requires a compatible image runtime'],['▤','Video Studio','Generation and post-production','Requires a compatible video workflow'],['◉','Voice Studio','Text-to-speech and audio','Requires a compatible audio runtime']];$('#workspace-grid').innerHTML=presets.map(([icon,title,desc,note])=>`<details class="workspace-card"><summary><span class="workspace-title">${title}</span><span class="workspace-description">${desc}</span></summary><small>${note}</small></details>`).join('');
+const presets=[['⌘','Coding','Software engineering and code assistance','Suggested: Qwen3-Coder-Next'],['⌁','Scientific Research','Scientific reasoning and analysis','Suggested: reasoning-oriented LLM'],['✦','General AI','Everyday reasoning and productivity','Suggested: Qwen 3.8 / Qwen3.5'],['◩','Image Studio','Creative image workflows','Requires a compatible image runtime'],['▤','Video Studio','Generation and post-production','Requires a compatible video workflow'],['◉','Voice Studio','Text-to-speech and audio','Requires a compatible audio runtime']];$('#workspace-grid').innerHTML=presets.map(([icon,title,desc,note])=>`<article class="workspace-card"><span class="symbol" aria-hidden="true"></span><h2 class="workspace-title">${title}</h2><p class="workspace-description">${desc}</p><small>${note}</small></article>`).join('');
 async function refreshActivity(){try{const events=await request('/api/activity');$('#activity-list').innerHTML=events.length?events.map(e=>`<div class="activity-entry"><i></i><div><strong>${escapeHTML(e.operation)} · ${escapeHTML(e.stage)}</strong><small>${escapeHTML(e.model||'System')} · ${escapeHTML(e.time||'')}</small>${e.detail?`<small>${escapeHTML(e.detail)}</small>`:''}</div></div>`).join(''):'<p>No operations recorded yet.</p>';}catch(e){$('#activity-list').textContent='Activity unavailable: '+e.message+'. Use Refresh to retry.';}}
 $('#activity-refresh').onclick=refreshActivity;
 const demoState={time:Date.now()/1000,memory:{total:128*1073741824,used:52*1073741824,available:76*1073741824},cpu:14,gpu:'GPU: 28% · 46°C',errors:[],storage:[{name:'Local storage',online:true,total:2000*1073741824,free:1350*1073741824}],history:Array.from({length:30},(_,i)=>({time:Date.now()/1000-(29-i)*5,memory:(48+Math.sin(i/4)*4)*1073741824})),operation:{busy:false,job:null,message:'Ready',error:null},models:[{key:'sglang',name:'Qwen 3.8-27B NVFP4',runtime:'SGLang',memory:'Not available',loaded:true},{key:'qwen3:8b',name:'qwen3:8b',runtime:'Ollama',memory:'—',loaded:false},{key:'nomic-embed-text',name:'nomic-embed-text',runtime:'Ollama',memory:'0.3 GiB',loaded:true,embedding:true},{key:'example-unavailable',name:'Example unavailable model',runtime:'SGLang',memory:'Not available',loaded:false,uncertain:true}]};
@@ -372,12 +366,12 @@ async function demoRequest(path,opts={}){
   return {message:'Simulation accepted'};
 }
 const navigationIcons=['M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z', 'M4 5h16v14H4z M8 9h8 M8 13h5', 'M4 4h16v16H4z M8 4v16 M12 8h4 M12 12h4', 'M3 19h18 M6 15V9 M12 15V4 M18 15v-7', 'M3 7h18v13H3z M3 7V4h7l3 3', 'M12 3a9 9 0 1 0 9 9 M12 7v5l4 2', 'M4 6h16 M4 12h16 M4 18h16 M8 3v6 M16 9v6 M10 15v6'];
-$$('.nav-item').forEach((b,i)=>{b.querySelector('span').innerHTML=`<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${navigationIcons[i]}"/></svg>`;});
+$$('.nav-item').forEach((b,i)=>{b.querySelector('span').innerHTML=`<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${navigationIcons[[0,1,2,4,5,6][i]]}"/></svg>`;});
 function uiIcon(path){return `<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${path}"/></svg>`;}
 $('.brand-mark').innerHTML=uiIcon('M4 18 10 5h4l6 13 M7 13h10');
 $('#theme-btn').innerHTML=uiIcon('M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9');
 $('#refresh-btn').innerHTML=uiIcon('M20 9a8 8 0 1 0 0 6 M20 3v6h-6');
-$$('.quick-grid b').forEach((b,i)=>b.innerHTML=uiIcon(navigationIcons[[1,2,3,5][i]]));
+$$('.quick-grid b').forEach((b,i)=>b.innerHTML=uiIcon(navigationIcons[[1,2,5][i]]));
 $('.metric-heading span').innerHTML=uiIcon(navigationIcons[1]);
 const workspaceIcons = [
   'M8 6 2 12l6 6 M16 6l6 6-6 6 M14 4l-4 16',

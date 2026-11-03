@@ -1,6 +1,6 @@
 # Desktop experience
 
-Date: 2026-11-03. Implementation complete in the checkout; installation and real
+Date: 2026-11-03. Implementation complete in the checkout; installed shortcut execution and real
 GX10 desktop acceptance **BLOCKED / NOT VERIFIED**. This is not a READY release.
 
 ## Mechanism and environment evidence
@@ -21,10 +21,13 @@ The mounted Snap manifests report Chromium **156.0.8078.47** and Firefox
 `cap_dac_override`. No Chrome executable was found. A fresh random loopback bind
 failed with PermissionError. Computer-use returned no apps or browsers.
 
-The existing menu entry points directly at
-`~/.local/share/asus-ai-model-manager-v5/server.py`; it starts a fresh backend on
-every invocation. The stable files and that installed shortcut were not changed.
-No matching Control Center desktop file was present in `~/Desktop` at inspection.
+Fresh recheck found executable menu and desktop entries already pointing at this
+checkout's `desktop_launcher.py`, with `Terminal=false` and the Stop action.
+GNOME resolves the desktop directory to `~/Área de trabalho`, rather than
+`~/Desktop`. A timestamped previous menu-entry backup is present. These files
+were installed before this pass; neither was changed here. Their presence does
+not establish that GNOME trusts them or that double-click opens a window.
+The separate legacy v5 entry remains present.
 
 ## Startup and shutdown
 
@@ -44,7 +47,9 @@ terminated: they lack the private control protocol and must remain undisturbed.
 Closing the browser retains the backend, matching the existing application's
 lifetime. Reopen with the icon. Use the menu entry's **Stop ASUS AI Control Center**
 action or `python3 desktop_launcher.py --stop` to shut down the owned backend.
-Stop refuses while the application's operation state is busy. SIGINT/SIGTERM
+Stop refuses while the application's operation state is busy. A timeout, permission
+failure or empty control reply reports an error rather than claiming shutdown; an
+absent/refused socket is treated as an already stopped owner. SIGINT/SIGTERM
 also close the HTTP/control sockets and release the lock. Browser sessions are
 never killed. Restart generates a fresh session token and random port.
 There is no logout service integration; stop explicitly when finished.
@@ -72,7 +77,7 @@ installation and differently named legacy shortcuts intact. It attempts GNOME's
 trusted metadata; if necessary, right-click the icon and choose **Allow Launching**.
 No sudo or packages are needed. Do not use legacy `install.sh` for this integration.
 The current workspace may write only inside the checkout and `/tmp`, so account
-installation could not be performed here. Neither installer was run as validation.
+installation or repair could not be performed here; existing shortcuts were inspected read-only. Neither installer was run as validation.
 
 To restore: stop this backend, restore the timestamped menu/desktop backups, and
 remove only the newly created desktop entry if no previous one existed. The
@@ -139,3 +144,14 @@ does not bypass Snap/browser sandboxes. For startup timeout, check Python and
 local socket permissions; stale control sockets are replaced under the owner lock.
 If no dialog appears, run the launch command in a terminal to see sanitized error
 feedback. Never make the server public to work around socket restrictions.
+
+## Latest verification
+
+The current socket-free suite passes 119 Python tests, including 18 launcher
+cases, and all three JavaScript suites. Compilation, shell/JavaScript syntax and
+desktop-entry validation pass. Both fixture browser commands are BLOCKED because
+Playwright is absent. Fresh loopback binding fails with PermissionError; installed
+Firefox/Chromium version commands fail in snap-confine. The graphical connector
+returns no apps or browsers. No real window validation or screenshots occurred.
+Release readiness remains withheld. No installer, live runtime operation or
+service change was performed during this pass.

@@ -1,5 +1,7 @@
 # Testing
 
+Current UI evidence: [Midnight visual acceptance](docs/design/MIDNIGHT_VISUAL_ACCEPTANCE.md). Firefox file-only Demo rendering is validated; Chromium and authenticated HTTP browser acceptance remain BLOCKED. Earlier emerald/browser-blocked sections below are historical.
+
 ## Required automated checks
 
 Run from the repository root. These checks do not contact live runtimes or perform model operations:
@@ -12,6 +14,7 @@ node tests/test_model_intelligence.js
 python3 -m py_compile tests/browser_server.py
 node --check web/app.js
 node --check tests/browser_e2e.mjs
+node --check tests/browser_visual.mjs
 bash -n install.sh
 git diff --check
 ```
@@ -274,3 +277,136 @@ fresh loopback, system-browser, cached ARM64 browser and connector attempts are
 blocked. No screenshots exist for this pass. Exact commands, evidence boundaries
 and remaining accessibility gates are in
 [FINAL_VISUAL_ACCEPTANCE.md](docs/design/FINAL_VISUAL_ACCEPTANCE.md).
+
+## Desktop launcher verification follow-up
+
+119 Python tests pass, including 18 desktop cases. New mocked regressions verify
+that Stop timeout/permission errors and empty socket replies cannot claim clean
+shutdown. All three JavaScript suites, prescribed compilation and JS/shell syntax
+checks, desktop-entry validation and whitespace checks pass. Neither installer
+was executed. Existing executable menu and localized desktop entries were
+inspected read-only; their execution/trust remain NOT VERIFIED.
+
+Both browser fixture commands report BLOCKED (missing Playwright). Fresh random
+loopback binding is denied; Firefox/Chromium fail in snap-confine; graphical
+inventory is empty. No real first-launch, repeated-click, close/restart, chrome,
+dimensions, theme or input acceptance is claimed. Exact workstation validation:
+
+```sh
+cd /home/frederico/Projetos/ASUS-AI-Control-Center && python3 desktop_launcher.py
+```
+
+Follow the manual checklist in `docs/design/DESKTOP-EXPERIENCE.md`; live lifecycle
+operations remain excluded. Release readiness remains withheld.
+
+## Final emerald UI consolidation
+
+119 Python tests and all three JavaScript suites pass. Navigation regressions now
+require exactly six sections, reject the retired Performance route in favor of
+Overview, retain chart pointer/keyboard/high-DPI coverage, and verify six workspace
+articles. Compact-card/details, lifecycle guards, metadata, authentication and
+security regressions continue to pass. Backend and desktop launcher files were
+not changed during this UI pass. Compilation, JS/shell syntax and whitespace
+checks pass; no installer or live model operation ran.
+
+The guarded browser matrix now targets six pages, Overview telemetry and workspace
+columns. Both commands below returned exit 2 / BLOCKED because Playwright is not
+installed. Fresh graphical inventory is empty. No screenshots, real visual
+comparison, computed contrast, keyboard/screen-reader or responsive acceptance
+are claimed. The design detector ran in degraded regex mode with advisory
+palette/type/radius findings; computed styles and contrast were unavailable.
+
+```sh
+node tests/browser_e2e.mjs
+AI_MANAGER_E2E_BROWSER=firefox node tests/browser_e2e.mjs
+```
+
+When available, review both themes and all five fixture widths, workspace cards,
+NAS disclosure content, Overview hardware overflow, compact cards and modal focus.
+Release readiness remains withheld pending rendered acceptance.
+
+
+## Midnight Blue + Graphite validation — 2026-11-03
+
+**Overall UI acceptance: PARTIAL. Firefox fixture visuals validated; Chromium app
+and authenticated HTTP browser acceptance BLOCKED.** This supersedes earlier
+statements that no browser rendering was possible. It does not change historical
+runtime readiness evidence or claim the release is READY.
+
+Final results: **119 Python tests**, all three JavaScript suites, Python fixture
+compilation, JavaScript syntax (including both browser runners), shell syntax and
+`git diff --check` pass. The optional local security scanner also completed; its
+existing infrastructure/test-fixture findings are advisory evidence, not a clean
+security audit. It does not establish absence of secrets.
+
+New frontend source tests cover one light/dark token authority, distinct glass
+materials and solid fallbacks, responsive four/two/one monitoring layout, blue
+history, four measured hardware fields, two runtime counts/unknown states, four
+storage observations and visible collection compatibility. Existing gauge
+calculations, unknown values, Details read-only behavior, modal focus, model
+filters and protected lifecycle tests remain enabled.
+
+### Socket-free rendered validation
+
+`tests/browser_visual.mjs` opens only the actual `web/index.html?demo=1` file in
+explicit Demo Mode. A route guard rejects network requests; no server starts and
+no runtime or NAS adapter exists in this path. Four storage records and two
+Activity events are clearly synthetic fixtures. The runner opens and cancels
+the existing protected operation dialog; it accepts no lifecycle operation.
+
+With an already provisioned Playwright package and Firefox binary:
+
+```sh
+AI_MANAGER_E2E_BROWSER=firefox node tests/browser_visual.mjs
+```
+
+If package resolution or browser discovery needs an existing installation, set
+`AI_MANAGER_E2E_PLAYWRIGHT_MODULE` to its `index.mjs` and
+`AI_MANAGER_VISUAL_EXECUTABLE` to its browser executable. No download/install is
+performed. `AI_MANAGER_VISUAL_ARTIFACTS` selects an evidence directory; the default
+is `/tmp/asus-ai-midnight-visual`. Chromium uses its sandbox; the runner never
+disables browser security to get a pass. Missing prerequisites exit 2/BLOCKED;
+assertion failures exit 1; success exits 0.
+
+The completed Firefox matrix has six pages plus Details in both themes at 1440,
+1024, 768, 390 and 320px: **70 matrix screenshots plus one confirmation screenshot**.
+Assertions verify no horizontal overflow; four/two/one secondary columns; four
+storage states and three valid native progress bars; no clipped strip content;
+154px desktop strip; aligned gauge headings and non-overlapping scale/captions;
+184px chart; keyboard history inspection; reduced-motion computed transition;
+model grid/filter/search; Details Tab/Escape/focus return; six workspaces; and
+zero network requests or page errors. Final captures were inspected and the four
+first-round issues corrected. Modal captures use the viewport after scrolling to
+the top to avoid Firefox full-page/fixed-position capture artifacts.
+
+[Evidence and correction verdict](docs/design/MIDNIGHT_VISUAL_ACCEPTANCE.md) links
+25 retained screenshots and results. The entire 71-image run remains in the local
+artifact directory. The mechanical detector ran once in degraded regex mode;
+type/radius advisories against the old DESIGN.md were reconciled in the new design
+document. Parser/computed contrast and assistive-technology validation remain
+unverified.
+
+### Remaining GX10 gates
+
+Run the guarded HTTP fixture on an environment permitting random loopback sockets:
+
+```sh
+node tests/browser_e2e.mjs
+AI_MANAGER_E2E_BROWSER=firefox node tests/browser_e2e.mjs
+```
+
+Use `AI_MANAGER_E2E_PLAYWRIGHT_MODULE` if an existing external package is needed.
+Here the default import exits 2 (module not on the project import path); with the
+provisioned package, both browser selections exit 2 because the fixture cannot
+create a socket (EPERM). Chromium's separate sandboxed file-render attempt also
+fails: crashpad `setsockopt: Operation not permitted`, process SIGTRAP. Browser
+connector profile conflict and empty computer-use inventory were rechecked.
+No security restriction was bypassed.
+
+On the GX10, review those HTTP screenshots in Chromium and Firefox, open Details
+with the keyboard, inspect library disclosures, and check the four-disk strip at
+1440px and its narrower two/one-column layouts. Inspect high-DPI rendering,
+computed text contrast, zoom and reduced transparency, and measure scrolling and
+idle CPU in the actual Chromium application window. Never point simulated
+operation tests at the stable app. No live load/unload/switch, readiness inference,
+installation or launcher change is needed for visual acceptance.

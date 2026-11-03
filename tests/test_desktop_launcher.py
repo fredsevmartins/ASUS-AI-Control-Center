@@ -59,16 +59,30 @@ class DesktopTests(unittest.TestCase):
         child.wait.assert_called_once()
 
     def test_stop_and_restart(self):
-        with patch.object(app, 'request', side_effect=['OK', OSError(), 'OK']) as request, patch.object(app.subprocess, 'Popen') as spawn:
+        with patch.object(app, 'request', side_effect=['OK', FileNotFoundError(), 'OK']) as request, patch.object(app.subprocess, 'Popen') as spawn:
             self.assertEqual(app.launch(Path('/synthetic'), 'STOP'), 'OK')
             self.assertEqual(app.launch(Path('/synthetic')), 'OK')
         self.assertEqual(request.call_args_list[0].args[1], 'STOP')
         self.assertEqual(spawn.call_count, 1)
 
     def test_stop_absent_does_not_start(self):
-        with patch.object(app, 'request', side_effect=OSError()), patch.object(app.subprocess, 'Popen') as spawn:
+        with patch.object(app, 'request', side_effect=FileNotFoundError()), patch.object(app.subprocess, 'Popen') as spawn:
             self.assertEqual(app.launch(Path('/synthetic'), 'STOP'), 'OK')
         spawn.assert_not_called()
+
+    def test_stop_unreachable_does_not_claim_shutdown_or_spawn(self):
+        for error in (TimeoutError(), PermissionError()):
+            with self.subTest(error=type(error).__name__), patch.object(app, 'request', side_effect=error), patch.object(app.subprocess, 'Popen') as spawn:
+                self.assertRaisesRegex(RuntimeError, 'Could not confirm', app.launch, Path('/synthetic'), 'STOP')
+                spawn.assert_not_called()
+
+    def test_empty_control_reply_is_not_success(self):
+        client = Mock()
+        client.__enter__ = Mock(return_value=client)
+        client.__exit__ = Mock(return_value=False)
+        client.recv.return_value = b''
+        with patch.object(app.socket, 'socket', return_value=client):
+            self.assertRaisesRegex(RuntimeError, 'without a reply', app.request, Path('/synthetic'), 'STOP')
 
     def test_ticket_single_use_expiry(self):
         tickets = app.Tickets()
