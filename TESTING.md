@@ -1,6 +1,6 @@
 # Testing
 
-Current UI evidence: [Midnight visual acceptance](docs/design/MIDNIGHT_VISUAL_ACCEPTANCE.md). Firefox file-only Demo rendering is validated; Chromium and authenticated HTTP browser acceptance remain BLOCKED. Earlier emerald/browser-blocked sections below are historical.
+Current UI evidence: [Final refinement](docs/design/LIQUID_GLASS_REFINEMENT.md). Earlier baseline: [Midnight visual acceptance](docs/design/MIDNIGHT_VISUAL_ACCEPTANCE.md). Firefox file-only Demo rendering is validated; Chromium and authenticated HTTP browser acceptance remain BLOCKED. Earlier emerald/browser-blocked sections below are historical.
 
 ## Required automated checks
 
@@ -410,3 +410,27 @@ computed text contrast, zoom and reduced transparency, and measure scrolling and
 idle CPU in the actual Chromium application window. Never point simulated
 operation tests at the stable app. No live load/unload/switch, readiness inference,
 installation or launcher change is needed for visual acceptance.
+
+## Final color and glass validation — 2026-11-04
+
+All 119 Python regressions and three JavaScript suites pass. Updated frontend source contracts cover the requested neutral palette and inherited dark gauge tokens, replacing an assertion that required a redundant selector. No telemetry tests were removed. Syntax/compilation and whitespace checks pass; installer syntax only, never executed.
+
+The existing socket-free Firefox fixture passes five groups with 71 screenshots: six pages and Details, both themes at 1440/1024/768/390/320px, plus cancelled confirmation. All requests are restricted to local frontend files; no backend or adapters run. The desktop supporting strip is 176.5px with larger text, four aligned columns and no clipping; previous baseline was 154px. History remains 184px. Manual inspection covers both Overview/Manager themes, Details, Library, Workspaces, Activity, Settings and narrower captures. Twenty selected images plus results are retained in `docs/design/evidence/liquid-glass/`; the full matrix is `/tmp/asus-ai-liquid-final`.
+
+Reproduce with an already provisioned Playwright module and Firefox executable (no installation):
+
+```sh
+AI_MANAGER_E2E_BROWSER=firefox AI_MANAGER_VISUAL_ARTIFACTS=/tmp/asus-ai-liquid-final node tests/browser_visual.mjs
+node tests/browser_materials.mjs
+python3 tests/contrast_samples.py /tmp/asus-ai-liquid-materials
+node --check tests/browser_materials.mjs
+python3 -m py_compile tests/contrast_samples.py
+```
+
+Set `AI_MANAGER_E2E_PLAYWRIGHT_MODULE` and `AI_MANAGER_VISUAL_EXECUTABLE` as described above when needed. `AI_MANAGER_MATERIAL_ARTIFACTS` overrides the material audit directory; pass the same directory to the Python analyzer. Pixel analysis additionally requires already provisioned Pillow. The audit records computed fills/blur and hides text fill for background captures. Three pixels beneath each visible text rectangle are compared against computed foreground using WCAG luminance. Hit testing excludes clipped modal content. Disabled controls, canvas text, offscreen content and hover/focus states are outside this sample. Results are a bounded contrast measurement, not full WCAG certification.
+
+The first sample found Light Mode green badges at 4.28–4.49:1. After changing semantic text green to #176F4E (gauge bands unchanged), 654 visible text rectangles pass 4.5:1, minimum 5.01:1. The final Firefox screenshot matrix also passes.
+
+Both HTTP browser commands were rechecked with the provisioned package: **BLOCKED**, exit 2, loopback socket access denied. Sandboxed Chromium file rendering: **BLOCKED**, exit 2, browser could not launch. Runtime version/readiness and NAS access were not exercised by this frontend-only task. No stable application, service, launcher, authentication or runtime configuration changed.
+
+Full UI acceptance remains **PARTIAL**. Chromium, authenticated HTTP delivery, actual reduced-transparency OS preference, forced colors, assistive technology, 200% zoom, all scroll/interaction-state contrast and performance require workstation validation. No release READY claim follows from the passing Firefox Demo fixture.

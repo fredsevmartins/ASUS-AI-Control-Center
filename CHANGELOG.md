@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — Final color and glass refinement (2026-11-04)
+
+- Neutralize Light Mode with #F5F6F8, white glass, graphite ink and desaturated environmental lighting; retain Midnight Blue + Graphite Dark Mode.
+- Refine existing material tokens, reflection transparency, edge highlights and tiered backdrop blur. Complete opaque/reduced-transparency fallbacks; remove redundant gauge and dark-action declarations.
+- Raise operational supporting text to 12px and compact strip/instrument titles to 14px; retain a documented 11px dense-storage exception. Preserve all grids, gauge proportions, spacing and functionality.
+- Correct light green badge text after rendered contrast evidence; 654 visible text samples pass 4.5:1 with minimum 5.01:1. Gauge semantic bands remain unchanged.
+- Pass 119 Python tests, all three JavaScript suites, syntax/whitespace checks and five Firefox visual fixture groups. Retain 20 screenshots and rendered contrast evidence. HTTP browser tests and Chromium launch remain BLOCKED; full UI acceptance is PARTIAL.
+- See `docs/design/LIQUID_GLASS_REFINEMENT.md` for before/after evidence, methods and limitations.
+
 ## Unreleased — Midnight Blue + Graphite glass redesign (2026-11-03)
 
 - Replace pale-green/emerald identity with independently authored neutral light and midnight/graphite dark themes; consolidate five competing token layers into one theme pair and remove obsolete purple, flat utility, Performance and master-detail CSS.

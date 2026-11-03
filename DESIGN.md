@@ -2,27 +2,27 @@
 name: ASUS AI Control Center
 description: Midnight Blue and Graphite workstation instrumentation with restrained optical glass.
 colors:
-  bg: '#f5f7fa'
+  bg: '#f5f6f8'
   surface: '#fff'
-  raised: '#e9eef5'
-  ink: '#222831'
+  raised: '#eceef1'
+  ink: '#17212f'
   sub: '#526174'
-  line: 'rgba(57,83,119,.18)'
+  line: 'rgba(75,95,125,.16)'
   blue: '#407bbd'
   dark-history-blue: '#74b5e8'
   indigo: '#285e99'
   action: '#326ba8'
   action-hover: '#265689'
-  accent-bg: 'rgba(64,123,189,.12)'
-  nav-glass: 'rgba(238,243,250,.67)'
-  instrument-glass: 'rgba(255,255,255,.56)'
+  accent-bg: 'rgba(64,123,189,.08)'
+  nav-glass: 'rgba(248,249,251,.62)'
+  instrument-glass: 'rgba(255,255,255,.62)'
   material: 'rgba(255,255,255,.52)'
-  dialog-glass: 'rgba(248,251,255,.985)'
-  edge: 'rgba(92,122,160,.24)'
+  dialog-glass: 'rgba(250,251,252,.985)'
+  edge: 'rgba(75,95,125,.2)'
   highlight: 'rgba(255,255,255,.94)'
-  reflection: 'rgba(255,255,255,.48)'
-  reflection-fade: 'rgba(255,255,255,.02)'
-  green: '#197b56'
+  reflection: 'rgba(255,255,255,.34)'
+  reflection-fade: 'rgba(255,255,255,0)'
+  green: '#176f4e'
   warning: '#875713'
   danger: '#b93232'
   band-low: '#23966b'
@@ -38,11 +38,11 @@ colors:
   dark-action-hover: '#3c79b9'
   dark-accent-bg: 'rgba(116,181,232,.13)'
   dark-nav-glass: 'rgba(12,20,35,.73)'
-  dark-instrument-glass: 'rgba(25,40,62,.59)'
+  dark-instrument-glass: 'rgba(25,40,62,.56)'
   dark-material: 'rgba(24,35,53,.58)'
   dark-dialog-glass: 'rgba(23,34,53,.985)'
   dark-edge: 'rgba(161,190,226,.19)'
-  dark-highlight: 'rgba(216,234,255,.17)'
+  dark-highlight: 'rgba(216,234,255,.21)'
   dark-reflection: 'rgba(136,182,229,.09)'
   dark-reflection-fade: 'rgba(91,135,188,.01)'
   dark-green: '#70d1a6'
@@ -70,7 +70,7 @@ typography:
     lineHeight: 1.5
   label:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Ubuntu, sans-serif'
-    fontSize: '10px'
+    fontSize: '12px'
     fontWeight: 650
 rounded:
   badge: '6px'
@@ -125,7 +125,9 @@ This is the active, implemented frontend design. The previous DESIGN.md, includi
 - Light cool-neutral and dark Graphite appearances, with equal information hierarchy.
 - Explicit uncertainty, provenance and separation of discovered assets from runtime registrations.
 
-Visual acceptance is **PARTIAL**. The guarded, file-only Firefox Demo fixture validated six pages plus Model Details in both themes at widths 1440, 1024, 768, 390 and 320: 70 matrix screenshots plus confirmation evidence. The four-disk desktop strip is synthetic fixture data. No HTTP, NAS or runtime requests were made. The finish reviewer accepted four resolved corrections: narrow gauge collision, dialog ghosting, strip height and gauge alignment; this is a limited correction verdict, not complete release certification. See [MIDNIGHT_VISUAL_ACCEPTANCE.md](docs/design/MIDNIGHT_VISUAL_ACCEPTANCE.md) and [evidence](docs/design/evidence/midnight-glass/).
+Current refinement evidence: [Final color and glass validation](docs/design/LIQUID_GLASS_REFINEMENT.md). Firefox fixture visual checks pass; full UI acceptance remains **PARTIAL**. The following describes the prior accepted layout baseline.
+
+Previous visual acceptance was **PARTIAL**. The guarded, file-only Firefox Demo fixture validated six pages plus Model Details in both themes at widths 1440, 1024, 768, 390 and 320: 70 matrix screenshots plus confirmation evidence. The four-disk desktop strip is synthetic fixture data. No HTTP, NAS or runtime requests were made. The finish reviewer accepted four resolved corrections: narrow gauge collision, dialog ghosting, strip height and gauge alignment; this is a limited correction verdict, not complete release certification. See [MIDNIGHT_VISUAL_ACCEPTANCE.md](docs/design/MIDNIGHT_VISUAL_ACCEPTANCE.md) and [evidence](docs/design/evidence/midnight-glass/).
 
 Full HTTP E2E is BLOCKED by loopback EPERM; Chromium sandbox launch is BLOCKED. The default local Playwright import is missing; the fixture run used an externally provisioned module via environment configuration. Chromium and real GX10 application acceptance remain unverified, including launch/authenticated application integration. No live readiness, inference, measured FPS, idle CPU or computed contrast claim follows from fixture screenshots.
 
@@ -155,7 +157,7 @@ Green remains a success/observed-state and low-utilization signal, not the brand
 
 ## Typography
 
-The local system stack is used throughout; there are no remote fonts. Normal body text uses the frontmatter body role. Page headlines use the headline role, falling to 26px at 720px and below; model names use the title role. Dialog headings are 22px; workspace titles are 16px. Operational controls and facts use 12px, navigation and principal instrument labels 13px, supporting observations 11px, and badges/compact telemetry 10px. The small brand descriptor remains 9px; 8px badges are removed.
+The local system stack is used throughout; there are no remote fonts. Normal body text uses the frontmatter body role. Page headlines use the headline role, falling to 26px at 720px and below; model names use the title role. Dialog headings are 22px; workspace titles are 16px. Operational controls, supporting observations, metadata sources, gauge scales and badges use the shared 12px support token; navigation and standard text use 13px, instrument and secondary-strip titles 14px. Dense storage names, capacities and status use an explicit 11px exception to retain all four disk observations. The small brand descriptor remains 9px; 8px badges are removed.
 
 Gauge values are tabular, weight 600, with tight tracking: memory scales from 36–52px, compute from 26–38px and becomes 28px in the narrow layout. The loaded-model count is 52px on desktop and 28px when moved below the gauges. Units and explanatory text remain visually subordinate. Use wrapping for long identifiers and evidence rather than clipping useful information.
 
@@ -163,7 +165,7 @@ Gauge values are tabular, weight 600, with tight tracking: memory scales from 36
 
 The desktop shell has a sticky 208px sidebar, 56px topbar and centered content capped at 1640px with 28px horizontal inset. The sidebar becomes 184px at 1100px and below. At 720px and below it becomes a top navigation strip with horizontal scrolling; content inset becomes 14px and principal controls have 44px minimum targets. Spacing is compact and varies by role; it is not a rigid multiples-only grid.
 
-Overview places the instrument assembly above the 184px memory-history canvas, then a supporting strip of Runtime Status, Storage Health, Hardware Telemetry and Quick Actions. Above 1250px all four supporting modules share one row; from 601–1250px they use two columns; at 600px and below they use one. The full four-disk fixture measured 154px high on desktop after correction. This is an observed fixture result, not a fixed CSS height: errors, offline messages and extra content must grow naturally.
+Overview places the instrument assembly above the 184px memory-history canvas, then a supporting strip of Runtime Status, Storage Health, Hardware Telemetry and Quick Actions. Above 1250px all four supporting modules share one row; from 601–1250px they use two columns; at 600px and below they use one. The final four-disk fixture measures 176.5px high on desktop with larger labels (previous baseline 154px). Grid proportions, padding and breakpoints remain unchanged; intrinsic text growth is allowed. This is an observed fixture result, not a fixed CSS height: errors, offline messages and extra content must grow naturally.
 
 The wide instrument row uses memory/compute/compute/count proportions of 1.55/1/1/.72. At 1100px and below the model count becomes a horizontal row beneath the three gauges. At 600px and below memory spans the row above the two compute gauges. Memory has a maximum 310px visual width, compute 220px; their desktop visual canvases are each 174px high. SVG `xMidYMax meet` alignment keeps the arc geometry anchored to the bottom of its canvas. Narrow compute canvases become 120px high; memory remains 174px. Preserve clearance between readings, arcs, scales and captions.
 
@@ -175,13 +177,13 @@ Depth combines tonal separation, translucent fills, fine borders, static diagona
 
 | Level | Material | Treatment |
 | --- | --- | --- |
-| 0 | Environment | Two static radial ambient lights over the theme background; no animated decoration. |
-| 1 | Navigation | Theme navigation glass, edge border and lateral shadow; 22px backdrop blur where supported. |
+| 0 | Environment | Three static radial ambient lights over the theme background; no animated decoration. |
+| 1 | Navigation | Theme navigation glass, edge border and lateral shadow; 20px backdrop blur where supported. |
 | 2 | Instrument assembly | Dedicated instrument glass, 24px corners, stronger panel shadow and inset highlight; 18px blur. Individual gauges share this assembly. |
-| 3 | Secondary observations | Theme material fill, reflected edges, 18px panels/16px cards and shallow card shadows. No blanket blur on every card. |
+| 3 | Secondary observations | Theme material fill, reflected edges, 18px panels/16px cards and shallow card shadows. Shared restrained 8px backdrop blur makes environmental light visible through secondary surfaces. |
 | 4 | Dialog | Nearly opaque theme dialog glass (alpha .985), 22px corners and strongest shadow; 24px blur over a dimmed backdrop with 6px blur. |
 
-Navigation fill alpha is .67 in light and .73 in dark; instrument fill is .56/.59; secondary material is .52/.58. These controlled differences make hierarchy visible while the dialog prevents background text ghosting. Card shadows are shallow, instrument shadows broader, and modal shadows broadest; exact theme shadow recipes remain centralized in CSS custom properties.
+Navigation fill alpha is .62 in light and .73 in dark; instrument fill is .62/.56; secondary material is .52/.58. These controlled differences make hierarchy visible while the dialog prevents background text ghosting. Card shadows are shallow, instrument shadows broader, and modal shadows broadest; exact theme shadow recipes remain centralized in CSS custom properties.
 
 Backdrop blur is progressive enhancement via `@supports`, including the WebKit-prefixed declaration. Unsupported blur replaces the main navigation, instrument, panel, model/workspace card and dialog materials with opaque theme surfaces. Reduced transparency additionally removes backdrop blur and makes capacity strips opaque. Reduced motion disables animations, transitions and smooth scrolling; normal gauge updates may animate for .65s and control states transition for .16s. There are no continuous decorative animations. Forced colors uses system Canvas/CanvasText surfaces and borders, Highlight arcs/active borders and GrayText tracks. Canvas history is separately drawn; do not claim complete forced-color chart adaptation from those CSS rules.
 
@@ -221,7 +223,17 @@ NAS assets remain non-runnable, with compatibility and “No executable adapter�
 ### Don't:
 
 - **Don't** restore emerald primary actions or pale-green light surfaces.
-- **Don't** apply blur to every card, animate ambient gradients or place reflections over text.
+- **Don't** use instrument-strength blur on secondary cards, animate ambient gradients or place reflections over text.
 - **Don't** compress the strip by clipping disks, offline messages, errors or useful labels.
 - **Don't** turn NAS discoveries or workspace planning cards into runnable models.
 - **Don't** equate fixture visuals with HTTP authentication, live runtime readiness, Chromium/GX10 acceptance or measured performance.
+
+## Final color and material refinement
+
+Light Mode now uses #F5F6F8, neutral #ECEEF1 raised controls, #17212F ink and #526174 supporting text. Blue remains concentrated in interactions and history. A desaturated ambient blue at alpha .16, graphite light at .12 and white environmental light replace the broad pale-blue wash. White reflection alpha falls from .48 to .34 with a fully transparent middle, allowing the environment to carry through. Dark foundation #0B1120/#172235/#222E40 and semantic gauge bands remain unchanged; instrument alpha .56 and inset highlight alpha .21 modestly improve separation.
+
+Blur tokens distinguish navigation 20px, instrument 18px, secondary 8px and modal 24px. Secondary material remains alpha .52/.58; dialogs retain .985 to prevent background text ghosting. Opaque fallbacks include the generic glass and capacity strip; reduced transparency removes environmental gradients and material blur. Reduced motion, focus and keyboard behavior remain intact.
+
+One root and one dark token authority remain. Removed redundant action and gauge-secondary declarations and the identical dark gauge rule; operational typography now uses support/standard/dense tokens. No layout declarations, HTML, telemetry or application JavaScript changed.
+
+Firefox rendered-background sampling found green badge text below AA and prompted #176F4E in Light Mode. Final sampling: 654 visible text rectangles, minimum 5.01:1, no failures at the conservative 4.5:1 threshold. This covers sampled visible DOM text, not all interaction states, canvas text, scroll positions or assistive technology. See the refinement report for evidence and remaining gates.

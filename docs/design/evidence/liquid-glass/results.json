@@ -1,0 +1,286 @@
+{
+  "classification": "PASS_FILE_DEMO_VISUAL_CHECKS",
+  "browser": "firefox",
+  "checks": [
+    "Six pages and read-only Details: both themes at 1440/1024/768/390/320px; no horizontal overflow",
+    "Four/two/one monitoring columns, four storage observations, no clipped strip content, four hardware readings",
+    "Memory/GPU/CPU gauges, fixed-height history, keyboard inspection, reduced motion",
+    "Compact model grid, search/filters, Details Tab/Escape/focus restoration, six workspaces",
+    "Protected confirmation opens readably; explicit stop/risk gates retained; cancelled without mutation"
+  ],
+  "measures": [
+    {
+      "theme": "light",
+      "width": 1440,
+      "columns": 4,
+      "items": [
+        {
+          "top": 892.4000244140625,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 892.4000244140625,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 892.4000244140625,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 892.4000244140625,
+          "height": 176.5,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "columns": 2,
+      "items": [
+        {
+          "top": 946.7999877929688,
+          "height": 160,
+          "clipped": false
+        },
+        {
+          "top": 946.7999877929688,
+          "height": 160,
+          "clipped": false
+        },
+        {
+          "top": 1118.800048828125,
+          "height": 160,
+          "clipped": false
+        },
+        {
+          "top": 1118.800048828125,
+          "height": 160,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "columns": 2,
+      "items": [
+        {
+          "top": 974,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 974,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 1162.5,
+          "height": 160,
+          "clipped": false
+        },
+        {
+          "top": 1162.5,
+          "height": 160,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "columns": 1,
+      "items": [
+        {
+          "top": 1411.199951171875,
+          "height": 181,
+          "clipped": false
+        },
+        {
+          "top": 1604.199951171875,
+          "height": 184,
+          "clipped": false
+        },
+        {
+          "top": 1800.199951171875,
+          "height": 164,
+          "clipped": false
+        },
+        {
+          "top": 1976.199951171875,
+          "height": 197,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "width": 320,
+      "columns": 1,
+      "items": [
+        {
+          "top": 1458.800048828125,
+          "height": 181,
+          "clipped": false
+        },
+        {
+          "top": 1651.800048828125,
+          "height": 200.5,
+          "clipped": false
+        },
+        {
+          "top": 1864.300048828125,
+          "height": 164,
+          "clipped": false
+        },
+        {
+          "top": 2040.300048828125,
+          "height": 197,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "columns": 4,
+      "items": [
+        {
+          "top": 892.4000244140625,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 892.4000244140625,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 892.4000244140625,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 892.4000244140625,
+          "height": 176.5,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "columns": 2,
+      "items": [
+        {
+          "top": 946.7999877929688,
+          "height": 160,
+          "clipped": false
+        },
+        {
+          "top": 946.7999877929688,
+          "height": 160,
+          "clipped": false
+        },
+        {
+          "top": 1118.800048828125,
+          "height": 160,
+          "clipped": false
+        },
+        {
+          "top": 1118.800048828125,
+          "height": 160,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "columns": 2,
+      "items": [
+        {
+          "top": 974,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 974,
+          "height": 176.5,
+          "clipped": false
+        },
+        {
+          "top": 1162.5,
+          "height": 160,
+          "clipped": false
+        },
+        {
+          "top": 1162.5,
+          "height": 160,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "columns": 1,
+      "items": [
+        {
+          "top": 1411.199951171875,
+          "height": 181,
+          "clipped": false
+        },
+        {
+          "top": 1604.199951171875,
+          "height": 184,
+          "clipped": false
+        },
+        {
+          "top": 1800.199951171875,
+          "height": 164,
+          "clipped": false
+        },
+        {
+          "top": 1976.199951171875,
+          "height": 197,
+          "clipped": false
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "columns": 1,
+      "items": [
+        {
+          "top": 1458.800048828125,
+          "height": 181,
+          "clipped": false
+        },
+        {
+          "top": 1651.800048828125,
+          "height": 200.5,
+          "clipped": false
+        },
+        {
+          "top": 1864.300048828125,
+          "height": 164,
+          "clipped": false
+        },
+        {
+          "top": 2040.300048828125,
+          "height": 197,
+          "clipped": false
+        }
+      ]
+    }
+  ],
+  "httpSecurityVerified": false,
+  "liveRuntimeValidated": false,
+  "visualReviewRequired": true
+}

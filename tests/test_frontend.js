@@ -159,7 +159,7 @@ assert.strictEqual(gaugeContext.gaugePercent(Infinity),null);
 const css = fs.readFileSync('web/style.css','utf8');
 assert(gaugeContext.gaugeMarkup('test','Test').includes('viewBox="0 0 240 140"'), 'gauge should use scalable vector graphics');
 assert(css.includes('width:min(100%,310px)') && css.includes('width:min(100%,220px)'), 'Memory remains the larger instrument');
-assert(css.includes('body.dark .gauge-card'), 'gauge colors must support dark mode');
+assert(/body\.dark\s*\{[^}]*--band-low:[^}]*--band-medium:[^}]*--band-high:[^}]*--gauge-track:/s.test(css), 'gauge colors inherit dark semantic bands and track tokens');
 assert(css.includes('prefers-reduced-motion:reduce') && css.includes('.gauge-animated .gauge-arc{transition:none}'));
 assert(css.includes('@media(max-width:1100px)') && css.includes('@media(max-width:600px)') && css.includes('#overview-memory-gauge { grid-column:1/-1; }'), 'instruments reflow at narrower widths');
 console.log('Telemetry gauge regressions passed');
@@ -263,7 +263,7 @@ console.log('Simplified Library evidence, escaping and empty-state regressions p
 // Source contracts are deliberately separate from computed browser acceptance.
 assert.equal((css.match(/:root\s*\{/g)||[]).length,1,'one light token authority');
 assert.equal((css.match(/body\.dark\s*\{/g)||[]).length,1,'one dark token authority');
-for(const token of ['--bg:#f5f7fa','--bg:#0b1120','--surface:#172235','--blue:#407bbd','--ink:#222831','--ink:#f1f5f9']) assert(css.includes(token),token);
+for(const token of ['--bg:#f5f6f8','--bg:#0b1120','--surface:#172235','--blue:#407bbd','--ink:#17212f','--ink:#f1f5f9']) assert(css.includes(token),token);
 for(const token of ['--nav-glass:','--instrument-glass:','--material:','--dialog-glass:','--reflection:','--panel-shadow:','--modal-shadow:']) assert(css.includes(token),token);
 assert(css.includes('prefers-reduced-transparency:reduce') && css.includes('@supports not'), 'solid material fallbacks');
 assert(css.includes('.overview-records { display:grid; grid-template-columns:repeat(4,minmax(0,1fr))'));

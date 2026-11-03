@@ -1,0 +1,7288 @@
+[
+  {
+    "section": "dashboard",
+    "theme": "light",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 56.416656494140625,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Workstation",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 159.86666870117188,
+        "height": 32
+      },
+      {
+        "text": "Memory, compute and runtime observations.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 262.3666687011719,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Unified Memory",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "x": 398.3999938964844,
+        "y": 264.79998779296875,
+        "width": 103.35000610351562,
+        "height": 16
+      },
+      {
+        "text": "52.0",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "48.9375px",
+        "fontWeight": "600",
+        "x": 394.08331298828125,
+        "y": 390.0333251953125,
+        "width": 87.9666748046875,
+        "height": 55
+      },
+      {
+        "text": "GiB",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 486.04998779296875,
+        "y": 424.0333251953125,
+        "width": 20.0333251953125,
+        "height": 14
+      },
+      {
+        "text": "40.6% used",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 419.183349609375,
+        "y": 451.6000061035156,
+        "width": 61.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "0%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 310.8500061035156,
+        "y": 475.79998779296875,
+        "width": 16.866653442382812,
+        "height": 13
+      },
+      {
+        "text": "50%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 431.5,
+        "y": 475.79998779296875,
+        "width": 23.633331298828125,
+        "height": 13
+      },
+      {
+        "text": "100%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 558.9166870117188,
+        "y": 475.79998779296875,
+        "width": 30.399993896484375,
+        "height": 13
+      },
+      {
+        "text": "128.0 GiB total · 76.0 GiB available",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 358.76666259765625,
+        "y": 507.79998779296875,
+        "width": 182.61666870117188,
+        "height": 13
+      },
+      {
+        "text": "GPU Utilization",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "x": 752.4666748046875,
+        "y": 264.79998779296875,
+        "width": 97.31668090820312,
+        "height": 16
+      },
+      {
+        "text": "28.0",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "37.4375px",
+        "fontWeight": "600",
+        "x": 760.0166625976562,
+        "y": 403.433349609375,
+        "width": 67.30000305175781,
+        "height": 42
+      },
+      {
+        "text": "%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 831.316650390625,
+        "y": 426.433349609375,
+        "width": 10.933334350585938,
+        "height": 14
+      },
+      {
+        "text": "28.0% utilization",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 756.2166748046875,
+        "y": 451.6000061035156,
+        "width": 89.81668090820312,
+        "height": 13
+      },
+      {
+        "text": "0%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 700.7999877929688,
+        "y": 475.79998779296875,
+        "width": 16.866668701171875,
+        "height": 13
+      },
+      {
+        "text": "50%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 782.5499877929688,
+        "y": 475.79998779296875,
+        "width": 23.633331298828125,
+        "height": 13
+      },
+      {
+        "text": "100%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 871.066650390625,
+        "y": 475.79998779296875,
+        "width": 30.399993896484375,
+        "height": 13
+      },
+      {
+        "text": "GPU temperature: 46°C",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 738.5,
+        "y": 507.79998779296875,
+        "width": 125.26666259765625,
+        "height": 13
+      },
+      {
+        "text": "CPU Utilization",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "x": 1027.7666015625,
+        "y": 264.79998779296875,
+        "width": 96.58334350585938,
+        "height": 16
+      },
+      {
+        "text": "14.0",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "37.4375px",
+        "fontWeight": "600",
+        "x": 1034.949951171875,
+        "y": 403.433349609375,
+        "width": 67.30000305175781,
+        "height": 42
+      },
+      {
+        "text": "%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 1106.25,
+        "y": 426.433349609375,
+        "width": 10.933334350585938,
+        "height": 14
+      },
+      {
+        "text": "14.0% utilization",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1031.1500244140625,
+        "y": 451.6000061035156,
+        "width": 89.81666564941406,
+        "height": 13
+      },
+      {
+        "text": "0%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 975.7333374023438,
+        "y": 475.79998779296875,
+        "width": 16.866668701171875,
+        "height": 13
+      },
+      {
+        "text": "50%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1057.4833984375,
+        "y": 475.79998779296875,
+        "width": 23.633331298828125,
+        "height": 13
+      },
+      {
+        "text": "100%",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1146,
+        "y": 475.79998779296875,
+        "width": 30.399993896484375,
+        "height": 13
+      },
+      {
+        "text": "System-wide utilization",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1013.7666625976562,
+        "y": 507.79998779296875,
+        "width": 124.60000610351562,
+        "height": 13
+      },
+      {
+        "text": "Models Loaded",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "x": 1230.0333251953125,
+        "y": 316,
+        "width": 100.08332824707031,
+        "height": 16
+      },
+      {
+        "text": "2",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "52px",
+        "fontWeight": "550",
+        "x": 1230.0333251953125,
+        "y": 356.1000061035156,
+        "width": 27.51666259765625,
+        "height": 58
+      },
+      {
+        "text": "4 registered models",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1230.0333251953125,
+        "y": 422.20001220703125,
+        "width": 107.26666259765625,
+        "height": 13
+      },
+      {
+        "text": "Runtime process state observed",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1230.0333251953125,
+        "y": 454.20001220703125,
+        "width": 119.79998779296875,
+        "height": 13
+      },
+      {
+        "text": "Runtime process state observed",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1230.0333251953125,
+        "y": 472.20001220703125,
+        "width": 50.133331298828125,
+        "height": 13
+      },
+      {
+        "text": "Memory Usage",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 591.6500244140625,
+        "width": 102.38333129882812,
+        "height": 17
+      },
+      {
+        "text": "Unified system memory · Live history",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 619.9000244140625,
+        "width": 197.3000030517578,
+        "height": 13
+      },
+      {
+        "text": "LIVE",
+        "color": "rgb(23, 111, 78)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 1358.25,
+        "y": 594.4000244140625,
+        "width": 25.75,
+        "height": 13
+      },
+      {
+        "text": "30 samples. Hover, tap, or use arrow keys to inspect.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 825.9000244140625,
+        "width": 279.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Memory usage",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 270,
+        "y": 847.9000244140625,
+        "width": 82.25,
+        "height": 13
+      },
+      {
+        "text": "30 samples in session",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1276.75,
+        "y": 847.9000244140625,
+        "width": 114.25,
+        "height": 13
+      },
+      {
+        "text": "Runtime Status",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "650",
+        "x": 249,
+        "y": 907.9000244140625,
+        "width": 98.25,
+        "height": 16
+      },
+      {
+        "text": "View models →",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 422.8666687011719,
+        "y": 909.9000244140625,
+        "width": 85.13333129882812,
+        "height": 15
+      },
+      {
+        "text": "SGLang",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 249,
+        "y": 944.9000244140625,
+        "width": 42.33332824707031,
+        "height": 13
+      },
+      {
+        "text": "2 registered · 1 loaded",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 249,
+        "y": 962.9000244140625,
+        "width": 120.11666870117188,
+        "height": 13
+      },
+      {
+        "text": "UNKNOWN",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 437.01666259765625,
+        "y": 953.9000244140625,
+        "width": 63.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Storage Health",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "650",
+        "x": 546,
+        "y": 907.9000244140625,
+        "width": 96.60000610351562,
+        "height": 16
+      },
+      {
+        "text": "Browse library →",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 710.0499877929688,
+        "y": 909.9000244140625,
+        "width": 94.94999694824219,
+        "height": 15
+      },
+      {
+        "text": "ASUS System",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "11px",
+        "fontWeight": "600",
+        "x": 546,
+        "y": 939.6500244140625,
+        "width": 68.39999389648438,
+        "height": 12
+      },
+      {
+        "text": "650.0 / 2000.0 GiB",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "11px",
+        "fontWeight": "400",
+        "x": 652.2833251953125,
+        "y": 939.6500244140625,
+        "width": 89.75,
+        "height": 12
+      },
+      {
+        "text": "ONLINE",
+        "color": "rgb(23, 111, 78)",
+        "fontSize": "11px",
+        "fontWeight": "650",
+        "x": 760.0333251953125,
+        "y": 942.1500244140625,
+        "width": 40.96665954589844,
+        "height": 12
+      },
+      {
+        "text": "NAS Model Library",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "11px",
+        "fontWeight": "600",
+        "x": 546,
+        "y": 966.1500244140625,
+        "width": 57.616668701171875,
+        "height": 12
+      },
+      {
+        "text": "NAS Model Library",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "11px",
+        "fontWeight": "600",
+        "x": 546,
+        "y": 982.6500244140625,
+        "width": 36.76666259765625,
+        "height": 12
+      },
+      {
+        "text": "5500.0 / 16000.0 GiB",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "11px",
+        "fontWeight": "400",
+        "x": 639.88330078125,
+        "y": 966.1500244140625,
+        "width": 102.15000915527344,
+        "height": 12
+      },
+      {
+        "text": "ONLINE",
+        "color": "rgb(23, 111, 78)",
+        "fontSize": "11px",
+        "fontWeight": "650",
+        "x": 760.0333251953125,
+        "y": 976.9000244140625,
+        "width": 40.96665954589844,
+        "height": 12
+      },
+      {
+        "text": "Hardware Telemetry",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "650",
+        "x": 843,
+        "y": 907.9000244140625,
+        "width": 131.39999389648438,
+        "height": 16
+      },
+      {
+        "text": "Memory in use",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 843,
+        "y": 938.9000244140625,
+        "width": 78.94999694824219,
+        "height": 13
+      },
+      {
+        "text": "52.0 GiB",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1056.316650390625,
+        "y": 938.9000244140625,
+        "width": 45.68333435058594,
+        "height": 13
+      },
+      {
+        "text": "Available memory",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 843,
+        "y": 965.9000244140625,
+        "width": 96.38333129882812,
+        "height": 13
+      },
+      {
+        "text": "76.0 GiB",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1056.316650390625,
+        "y": 965.9000244140625,
+        "width": 45.68333435058594,
+        "height": 13
+      },
+      {
+        "text": "Quick Actions",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "650",
+        "x": 1140,
+        "y": 907.9000244140625,
+        "width": 88.16667175292969,
+        "height": 16
+      },
+      {
+        "text": "Manage models",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1175,
+        "y": 941.9000244140625,
+        "width": 88.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "Explore NAS",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1175,
+        "y": 977.9000244140625,
+        "width": 70.88333129882812,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(248, 249, 251, 0.62)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(25, 45, 74, 0.035) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".overview-instruments",
+        "background": "rgba(255, 255, 255, 0.62)",
+        "blur": "blur(18px)",
+        "shadow": "rgba(26, 49, 82, 0.26) 0px 14px 32px -16px, rgba(26, 49, 82, 0.04) 0px 3px 8px 0px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset, rgba(93, 127, 166, 0.08) 0px -1px 0px 0px inset",
+        "x": 236,
+        "y": 241.3000030517578,
+        "width": 1176,
+        "height": 318.5999755859375
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 573.9000244140625,
+        "width": 1176,
+        "height": 304.5
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 892.4000244140625,
+        "width": 285,
+        "height": 176.5
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 533,
+        "y": 892.4000244140625,
+        "width": 285,
+        "height": 176.5
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 830,
+        "y": 892.4000244140625,
+        "width": 285,
+        "height": 176.5
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 1127,
+        "y": 892.4000244140625,
+        "width": 285,
+        "height": 176.5
+      }
+    ],
+    "image": "dashboard-light-background.png"
+  },
+  {
+    "section": "models",
+    "theme": "light",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 92.0333251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 201.6999969482422,
+        "height": 32
+      },
+      {
+        "text": "Manage local AI models with clear, deliberate actions.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 310.66668701171875,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Unified memory",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "600",
+        "x": 255,
+        "y": 258.04998779296875,
+        "width": 97.86666870117188,
+        "height": 14
+      },
+      {
+        "text": "52.0 GiB used / 128.0 GiB",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 279.29998779296875,
+        "width": 134.0833282470703,
+        "height": 13
+      },
+      {
+        "text": "System-wide · Not per-model allocation",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 737.0833129882812,
+        "y": 268.54998779296875,
+        "width": 210.65000915527344,
+        "height": 13
+      },
+      {
+        "text": "Ready",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 238,
+        "y": 333.29998779296875,
+        "width": 34.81666564941406,
+        "height": 13
+      },
+      {
+        "text": "Simulation only · Loaded and inference-ready states are distinct",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 288.816650390625,
+        "y": 333.29998779296875,
+        "width": 339.45001220703125,
+        "height": 13
+      },
+      {
+        "text": "Registered models",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 377.54998779296875,
+        "width": 131.46665954589844,
+        "height": 17
+      },
+      {
+        "text": "4 of 4",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 375.4666748046875,
+        "y": 380.54998779296875,
+        "width": 29.2166748046875,
+        "height": 13
+      },
+      {
+        "text": "Manage the models connected to this workstation.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 405.79998779296875,
+        "width": 272.816650390625,
+        "height": 13
+      },
+      {
+        "text": "All models",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 252,
+        "y": 447.79998779296875,
+        "width": 56.19999694824219,
+        "height": 13
+      },
+      {
+        "text": "Loaded",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 334.20001220703125,
+        "y": 447.79998779296875,
+        "width": 39.93333435058594,
+        "height": 13
+      },
+      {
+        "text": "Unloaded",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 400.1333312988281,
+        "y": 447.79998779296875,
+        "width": 52.03334045410156,
+        "height": 13
+      },
+      {
+        "text": "Needs attention",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 478.16668701171875,
+        "y": 447.79998779296875,
+        "width": 87.31666564941406,
+        "height": 13
+      },
+      {
+        "text": "SGLang",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 255,
+        "y": 513.7999877929688,
+        "width": 42.33332824707031,
+        "height": 13
+      },
+      {
+        "text": "Loaded",
+        "color": "rgb(23, 111, 78)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 551.0499877929688,
+        "y": 513.7999877929688,
+        "width": 41.616668701171875,
+        "height": 13
+      },
+      {
+        "text": "Qwen 3.8-27B NVFP4",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "19px",
+        "fontWeight": "650",
+        "x": 255,
+        "y": 548.11669921875,
+        "width": 181.1999969482422,
+        "height": 22
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 592.4500122070312,
+        "width": 61.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "27B",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 578.5166625976562,
+        "y": 592.4500122070312,
+        "width": 21.150009155273438,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 617.4500122070312,
+        "width": 69.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "NVFP4",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 563.2166748046875,
+        "y": 617.4500122070312,
+        "width": 36.45001220703125,
+        "height": 13
+      },
+      {
+        "text": "Runtime memory",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 642.4500122070312,
+        "width": 93.46665954589844,
+        "height": 13
+      },
+      {
+        "text": "Not available",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 529.4166870117188,
+        "y": 642.4500122070312,
+        "width": 70.25,
+        "height": 13
+      },
+      {
+        "text": "Unload",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 268,
+        "y": 702.4500122070312,
+        "width": 39.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Details",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 546.7000122070312,
+        "y": 702.4500122070312,
+        "width": 39.9666748046875,
+        "height": 13
+      },
+      {
+        "text": "Ollama",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 651.6666870117188,
+        "y": 513.7999877929688,
+        "width": 40.133331298828125,
+        "height": 13
+      },
+      {
+        "text": "Unloaded",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 935.25,
+        "y": 513.7999877929688,
+        "width": 54.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "qwen3:8b",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "19px",
+        "fontWeight": "650",
+        "x": 651.6666870117188,
+        "y": 548.11669921875,
+        "width": 82.68333435058594,
+        "height": 22
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 651.6666870117188,
+        "y": 592.4500122070312,
+        "width": 61.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "8B",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 981.9500122070312,
+        "y": 592.4500122070312,
+        "width": 14.383331298828125,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 651.6666870117188,
+        "y": 617.4500122070312,
+        "width": 69.98332214355469,
+        "height": 13
+      },
+      {
+        "text": "Q4_K_M",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 950.7166748046875,
+        "y": 617.4500122070312,
+        "width": 45.616668701171875,
+        "height": 13
+      },
+      {
+        "text": "Runtime memory",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 651.6666870117188,
+        "y": 642.4500122070312,
+        "width": 93.46665954589844,
+        "height": 13
+      },
+      {
+        "text": "—",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 984.38330078125,
+        "y": 642.4500122070312,
+        "width": 11.949996948242188,
+        "height": 13
+      },
+      {
+        "text": "Load",
+        "color": "rgb(255, 255, 255)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 664.6666870117188,
+        "y": 702.4500122070312,
+        "width": 27.51666259765625,
+        "height": 13
+      },
+      {
+        "text": "Switch",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 725.183349609375,
+        "y": 702.4500122070312,
+        "width": 37.58332824707031,
+        "height": 13
+      },
+      {
+        "text": "Details",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 943.36669921875,
+        "y": 702.4500122070312,
+        "width": 39.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "Ollama",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1048.3333740234375,
+        "y": 513.7999877929688,
+        "width": 40.133331298828125,
+        "height": 13
+      },
+      {
+        "text": "Loaded",
+        "color": "rgb(23, 111, 78)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 1344.38330078125,
+        "y": 513.7999877929688,
+        "width": 41.616668701171875,
+        "height": 13
+      },
+      {
+        "text": "nomic-embed-text",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "19px",
+        "fontWeight": "650",
+        "x": 1048.3333740234375,
+        "y": 548.11669921875,
+        "width": 158.11666870117188,
+        "height": 22
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1048.3333740234375,
+        "y": 592.4500122070312,
+        "width": 61.9666748046875,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1330.75,
+        "y": 592.4500122070312,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1048.3333740234375,
+        "y": 617.4500122070312,
+        "width": 69.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1330.75,
+        "y": 617.4500122070312,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Runtime memory",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1048.3333740234375,
+        "y": 642.4500122070312,
+        "width": 93.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "0.3 GiB",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1355.2833251953125,
+        "y": 642.4500122070312,
+        "width": 37.71665954589844,
+        "height": 13
+      },
+      {
+        "text": "Unload",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1061.3333740234375,
+        "y": 702.4500122070312,
+        "width": 39.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Details",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1340.0333251953125,
+        "y": 702.4500122070312,
+        "width": 39.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "SGLang",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 255,
+        "y": 784.4500122070312,
+        "width": 42.33332824707031,
+        "height": 13
+      },
+      {
+        "text": "Unknown",
+        "color": "rgb(135, 87, 19)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 539.86669921875,
+        "y": 784.4500122070312,
+        "width": 52.80000305175781,
+        "height": 13
+      },
+      {
+        "text": "Example unavailable model",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "19px",
+        "fontWeight": "650",
+        "x": 255,
+        "y": 818.7666625976562,
+        "width": 234.31666564941406,
+        "height": 22
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 863.0999755859375,
+        "width": 61.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 537.4166870117188,
+        "y": 863.0999755859375,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 888.0999755859375,
+        "width": 69.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 537.4166870117188,
+        "y": 888.0999755859375,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Runtime memory",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 913.0999755859375,
+        "width": 93.46665954589844,
+        "height": 13
+      },
+      {
+        "text": "Not available",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 529.4166870117188,
+        "y": 913.0999755859375,
+        "width": 70.25,
+        "height": 13
+      },
+      {
+        "text": "Refresh runtime status before operating.",
+        "color": "rgb(135, 87, 19)",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 964.0999755859375,
+        "width": 257.48333740234375,
+        "height": 16
+      },
+      {
+        "text": "Details",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 546.7000122070312,
+        "y": 973.0999755859375,
+        "width": 39.9666748046875,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(248, 249, 251, 0.62)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(25, 45, 74, 0.035) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 489.29998779296875,
+        "width": 382.66668701171875,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 632.6666870117188,
+        "y": 489.29998779296875,
+        "width": 382.6666564941406,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 1029.3333740234375,
+        "y": 489.29998779296875,
+        "width": 382.66668701171875,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 759.9500122070312,
+        "width": 382.66668701171875,
+        "height": 256.6500244140625
+      }
+    ],
+    "image": "models-light-background.png"
+  },
+  {
+    "section": "details",
+    "theme": "light",
+    "texts": [
+      {
+        "text": "qwen3:8b",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "22px",
+        "fontWeight": "650",
+        "x": 357,
+        "y": 106,
+        "width": 96.60000610351562,
+        "height": 25
+      },
+      {
+        "text": "Close",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1038.9000244140625,
+        "y": 113.5,
+        "width": 31.100006103515625,
+        "height": 13
+      },
+      {
+        "text": "Ollama · unloaded · Installation: Unverified",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 173.71665954589844,
+        "width": 246.68333435058594,
+        "height": 14
+      },
+      {
+        "text": "Model identity",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "700",
+        "x": 357,
+        "y": 218.1999969482422,
+        "width": 89.89999389648438,
+        "height": 14
+      },
+      {
+        "text": "Model name",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 255.4499969482422,
+        "width": 66.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 255.6999969482422,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 278.54998779296875,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Runtime",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 318.1499938964844,
+        "width": 45.78334045410156,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 318.3999938964844,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 341.25,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Family",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 380.8500061035156,
+        "width": 34.19999694824219,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 381.1000061035156,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 403.95001220703125,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 443.54998779296875,
+        "width": 61.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "8B",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 443.79998779296875,
+        "width": 15.583328247070312,
+        "height": 14
+      },
+      {
+        "text": "Estimated · Representative demo fixture",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 466.6499938964844,
+        "width": 217.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Architecture",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 506.25,
+        "width": 67.30000305175781,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 506.5,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 529.3499755859375,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 568.9500122070312,
+        "width": 69.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Q4_K_M",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 569.2000122070312,
+        "width": 49.40000915527344,
+        "height": 14
+      },
+      {
+        "text": "Estimated · Representative demo fixture",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 592.0499877929688,
+        "width": 217.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Weight format",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 631.6500244140625,
+        "width": 79.03334045410156,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 631.9000244140625,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 654.75,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Storage & context",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "700",
+        "x": 357,
+        "y": 708.5999755859375,
+        "width": 111,
+        "height": 14
+      },
+      {
+        "text": "Stored size",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 745.8499755859375,
+        "width": 59.06666564941406,
+        "height": 13
+      },
+      {
+        "text": "5.0 GiB",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 746.0999755859375,
+        "width": 40.883331298828125,
+        "height": 14
+      },
+      {
+        "text": "Estimated · Representative demo fixture",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 768.9500122070312,
+        "width": 217.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Storage / model identifier",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 808.5499877929688,
+        "width": 138.71665954589844,
+        "height": 13
+      },
+      {
+        "text": "Example runtime-managed storage",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 808.7999877929688,
+        "width": 205.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "Estimated · Representative demo fixture",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 831.6500244140625,
+        "width": 217.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Maximum context",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 871.25,
+        "width": 97.39999389648438,
+        "height": 13
+      },
+      {
+        "text": "32768",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 871.5,
+        "width": 36.66667175292969,
+        "height": 14
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(248, 249, 251, 0.62)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(25, 45, 74, 0.035) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 489.29998779296875,
+        "width": 382.66668701171875,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 632.6666870117188,
+        "y": 489.29998779296875,
+        "width": 382.6666564941406,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 1029.3333740234375,
+        "y": 489.29998779296875,
+        "width": 382.66668701171875,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 759.9500122070312,
+        "width": 382.66668701171875,
+        "height": 256.6500244140625
+      },
+      {
+        "selector": ".modal-card",
+        "background": "rgba(250, 251, 252, 0.985)",
+        "blur": "blur(24px)",
+        "shadow": "rgba(8, 20, 40, 0.3) 0px 32px 100px 0px, rgba(8, 20, 40, 0.12) 0px 6px 20px 0px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 330,
+        "y": 75,
+        "width": 780,
+        "height": 850
+      }
+    ],
+    "image": "details-light-background.png"
+  },
+  {
+    "section": "library",
+    "theme": "light",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 82.5,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 178.68333435058594,
+        "height": 32
+      },
+      {
+        "text": "Discover and inspect model assets on your NAS.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 277.04998779296875,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "NAS assets",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 265.04998779296875,
+        "width": 76.19999694824219,
+        "height": 17
+      },
+      {
+        "text": "Read-only inventory · Collections are assets, not guaranteed runnable models",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 293.29998779296875,
+        "width": 413.91668701171875,
+        "height": 13
+      },
+      {
+        "text": "Scan NAS",
+        "color": "rgb(255, 255, 255)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1324.550048828125,
+        "y": 273.79998779296875,
+        "width": 53.44999694824219,
+        "height": 13
+      },
+      {
+        "text": "2 asset files · 1 collections · Representative inventory · No NAS access",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 269,
+        "y": 337.29998779296875,
+        "width": 369.41668701171875,
+        "height": 13
+      },
+      {
+        "text": "Collections",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 273,
+        "y": 391.29998779296875,
+        "width": 59.56666564941406,
+        "height": 13
+      },
+      {
+        "text": "Model components",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 358.566650390625,
+        "y": 391.29998779296875,
+        "width": 104.16667175292969,
+        "height": 13
+      },
+      {
+        "text": "Language",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 452.54998779296875,
+        "width": 52.56666564941406,
+        "height": 13
+      },
+      {
+        "text": "Research collection",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "700",
+        "x": 379,
+        "y": 451.54998779296875,
+        "width": 119.61666870117188,
+        "height": 14
+      },
+      {
+        "text": "2 asset file(s) · 32.0 GiB stored",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1226.2666015625,
+        "y": 452.54998779296875,
+        "width": 160.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Requires additional configuration · No executable adapter",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 379,
+        "y": 476.79998779296875,
+        "width": 310.48333740234375,
+        "height": 13
+      },
+      {
+        "text": "Asset details",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 389.566650390625,
+        "y": 506.79998779296875,
+        "width": 68.19999694824219,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(248, 249, 251, 0.62)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(25, 45, 74, 0.035) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 241.3000030517578,
+        "width": 1176,
+        "height": 324
+      }
+    ],
+    "image": "library-light-background.png"
+  },
+  {
+    "section": "workspaces",
+    "theme": "light",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 70.81666564941406,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 155.21665954589844,
+        "height": 32
+      },
+      {
+        "text": "Planning profiles for local AI workflows.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 230.5833282470703,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Workspaces are planning presets, not automatic launchers. Each preset shows a suggested mo",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 253,
+        "y": 257.3999938964844,
+        "width": 1031.5,
+        "height": 13
+      },
+      {
+        "text": "Coding",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 376.5,
+        "width": 51.25,
+        "height": 18
+      },
+      {
+        "text": "Software engineering and code assistance",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 406,
+        "width": 225.60000610351562,
+        "height": 13
+      },
+      {
+        "text": "Suggested: Qwen3-Coder-Next",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 455,
+        "width": 166.88333129882812,
+        "height": 13
+      },
+      {
+        "text": "Scientific Research",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 653.6666870117188,
+        "y": 376.5,
+        "width": 139.06666564941406,
+        "height": 18
+      },
+      {
+        "text": "Scientific reasoning and analysis",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 653.6666870117188,
+        "y": 406,
+        "width": 171.6999969482422,
+        "height": 13
+      },
+      {
+        "text": "Suggested: reasoning-oriented LLM",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 653.6666870117188,
+        "y": 455,
+        "width": 190.9833221435547,
+        "height": 13
+      },
+      {
+        "text": "General AI",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 1050.3333740234375,
+        "y": 376.5,
+        "width": 76.5,
+        "height": 18
+      },
+      {
+        "text": "Everyday reasoning and productivity",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1050.3333740234375,
+        "y": 406,
+        "width": 194.81666564941406,
+        "height": 13
+      },
+      {
+        "text": "Suggested: Qwen 3.8 / Qwen3.5",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1050.3333740234375,
+        "y": 455,
+        "width": 172.58334350585938,
+        "height": 13
+      },
+      {
+        "text": "Image Studio",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 577.5,
+        "width": 95.94999694824219,
+        "height": 18
+      },
+      {
+        "text": "Creative image workflows",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 607,
+        "width": 139.35000610351562,
+        "height": 13
+      },
+      {
+        "text": "Requires a compatible image runtime",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 656,
+        "width": 200.68333435058594,
+        "height": 13
+      },
+      {
+        "text": "Video Studio",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 653.6666870117188,
+        "y": 577.5,
+        "width": 94.61666870117188,
+        "height": 18
+      },
+      {
+        "text": "Generation and post-production",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 653.6666870117188,
+        "y": 607,
+        "width": 172.38333129882812,
+        "height": 13
+      },
+      {
+        "text": "Requires a compatible video workflow",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 653.6666870117188,
+        "y": 656,
+        "width": 205.26666259765625,
+        "height": 13
+      },
+      {
+        "text": "Voice Studio",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 1050.3333740234375,
+        "y": 577.5,
+        "width": 91.73333740234375,
+        "height": 18
+      },
+      {
+        "text": "Text-to-speech and audio",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1050.3333740234375,
+        "y": 607,
+        "width": 135.23333740234375,
+        "height": 13
+      },
+      {
+        "text": "Requires a compatible audio runtime",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1050.3333740234375,
+        "y": 656,
+        "width": 197.70001220703125,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(248, 249, 251, 0.62)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(25, 45, 74, 0.035) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 304.5,
+        "width": 382.66668701171875,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 632.6666870117188,
+        "y": 304.5,
+        "width": 382.6666564941406,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 1029.3333740234375,
+        "y": 304.5,
+        "width": 382.66668701171875,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 505.5,
+        "width": 382.66668701171875,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 632.6666870117188,
+        "y": 505.5,
+        "width": 382.6666564941406,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 1029.3333740234375,
+        "y": 505.5,
+        "width": 382.66668701171875,
+        "height": 187
+      }
+    ],
+    "image": "workspaces-light-background.png"
+  },
+  {
+    "section": "activity",
+    "theme": "light",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 46.5,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 99.66667175292969,
+        "height": 32
+      },
+      {
+        "text": "Inspect local operations and recovery attempts.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 276.5,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Operation History",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 265.04998779296875,
+        "width": 123.81666564941406,
+        "height": 17
+      },
+      {
+        "text": "Recent local events, excluding prompts and model outputs",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 293.29998779296875,
+        "width": 315.066650390625,
+        "height": 13
+      },
+      {
+        "text": "Refresh",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1346.7833251953125,
+        "y": 267.79998779296875,
+        "width": 44.21665954589844,
+        "height": 13
+      },
+      {
+        "text": "Inventory · Observed",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 281,
+        "y": 344.29998779296875,
+        "width": 128.3000030517578,
+        "height": 14
+      },
+      {
+        "text": "Representative fixture · 12:30:00",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 281,
+        "y": 369.29998779296875,
+        "width": 175.8000030517578,
+        "height": 13
+      },
+      {
+        "text": "Synthetic observation; no runtime or NAS access.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 281,
+        "y": 392.29998779296875,
+        "width": 262.16668701171875,
+        "height": 13
+      },
+      {
+        "text": "Details · Inspected",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 281,
+        "y": 444.29998779296875,
+        "width": 112.81666564941406,
+        "height": 14
+      },
+      {
+        "text": "qwen3:8b · 12:29:55",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 281,
+        "y": 469.29998779296875,
+        "width": 108.21665954589844,
+        "height": 13
+      },
+      {
+        "text": "Representative read-only metadata inspection.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 281,
+        "y": 492.29998779296875,
+        "width": 251.1999969482422,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(248, 249, 251, 0.62)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(25, 45, 74, 0.035) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 241.3000030517578,
+        "width": 1176,
+        "height": 303.5
+      }
+    ],
+    "image": "activity-light-background.png"
+  },
+  {
+    "section": "settings",
+    "theme": "light",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 49.54998779296875,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 107.03334045410156,
+        "height": 32
+      },
+      {
+        "text": "Personalize your local control center.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 214.25,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Appearance",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 261,
+        "y": 269.04998779296875,
+        "width": 82,
+        "height": 17
+      },
+      {
+        "text": "Preferences are saved in this browser only.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 305.51666259765625,
+        "width": 248,
+        "height": 14
+      },
+      {
+        "text": "Color theme",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "14px",
+        "fontWeight": "700",
+        "x": 261,
+        "y": 350.75,
+        "width": 81.53334045410156,
+        "height": 16
+      },
+      {
+        "text": "Choose a comfortable environment for your workstation.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 376.9666748046875,
+        "width": 331.95001220703125,
+        "height": 14
+      },
+      {
+        "text": "Toggle light / dark",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 974.316650390625,
+        "y": 364.9666748046875,
+        "width": 103.68333435058594,
+        "height": 13
+      },
+      {
+        "text": "Connection & privacy",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 261,
+        "y": 444.45001220703125,
+        "width": 144.38333129882812,
+        "height": 17
+      },
+      {
+        "text": "Access",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 484.70001220703125,
+        "width": 35.899993896484375,
+        "height": 13
+      },
+      {
+        "text": "Loopback only · Session authenticated",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 875.4833374023438,
+        "y": 484.70001220703125,
+        "width": 215.51666259765625,
+        "height": 13
+      },
+      {
+        "text": "Telemetry refresh",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 527.7000122070312,
+        "width": 96.43333435058594,
+        "height": 13
+      },
+      {
+        "text": "Every 5 seconds",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1001.13330078125,
+        "y": 527.7000122070312,
+        "width": 89.86666870117188,
+        "height": 13
+      },
+      {
+        "text": "Runtime configuration",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 570.7000122070312,
+        "width": 121.38333129882812,
+        "height": 13
+      },
+      {
+        "text": "Managed outside this interface",
+        "color": "rgb(23, 33, 47)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 915.2999877929688,
+        "y": 570.7000122070312,
+        "width": 175.6999969482422,
+        "height": 13
+      },
+      {
+        "text": "Runtime configuration is read-only here. Activity excludes prompts and model outputs.",
+        "color": "rgb(82, 97, 116)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 615.9166870117188,
+        "width": 503.98333740234375,
+        "height": 14
+      },
+      {
+        "text": "Open interactive prototype",
+        "color": "rgb(40, 94, 153)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 657.4000244140625,
+        "width": 159.46665954589844,
+        "height": 14
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(248, 249, 251, 0.62)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(25, 45, 74, 0.035) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(255, 255, 255, 0.52)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(26, 49, 82, 0.22) 0px 5px 14px -8px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 241.3000030517578,
+        "width": 880,
+        "height": 458.5999755859375
+      }
+    ],
+    "image": "settings-light-background.png"
+  },
+  {
+    "section": "dashboard",
+    "theme": "dark",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 56.416656494140625,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Workstation",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 159.86666870117188,
+        "height": 32
+      },
+      {
+        "text": "Memory, compute and runtime observations.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 262.3666687011719,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Unified Memory",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "x": 398.3999938964844,
+        "y": 264.79998779296875,
+        "width": 103.35000610351562,
+        "height": 16
+      },
+      {
+        "text": "52.0",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "48.9375px",
+        "fontWeight": "600",
+        "x": 394.08331298828125,
+        "y": 390.0333251953125,
+        "width": 87.9666748046875,
+        "height": 55
+      },
+      {
+        "text": "GiB",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 486.04998779296875,
+        "y": 424.0333251953125,
+        "width": 20.0333251953125,
+        "height": 14
+      },
+      {
+        "text": "40.6% used",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 419.183349609375,
+        "y": 451.6000061035156,
+        "width": 61.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "0%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 310.8500061035156,
+        "y": 475.79998779296875,
+        "width": 16.866653442382812,
+        "height": 13
+      },
+      {
+        "text": "50%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 431.5,
+        "y": 475.79998779296875,
+        "width": 23.633331298828125,
+        "height": 13
+      },
+      {
+        "text": "100%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 558.9166870117188,
+        "y": 475.79998779296875,
+        "width": 30.399993896484375,
+        "height": 13
+      },
+      {
+        "text": "128.0 GiB total · 76.0 GiB available",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 358.76666259765625,
+        "y": 507.79998779296875,
+        "width": 182.61666870117188,
+        "height": 13
+      },
+      {
+        "text": "GPU Utilization",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "x": 752.4666748046875,
+        "y": 264.79998779296875,
+        "width": 97.31668090820312,
+        "height": 16
+      },
+      {
+        "text": "28.0",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "37.4375px",
+        "fontWeight": "600",
+        "x": 760.0166625976562,
+        "y": 403.433349609375,
+        "width": 67.30000305175781,
+        "height": 42
+      },
+      {
+        "text": "%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 831.316650390625,
+        "y": 426.433349609375,
+        "width": 10.933334350585938,
+        "height": 14
+      },
+      {
+        "text": "28.0% utilization",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 756.2166748046875,
+        "y": 451.6000061035156,
+        "width": 89.81668090820312,
+        "height": 13
+      },
+      {
+        "text": "0%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 700.7999877929688,
+        "y": 475.79998779296875,
+        "width": 16.866668701171875,
+        "height": 13
+      },
+      {
+        "text": "50%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 782.5499877929688,
+        "y": 475.79998779296875,
+        "width": 23.633331298828125,
+        "height": 13
+      },
+      {
+        "text": "100%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 871.066650390625,
+        "y": 475.79998779296875,
+        "width": 30.399993896484375,
+        "height": 13
+      },
+      {
+        "text": "GPU temperature: 46°C",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 738.5,
+        "y": 507.79998779296875,
+        "width": 125.26666259765625,
+        "height": 13
+      },
+      {
+        "text": "CPU Utilization",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "x": 1027.7666015625,
+        "y": 264.79998779296875,
+        "width": 96.58334350585938,
+        "height": 16
+      },
+      {
+        "text": "14.0",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "37.4375px",
+        "fontWeight": "600",
+        "x": 1034.949951171875,
+        "y": 403.433349609375,
+        "width": 67.30000305175781,
+        "height": 42
+      },
+      {
+        "text": "%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 1106.25,
+        "y": 426.433349609375,
+        "width": 10.933334350585938,
+        "height": 14
+      },
+      {
+        "text": "14.0% utilization",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1031.1500244140625,
+        "y": 451.6000061035156,
+        "width": 89.81666564941406,
+        "height": 13
+      },
+      {
+        "text": "0%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 975.7333374023438,
+        "y": 475.79998779296875,
+        "width": 16.866668701171875,
+        "height": 13
+      },
+      {
+        "text": "50%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1057.4833984375,
+        "y": 475.79998779296875,
+        "width": 23.633331298828125,
+        "height": 13
+      },
+      {
+        "text": "100%",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1146,
+        "y": 475.79998779296875,
+        "width": 30.399993896484375,
+        "height": 13
+      },
+      {
+        "text": "System-wide utilization",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1013.7666625976562,
+        "y": 507.79998779296875,
+        "width": 124.60000610351562,
+        "height": 13
+      },
+      {
+        "text": "Models Loaded",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "x": 1230.0333251953125,
+        "y": 316,
+        "width": 100.08332824707031,
+        "height": 16
+      },
+      {
+        "text": "2",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "52px",
+        "fontWeight": "550",
+        "x": 1230.0333251953125,
+        "y": 356.1000061035156,
+        "width": 27.51666259765625,
+        "height": 58
+      },
+      {
+        "text": "4 registered models",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1230.0333251953125,
+        "y": 422.20001220703125,
+        "width": 107.26666259765625,
+        "height": 13
+      },
+      {
+        "text": "Runtime process state observed",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1230.0333251953125,
+        "y": 454.20001220703125,
+        "width": 119.79998779296875,
+        "height": 13
+      },
+      {
+        "text": "Runtime process state observed",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1230.0333251953125,
+        "y": 472.20001220703125,
+        "width": 50.133331298828125,
+        "height": 13
+      },
+      {
+        "text": "Memory Usage",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 591.6500244140625,
+        "width": 102.38333129882812,
+        "height": 17
+      },
+      {
+        "text": "Unified system memory · Live history",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 619.9000244140625,
+        "width": 197.3000030517578,
+        "height": 13
+      },
+      {
+        "text": "LIVE",
+        "color": "rgb(112, 209, 166)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 1358.25,
+        "y": 594.4000244140625,
+        "width": 25.75,
+        "height": 13
+      },
+      {
+        "text": "30 samples. Hover, tap, or use arrow keys to inspect.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 825.9000244140625,
+        "width": 279.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Memory usage",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 270,
+        "y": 847.9000244140625,
+        "width": 82.25,
+        "height": 13
+      },
+      {
+        "text": "30 samples in session",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1276.75,
+        "y": 847.9000244140625,
+        "width": 114.25,
+        "height": 13
+      },
+      {
+        "text": "Runtime Status",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "650",
+        "x": 249,
+        "y": 907.9000244140625,
+        "width": 98.25,
+        "height": 16
+      },
+      {
+        "text": "View models →",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 422.8666687011719,
+        "y": 909.9000244140625,
+        "width": 85.13333129882812,
+        "height": 15
+      },
+      {
+        "text": "SGLang",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 249,
+        "y": 944.9000244140625,
+        "width": 42.33332824707031,
+        "height": 13
+      },
+      {
+        "text": "2 registered · 1 loaded",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 249,
+        "y": 962.9000244140625,
+        "width": 120.11666870117188,
+        "height": 13
+      },
+      {
+        "text": "UNKNOWN",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 437.01666259765625,
+        "y": 953.9000244140625,
+        "width": 63.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Storage Health",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "650",
+        "x": 546,
+        "y": 907.9000244140625,
+        "width": 96.60000610351562,
+        "height": 16
+      },
+      {
+        "text": "Browse library →",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 710.0499877929688,
+        "y": 909.9000244140625,
+        "width": 94.94999694824219,
+        "height": 15
+      },
+      {
+        "text": "ASUS System",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "11px",
+        "fontWeight": "600",
+        "x": 546,
+        "y": 939.6500244140625,
+        "width": 68.39999389648438,
+        "height": 12
+      },
+      {
+        "text": "650.0 / 2000.0 GiB",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "11px",
+        "fontWeight": "400",
+        "x": 652.2833251953125,
+        "y": 939.6500244140625,
+        "width": 89.75,
+        "height": 12
+      },
+      {
+        "text": "ONLINE",
+        "color": "rgb(112, 209, 166)",
+        "fontSize": "11px",
+        "fontWeight": "650",
+        "x": 760.0333251953125,
+        "y": 942.1500244140625,
+        "width": 40.96665954589844,
+        "height": 12
+      },
+      {
+        "text": "NAS Model Library",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "11px",
+        "fontWeight": "600",
+        "x": 546,
+        "y": 966.1500244140625,
+        "width": 57.616668701171875,
+        "height": 12
+      },
+      {
+        "text": "NAS Model Library",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "11px",
+        "fontWeight": "600",
+        "x": 546,
+        "y": 982.6500244140625,
+        "width": 36.76666259765625,
+        "height": 12
+      },
+      {
+        "text": "5500.0 / 16000.0 GiB",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "11px",
+        "fontWeight": "400",
+        "x": 639.88330078125,
+        "y": 966.1500244140625,
+        "width": 102.15000915527344,
+        "height": 12
+      },
+      {
+        "text": "ONLINE",
+        "color": "rgb(112, 209, 166)",
+        "fontSize": "11px",
+        "fontWeight": "650",
+        "x": 760.0333251953125,
+        "y": 976.9000244140625,
+        "width": 40.96665954589844,
+        "height": 12
+      },
+      {
+        "text": "Hardware Telemetry",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "650",
+        "x": 843,
+        "y": 907.9000244140625,
+        "width": 131.39999389648438,
+        "height": 16
+      },
+      {
+        "text": "Memory in use",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 843,
+        "y": 938.9000244140625,
+        "width": 78.94999694824219,
+        "height": 13
+      },
+      {
+        "text": "52.0 GiB",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1056.316650390625,
+        "y": 938.9000244140625,
+        "width": 45.68333435058594,
+        "height": 13
+      },
+      {
+        "text": "Available memory",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 843,
+        "y": 965.9000244140625,
+        "width": 96.38333129882812,
+        "height": 13
+      },
+      {
+        "text": "76.0 GiB",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1056.316650390625,
+        "y": 965.9000244140625,
+        "width": 45.68333435058594,
+        "height": 13
+      },
+      {
+        "text": "Quick Actions",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "650",
+        "x": 1140,
+        "y": 907.9000244140625,
+        "width": 88.16667175292969,
+        "height": 16
+      },
+      {
+        "text": "Manage models",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1175,
+        "y": 941.9000244140625,
+        "width": 88.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "Explore NAS",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1175,
+        "y": 977.9000244140625,
+        "width": 70.88333129882812,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(12, 20, 35, 0.73)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(0, 0, 0, 0.12) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".overview-instruments",
+        "background": "rgba(25, 40, 62, 0.56)",
+        "blur": "blur(18px)",
+        "shadow": "rgba(0, 0, 0, 0.64) 0px 18px 36px -16px, rgba(0, 0, 0, 0.15) 0px 3px 8px 0px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.18) 0px -1px 0px 0px inset",
+        "x": 236,
+        "y": 241.3000030517578,
+        "width": 1176,
+        "height": 318.5999755859375
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 573.9000244140625,
+        "width": 1176,
+        "height": 304.5
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 892.4000244140625,
+        "width": 285,
+        "height": 176.5
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 533,
+        "y": 892.4000244140625,
+        "width": 285,
+        "height": 176.5
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 830,
+        "y": 892.4000244140625,
+        "width": 285,
+        "height": 176.5
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 1127,
+        "y": 892.4000244140625,
+        "width": 285,
+        "height": 176.5
+      }
+    ],
+    "image": "dashboard-dark-background.png"
+  },
+  {
+    "section": "models",
+    "theme": "dark",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 92.0333251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 201.6999969482422,
+        "height": 32
+      },
+      {
+        "text": "Manage local AI models with clear, deliberate actions.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 310.66668701171875,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Unified memory",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "600",
+        "x": 255,
+        "y": 258.04998779296875,
+        "width": 97.86666870117188,
+        "height": 14
+      },
+      {
+        "text": "52.0 GiB used / 128.0 GiB",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 279.29998779296875,
+        "width": 134.0833282470703,
+        "height": 13
+      },
+      {
+        "text": "System-wide · Not per-model allocation",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 737.0833129882812,
+        "y": 268.54998779296875,
+        "width": 210.65000915527344,
+        "height": 13
+      },
+      {
+        "text": "Ready",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 238,
+        "y": 333.29998779296875,
+        "width": 34.81666564941406,
+        "height": 13
+      },
+      {
+        "text": "Simulation only · Loaded and inference-ready states are distinct",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 288.816650390625,
+        "y": 333.29998779296875,
+        "width": 339.45001220703125,
+        "height": 13
+      },
+      {
+        "text": "Registered models",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 377.54998779296875,
+        "width": 131.46665954589844,
+        "height": 17
+      },
+      {
+        "text": "4 of 4",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 375.4666748046875,
+        "y": 380.54998779296875,
+        "width": 29.2166748046875,
+        "height": 13
+      },
+      {
+        "text": "Manage the models connected to this workstation.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 405.79998779296875,
+        "width": 272.816650390625,
+        "height": 13
+      },
+      {
+        "text": "All models",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 252,
+        "y": 447.79998779296875,
+        "width": 56.19999694824219,
+        "height": 13
+      },
+      {
+        "text": "Loaded",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 334.20001220703125,
+        "y": 447.79998779296875,
+        "width": 39.93333435058594,
+        "height": 13
+      },
+      {
+        "text": "Unloaded",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 400.1333312988281,
+        "y": 447.79998779296875,
+        "width": 52.03334045410156,
+        "height": 13
+      },
+      {
+        "text": "Needs attention",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 478.16668701171875,
+        "y": 447.79998779296875,
+        "width": 87.31666564941406,
+        "height": 13
+      },
+      {
+        "text": "SGLang",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 255,
+        "y": 513.7999877929688,
+        "width": 42.33332824707031,
+        "height": 13
+      },
+      {
+        "text": "Loaded",
+        "color": "rgb(112, 209, 166)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 551.0499877929688,
+        "y": 513.7999877929688,
+        "width": 41.616668701171875,
+        "height": 13
+      },
+      {
+        "text": "Qwen 3.8-27B NVFP4",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "19px",
+        "fontWeight": "650",
+        "x": 255,
+        "y": 548.11669921875,
+        "width": 181.1999969482422,
+        "height": 22
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 592.4500122070312,
+        "width": 61.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "27B",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 578.5166625976562,
+        "y": 592.4500122070312,
+        "width": 21.150009155273438,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 617.4500122070312,
+        "width": 69.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "NVFP4",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 563.2166748046875,
+        "y": 617.4500122070312,
+        "width": 36.45001220703125,
+        "height": 13
+      },
+      {
+        "text": "Runtime memory",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 642.4500122070312,
+        "width": 93.46665954589844,
+        "height": 13
+      },
+      {
+        "text": "Not available",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 529.4166870117188,
+        "y": 642.4500122070312,
+        "width": 70.25,
+        "height": 13
+      },
+      {
+        "text": "Unload",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 268,
+        "y": 702.4500122070312,
+        "width": 39.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Details",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 546.7000122070312,
+        "y": 702.4500122070312,
+        "width": 39.9666748046875,
+        "height": 13
+      },
+      {
+        "text": "Ollama",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 651.6666870117188,
+        "y": 513.7999877929688,
+        "width": 40.133331298828125,
+        "height": 13
+      },
+      {
+        "text": "Unloaded",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 935.25,
+        "y": 513.7999877929688,
+        "width": 54.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "qwen3:8b",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "19px",
+        "fontWeight": "650",
+        "x": 651.6666870117188,
+        "y": 548.11669921875,
+        "width": 82.68333435058594,
+        "height": 22
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 651.6666870117188,
+        "y": 592.4500122070312,
+        "width": 61.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "8B",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 981.9500122070312,
+        "y": 592.4500122070312,
+        "width": 14.383331298828125,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 651.6666870117188,
+        "y": 617.4500122070312,
+        "width": 69.98332214355469,
+        "height": 13
+      },
+      {
+        "text": "Q4_K_M",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 950.7166748046875,
+        "y": 617.4500122070312,
+        "width": 45.616668701171875,
+        "height": 13
+      },
+      {
+        "text": "Runtime memory",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 651.6666870117188,
+        "y": 642.4500122070312,
+        "width": 93.46665954589844,
+        "height": 13
+      },
+      {
+        "text": "—",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 984.38330078125,
+        "y": 642.4500122070312,
+        "width": 11.949996948242188,
+        "height": 13
+      },
+      {
+        "text": "Load",
+        "color": "rgb(255, 255, 255)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 664.6666870117188,
+        "y": 702.4500122070312,
+        "width": 27.51666259765625,
+        "height": 13
+      },
+      {
+        "text": "Switch",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 725.183349609375,
+        "y": 702.4500122070312,
+        "width": 37.58332824707031,
+        "height": 13
+      },
+      {
+        "text": "Details",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 943.36669921875,
+        "y": 702.4500122070312,
+        "width": 39.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "Ollama",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1048.3333740234375,
+        "y": 513.7999877929688,
+        "width": 40.133331298828125,
+        "height": 13
+      },
+      {
+        "text": "Loaded",
+        "color": "rgb(112, 209, 166)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 1344.38330078125,
+        "y": 513.7999877929688,
+        "width": 41.616668701171875,
+        "height": 13
+      },
+      {
+        "text": "nomic-embed-text",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "19px",
+        "fontWeight": "650",
+        "x": 1048.3333740234375,
+        "y": 548.11669921875,
+        "width": 158.11666870117188,
+        "height": 22
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1048.3333740234375,
+        "y": 592.4500122070312,
+        "width": 61.9666748046875,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1330.75,
+        "y": 592.4500122070312,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1048.3333740234375,
+        "y": 617.4500122070312,
+        "width": 69.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1330.75,
+        "y": 617.4500122070312,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Runtime memory",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1048.3333740234375,
+        "y": 642.4500122070312,
+        "width": 93.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "0.3 GiB",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1355.2833251953125,
+        "y": 642.4500122070312,
+        "width": 37.71665954589844,
+        "height": 13
+      },
+      {
+        "text": "Unload",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1061.3333740234375,
+        "y": 702.4500122070312,
+        "width": 39.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Details",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1340.0333251953125,
+        "y": 702.4500122070312,
+        "width": 39.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "SGLang",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 255,
+        "y": 784.4500122070312,
+        "width": 42.33332824707031,
+        "height": 13
+      },
+      {
+        "text": "Unknown",
+        "color": "rgb(239, 189, 109)",
+        "fontSize": "12px",
+        "fontWeight": "650",
+        "x": 539.86669921875,
+        "y": 784.4500122070312,
+        "width": 52.80000305175781,
+        "height": 13
+      },
+      {
+        "text": "Example unavailable model",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "19px",
+        "fontWeight": "650",
+        "x": 255,
+        "y": 818.7666625976562,
+        "width": 234.31666564941406,
+        "height": 22
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 863.0999755859375,
+        "width": 61.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 537.4166870117188,
+        "y": 863.0999755859375,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 888.0999755859375,
+        "width": 69.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 537.4166870117188,
+        "y": 888.0999755859375,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Runtime memory",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 913.0999755859375,
+        "width": 93.46665954589844,
+        "height": 13
+      },
+      {
+        "text": "Not available",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 529.4166870117188,
+        "y": 913.0999755859375,
+        "width": 70.25,
+        "height": 13
+      },
+      {
+        "text": "Refresh runtime status before operating.",
+        "color": "rgb(239, 189, 109)",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "x": 255,
+        "y": 964.0999755859375,
+        "width": 257.48333740234375,
+        "height": 16
+      },
+      {
+        "text": "Details",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 546.7000122070312,
+        "y": 973.0999755859375,
+        "width": 39.9666748046875,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(12, 20, 35, 0.73)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(0, 0, 0, 0.12) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 489.29998779296875,
+        "width": 382.66668701171875,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 632.6666870117188,
+        "y": 489.29998779296875,
+        "width": 382.6666564941406,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 1029.3333740234375,
+        "y": 489.29998779296875,
+        "width": 382.66668701171875,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 759.9500122070312,
+        "width": 382.66668701171875,
+        "height": 256.6500244140625
+      }
+    ],
+    "image": "models-dark-background.png"
+  },
+  {
+    "section": "details",
+    "theme": "dark",
+    "texts": [
+      {
+        "text": "qwen3:8b",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "22px",
+        "fontWeight": "650",
+        "x": 357,
+        "y": 106,
+        "width": 96.60000610351562,
+        "height": 25
+      },
+      {
+        "text": "Close",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1038.9000244140625,
+        "y": 113.5,
+        "width": 31.100006103515625,
+        "height": 13
+      },
+      {
+        "text": "Ollama · unloaded · Installation: Unverified",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 173.71665954589844,
+        "width": 246.68333435058594,
+        "height": 14
+      },
+      {
+        "text": "Model identity",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "700",
+        "x": 357,
+        "y": 218.1999969482422,
+        "width": 89.89999389648438,
+        "height": 14
+      },
+      {
+        "text": "Model name",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 255.4499969482422,
+        "width": 66.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 255.6999969482422,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 278.54998779296875,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Runtime",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 318.1499938964844,
+        "width": 45.78334045410156,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 318.3999938964844,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 341.25,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Family",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 380.8500061035156,
+        "width": 34.19999694824219,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 381.1000061035156,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 403.95001220703125,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Parameters",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 443.54998779296875,
+        "width": 61.96665954589844,
+        "height": 13
+      },
+      {
+        "text": "8B",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 443.79998779296875,
+        "width": 15.583328247070312,
+        "height": 14
+      },
+      {
+        "text": "Estimated · Representative demo fixture",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 466.6499938964844,
+        "width": 217.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Architecture",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 506.25,
+        "width": 67.30000305175781,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 506.5,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 529.3499755859375,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Quantization",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 568.9500122070312,
+        "width": 69.98333740234375,
+        "height": 13
+      },
+      {
+        "text": "Q4_K_M",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 569.2000122070312,
+        "width": 49.40000915527344,
+        "height": 14
+      },
+      {
+        "text": "Estimated · Representative demo fixture",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 592.0499877929688,
+        "width": 217.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Weight format",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 631.6500244140625,
+        "width": 79.03334045410156,
+        "height": 13
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 631.9000244140625,
+        "width": 67.44999694824219,
+        "height": 14
+      },
+      {
+        "text": "Unavailable",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 654.75,
+        "width": 62.25,
+        "height": 13
+      },
+      {
+        "text": "Storage & context",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "700",
+        "x": 357,
+        "y": 708.5999755859375,
+        "width": 111,
+        "height": 14
+      },
+      {
+        "text": "Stored size",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 745.8499755859375,
+        "width": 59.06666564941406,
+        "height": 13
+      },
+      {
+        "text": "5.0 GiB",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 746.0999755859375,
+        "width": 40.883331298828125,
+        "height": 14
+      },
+      {
+        "text": "Estimated · Representative demo fixture",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 768.9500122070312,
+        "width": 217.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Storage / model identifier",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 808.5499877929688,
+        "width": 138.71665954589844,
+        "height": 13
+      },
+      {
+        "text": "Example runtime-managed storage",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 808.7999877929688,
+        "width": 205.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "Estimated · Representative demo fixture",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 831.6500244140625,
+        "width": 217.4666748046875,
+        "height": 13
+      },
+      {
+        "text": "Maximum context",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 357,
+        "y": 871.25,
+        "width": 97.39999389648438,
+        "height": 13
+      },
+      {
+        "text": "32768",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 660.88330078125,
+        "y": 871.5,
+        "width": 36.66667175292969,
+        "height": 14
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(12, 20, 35, 0.73)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(0, 0, 0, 0.12) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 489.29998779296875,
+        "width": 382.66668701171875,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 632.6666870117188,
+        "y": 489.29998779296875,
+        "width": 382.6666564941406,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 1029.3333740234375,
+        "y": 489.29998779296875,
+        "width": 382.66668701171875,
+        "height": 256.6499938964844
+      },
+      {
+        "selector": ".model-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 759.9500122070312,
+        "width": 382.66668701171875,
+        "height": 256.6500244140625
+      },
+      {
+        "selector": ".modal-card",
+        "background": "rgba(23, 34, 53, 0.985)",
+        "blur": "blur(24px)",
+        "shadow": "rgba(0, 0, 0, 0.66) 0px 36px 100px 0px, rgba(0, 0, 0, 0.28) 0px 8px 24px 0px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 330,
+        "y": 75,
+        "width": 780,
+        "height": 850
+      }
+    ],
+    "image": "details-dark-background.png"
+  },
+  {
+    "section": "library",
+    "theme": "dark",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 82.5,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 178.68333435058594,
+        "height": 32
+      },
+      {
+        "text": "Discover and inspect model assets on your NAS.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 277.04998779296875,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "NAS assets",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 265.04998779296875,
+        "width": 76.19999694824219,
+        "height": 17
+      },
+      {
+        "text": "Read-only inventory · Collections are assets, not guaranteed runnable models",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 293.29998779296875,
+        "width": 413.91668701171875,
+        "height": 13
+      },
+      {
+        "text": "Scan NAS",
+        "color": "rgb(255, 255, 255)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1324.550048828125,
+        "y": 273.79998779296875,
+        "width": 53.44999694824219,
+        "height": 13
+      },
+      {
+        "text": "2 asset files · 1 collections · Representative inventory · No NAS access",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 269,
+        "y": 337.29998779296875,
+        "width": 369.41668701171875,
+        "height": 13
+      },
+      {
+        "text": "Collections",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 273,
+        "y": 391.29998779296875,
+        "width": 59.56666564941406,
+        "height": 13
+      },
+      {
+        "text": "Model components",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 358.566650390625,
+        "y": 391.29998779296875,
+        "width": 104.16667175292969,
+        "height": 13
+      },
+      {
+        "text": "Language",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 452.54998779296875,
+        "width": 52.56666564941406,
+        "height": 13
+      },
+      {
+        "text": "Research collection",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "700",
+        "x": 379,
+        "y": 451.54998779296875,
+        "width": 119.61666870117188,
+        "height": 14
+      },
+      {
+        "text": "2 asset file(s) · 32.0 GiB stored",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1226.2666015625,
+        "y": 452.54998779296875,
+        "width": 160.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Requires additional configuration · No executable adapter",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 379,
+        "y": 476.79998779296875,
+        "width": 310.48333740234375,
+        "height": 13
+      },
+      {
+        "text": "Asset details",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 389.566650390625,
+        "y": 506.79998779296875,
+        "width": 68.19999694824219,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(12, 20, 35, 0.73)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(0, 0, 0, 0.12) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 241.3000030517578,
+        "width": 1176,
+        "height": 324
+      }
+    ],
+    "image": "library-dark-background.png"
+  },
+  {
+    "section": "workspaces",
+    "theme": "dark",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 70.81666564941406,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 155.21665954589844,
+        "height": 32
+      },
+      {
+        "text": "Planning profiles for local AI workflows.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 230.5833282470703,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Workspaces are planning presets, not automatic launchers. Each preset shows a suggested mo",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 253,
+        "y": 257.3999938964844,
+        "width": 1031.5,
+        "height": 13
+      },
+      {
+        "text": "Coding",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 376.5,
+        "width": 51.25,
+        "height": 18
+      },
+      {
+        "text": "Software engineering and code assistance",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 406,
+        "width": 225.60000610351562,
+        "height": 13
+      },
+      {
+        "text": "Suggested: Qwen3-Coder-Next",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 455,
+        "width": 166.88333129882812,
+        "height": 13
+      },
+      {
+        "text": "Scientific Research",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 653.6666870117188,
+        "y": 376.5,
+        "width": 139.06666564941406,
+        "height": 18
+      },
+      {
+        "text": "Scientific reasoning and analysis",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 653.6666870117188,
+        "y": 406,
+        "width": 171.6999969482422,
+        "height": 13
+      },
+      {
+        "text": "Suggested: reasoning-oriented LLM",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 653.6666870117188,
+        "y": 455,
+        "width": 190.9833221435547,
+        "height": 13
+      },
+      {
+        "text": "General AI",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 1050.3333740234375,
+        "y": 376.5,
+        "width": 76.5,
+        "height": 18
+      },
+      {
+        "text": "Everyday reasoning and productivity",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1050.3333740234375,
+        "y": 406,
+        "width": 194.81666564941406,
+        "height": 13
+      },
+      {
+        "text": "Suggested: Qwen 3.8 / Qwen3.5",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1050.3333740234375,
+        "y": 455,
+        "width": 172.58334350585938,
+        "height": 13
+      },
+      {
+        "text": "Image Studio",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 577.5,
+        "width": 95.94999694824219,
+        "height": 18
+      },
+      {
+        "text": "Creative image workflows",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 607,
+        "width": 139.35000610351562,
+        "height": 13
+      },
+      {
+        "text": "Requires a compatible image runtime",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 656,
+        "width": 200.68333435058594,
+        "height": 13
+      },
+      {
+        "text": "Video Studio",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 653.6666870117188,
+        "y": 577.5,
+        "width": 94.61666870117188,
+        "height": 18
+      },
+      {
+        "text": "Generation and post-production",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 653.6666870117188,
+        "y": 607,
+        "width": 172.38333129882812,
+        "height": 13
+      },
+      {
+        "text": "Requires a compatible video workflow",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 653.6666870117188,
+        "y": 656,
+        "width": 205.26666259765625,
+        "height": 13
+      },
+      {
+        "text": "Voice Studio",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "16px",
+        "fontWeight": "650",
+        "x": 1050.3333740234375,
+        "y": 577.5,
+        "width": 91.73333740234375,
+        "height": 18
+      },
+      {
+        "text": "Text-to-speech and audio",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1050.3333740234375,
+        "y": 607,
+        "width": 135.23333740234375,
+        "height": 13
+      },
+      {
+        "text": "Requires a compatible audio runtime",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1050.3333740234375,
+        "y": 656,
+        "width": 197.70001220703125,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(12, 20, 35, 0.73)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(0, 0, 0, 0.12) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 304.5,
+        "width": 382.66668701171875,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 632.6666870117188,
+        "y": 304.5,
+        "width": 382.6666564941406,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 1029.3333740234375,
+        "y": 304.5,
+        "width": 382.66668701171875,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 505.5,
+        "width": 382.66668701171875,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 632.6666870117188,
+        "y": 505.5,
+        "width": 382.6666564941406,
+        "height": 187
+      },
+      {
+        "selector": ".workspace-card",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 1029.3333740234375,
+        "y": 505.5,
+        "width": 382.66668701171875,
+        "height": 187
+      }
+    ],
+    "image": "workspaces-dark-background.png"
+  },
+  {
+    "section": "activity",
+    "theme": "dark",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 46.5,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 99.66667175292969,
+        "height": 32
+      },
+      {
+        "text": "Inspect local operations and recovery attempts.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 276.5,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Operation History",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 257,
+        "y": 265.04998779296875,
+        "width": 123.81666564941406,
+        "height": 17
+      },
+      {
+        "text": "Recent local events, excluding prompts and model outputs",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 257,
+        "y": 293.29998779296875,
+        "width": 315.066650390625,
+        "height": 13
+      },
+      {
+        "text": "Refresh",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1346.7833251953125,
+        "y": 267.79998779296875,
+        "width": 44.21665954589844,
+        "height": 13
+      },
+      {
+        "text": "Inventory · Observed",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 281,
+        "y": 344.29998779296875,
+        "width": 128.3000030517578,
+        "height": 14
+      },
+      {
+        "text": "Representative fixture · 12:30:00",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 281,
+        "y": 369.29998779296875,
+        "width": 175.8000030517578,
+        "height": 13
+      },
+      {
+        "text": "Synthetic observation; no runtime or NAS access.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 281,
+        "y": 392.29998779296875,
+        "width": 262.16668701171875,
+        "height": 13
+      },
+      {
+        "text": "Details · Inspected",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 281,
+        "y": 444.29998779296875,
+        "width": 112.81666564941406,
+        "height": 14
+      },
+      {
+        "text": "qwen3:8b · 12:29:55",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 281,
+        "y": 469.29998779296875,
+        "width": 108.21665954589844,
+        "height": 13
+      },
+      {
+        "text": "Representative read-only metadata inspection.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 281,
+        "y": 492.29998779296875,
+        "width": 251.1999969482422,
+        "height": 13
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(12, 20, 35, 0.73)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(0, 0, 0, 0.12) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 241.3000030517578,
+        "width": 1176,
+        "height": 303.5
+      }
+    ],
+    "image": "activity-dark-background.png"
+  },
+  {
+    "section": "settings",
+    "theme": "dark",
+    "texts": [
+      {
+        "text": "ASUS AI",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "x": 66,
+        "y": 31.25,
+        "width": 61.5,
+        "height": 19
+      },
+      {
+        "text": "CONTROL CENTER",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "9px",
+        "fontWeight": "400",
+        "x": 66,
+        "y": 57.25,
+        "width": 92.06666564941406,
+        "height": 10
+      },
+      {
+        "text": "Overview",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 119,
+        "width": 58.5,
+        "height": 14
+      },
+      {
+        "text": "Model Manager",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 166,
+        "width": 95.46665954589844,
+        "height": 14
+      },
+      {
+        "text": "Model Library",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 213,
+        "width": 85.16667175292969,
+        "height": 14
+      },
+      {
+        "text": "Workspaces",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 260,
+        "width": 73.5,
+        "height": 14
+      },
+      {
+        "text": "Activity",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 307,
+        "width": 47.78334045410156,
+        "height": 14
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "550",
+        "x": 55,
+        "y": 354,
+        "width": 51.06666564941406,
+        "height": 14
+      },
+      {
+        "text": "ASUS GX10",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 20,
+        "y": 908.5,
+        "width": 63.28334045410156,
+        "height": 13
+      },
+      {
+        "text": "Grace Blackwell · Local",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 930.5,
+        "width": 120.83332824707031,
+        "height": 13
+      },
+      {
+        "text": "v5.0 · Private by design",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 20,
+        "y": 966.5,
+        "width": 122.53334045410156,
+        "height": 13
+      },
+      {
+        "text": "AI WORKSTATION",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 21,
+        "width": 103.08332824707031,
+        "height": 13
+      },
+      {
+        "text": "/",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 349.08331298828125,
+        "y": 21,
+        "width": 4.7166748046875,
+        "height": 13
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 366.8500061035156,
+        "y": 21,
+        "width": 49.54998779296875,
+        "height": 13
+      },
+      {
+        "text": "Simulated telemetry",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1203.816650390625,
+        "y": 21,
+        "width": 110.18333435058594,
+        "height": 13
+      },
+      {
+        "text": "Interactive prototype",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "700",
+        "x": 253,
+        "y": 104.5,
+        "width": 122.01666259765625,
+        "height": 13
+      },
+      {
+        "text": "Representative data · All operations are simulated",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 391.01666259765625,
+        "y": 104.5,
+        "width": 267.7833251953125,
+        "height": 13
+      },
+      {
+        "text": "Simulate next load failure",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 1236.2666015625,
+        "y": 104.5,
+        "width": 145.73333740234375,
+        "height": 13
+      },
+      {
+        "text": "Settings",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "29px",
+        "fontWeight": "650",
+        "x": 236,
+        "y": 161.39999389648438,
+        "width": 107.03334045410156,
+        "height": 32
+      },
+      {
+        "text": "Personalize your local control center.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 236,
+        "y": 202.5500030517578,
+        "width": 214.25,
+        "height": 14
+      },
+      {
+        "text": "Prototype · No runtime connection",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 1225.050048828125,
+        "y": 183.14999389648438,
+        "width": 186.9499969482422,
+        "height": 13
+      },
+      {
+        "text": "Appearance",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 261,
+        "y": 269.04998779296875,
+        "width": 82,
+        "height": 17
+      },
+      {
+        "text": "Preferences are saved in this browser only.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 305.51666259765625,
+        "width": 248,
+        "height": 14
+      },
+      {
+        "text": "Color theme",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "14px",
+        "fontWeight": "700",
+        "x": 261,
+        "y": 350.75,
+        "width": 81.53334045410156,
+        "height": 16
+      },
+      {
+        "text": "Choose a comfortable environment for your workstation.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 376.9666748046875,
+        "width": 331.95001220703125,
+        "height": 14
+      },
+      {
+        "text": "Toggle light / dark",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "x": 974.316650390625,
+        "y": 364.9666748046875,
+        "width": 103.68333435058594,
+        "height": 13
+      },
+      {
+        "text": "Connection & privacy",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "15px",
+        "fontWeight": "650",
+        "x": 261,
+        "y": 444.45001220703125,
+        "width": 144.38333129882812,
+        "height": 17
+      },
+      {
+        "text": "Access",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 484.70001220703125,
+        "width": 35.899993896484375,
+        "height": 13
+      },
+      {
+        "text": "Loopback only · Session authenticated",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 875.4833374023438,
+        "y": 484.70001220703125,
+        "width": 215.51666259765625,
+        "height": 13
+      },
+      {
+        "text": "Telemetry refresh",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 527.7000122070312,
+        "width": 96.43333435058594,
+        "height": 13
+      },
+      {
+        "text": "Every 5 seconds",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 1001.13330078125,
+        "y": 527.7000122070312,
+        "width": 89.86666870117188,
+        "height": 13
+      },
+      {
+        "text": "Runtime configuration",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 570.7000122070312,
+        "width": 121.38333129882812,
+        "height": 13
+      },
+      {
+        "text": "Managed outside this interface",
+        "color": "rgb(241, 245, 249)",
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "x": 915.2999877929688,
+        "y": 570.7000122070312,
+        "width": 175.6999969482422,
+        "height": 13
+      },
+      {
+        "text": "Runtime configuration is read-only here. Activity excludes prompts and model outputs.",
+        "color": "rgb(168, 184, 204)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 615.9166870117188,
+        "width": 503.98333740234375,
+        "height": 14
+      },
+      {
+        "text": "Open interactive prototype",
+        "color": "rgb(145, 196, 237)",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "x": 261,
+        "y": 657.4000244140625,
+        "width": 159.46665954589844,
+        "height": 14
+      }
+    ],
+    "materials": [
+      {
+        "selector": ".sidebar",
+        "background": "rgba(12, 20, 35, 0.73)",
+        "blur": "blur(20px)",
+        "shadow": "rgba(0, 0, 0, 0.12) 8px 0px 32px 0px",
+        "x": 0,
+        "y": 0,
+        "width": 208,
+        "height": 1000
+      },
+      {
+        "selector": ".panel",
+        "background": "rgba(24, 35, 53, 0.58)",
+        "blur": "blur(8px)",
+        "shadow": "rgba(0, 0, 0, 0.55) 0px 7px 18px -10px, rgba(216, 234, 255, 0.21) 0px 1px 0px 0px inset",
+        "x": 236,
+        "y": 241.3000030517578,
+        "width": 880,
+        "height": 458.5999755859375
+      }
+    ],
+    "image": "settings-dark-background.png"
+  }
+]
