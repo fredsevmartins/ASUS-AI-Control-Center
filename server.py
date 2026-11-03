@@ -73,7 +73,7 @@ def _telemetry():
 
 def activity():
     try:
-        with core.LOG_PATH.open('rb') as stream:
+        with core.state_file(core.LOG_PATH.name, os.O_RDONLY) as fd, os.fdopen(os.dup(fd), 'rb') as stream:
             stream.seek(0, os.SEEK_END)
             stream.seek(max(0, stream.tell() - 131072))
             lines = stream.read(131072).decode('utf8', errors='replace').splitlines()[-65:]
@@ -175,8 +175,45 @@ def run_job(action, target, stops, confirmed_plan=None):
             STATE.update(busy=False, job=None, phase='failed', error=str(exc), message=str(exc), finished_at=int(time.time()))
 
 
+class LocalHTTPServer(ThreadingHTTPServer):
+    """Bound unauthenticated connections before allocating request threads."""
+    daemon_threads = True
+    max_connections = 16
+
+    def __init__(self, *args, **kwargs):
+        self.slots = threading.BoundedSemaphore(self.max_connections)
+        super().__init__(*args, **kwargs)
+
+    def process_request(self, request, client_address):
+        if not self.slots.acquire(blocking=False):
+            self.shutdown_request(request)
+            return
+        try:
+            super().process_request(request, client_address)
+        except Exception:
+            self.slots.release()
+            raise
+
+    def process_request_thread(self, request, client_address):
+        try:
+            super().process_request_thread(request, client_address)
+        finally:
+            self.slots.release()
+
+    def handle_error(self, request, client_address):
+        # Do not dump request context or credentials to terminal logs.
+        pass
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = 'ASUSModelManager/5.0'
+    timeout = 10
+
+    def end_headers(self):
+        self.send_header('X-Content-Type-Options', 'nosniff')
+        self.send_header('Referrer-Policy', 'no-referrer')
+        self.send_header('Cache-Control', 'no-store')
+        super().end_headers()
     def log_message(self, fmt, *args):
         pass
     def respond(self, status, payload):
@@ -193,6 +230,10 @@ class Handler(BaseHTTPRequestHandler):
         return secrets.compare_digest(value.encode('utf8'), TOKEN.encode('utf8'))
     def local_request(self):
         """Reject DNS rebinding and cross-origin requests before reading bodies."""
+        if hasattr(self.headers, 'get_all') and any(
+                len(self.headers.get_all(name, [])) > 1 for name in
+                ('Host', 'Origin', 'X-Session-Token', 'Content-Length', 'Content-Type', 'Transfer-Encoding', 'Sec-Fetch-Site')):
+            return False
         address = self.server.server_address
         expected_host = f'127.0.0.1:{address[1]}'
         if self.headers.get('Host') != expected_host:
@@ -212,7 +253,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'text/html; charset=utf-8')
             self.send_header('Cache-Control', 'no-store')
             self.send_header('Referrer-Policy', 'no-referrer')
-            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'")
+            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'")
             self.send_header('Content-Length', str(len(data)))
             self.end_headers()
             return self.wfile.write(data)
@@ -262,7 +303,10 @@ class Handler(BaseHTTPRequestHandler):
             length = int(self.headers.get('Content-Length', '0'))
             if length > 8192 or length <= 0:
                 raise ValueError('Invalid body length')
-            body = json.loads(self.rfile.read(length))
+            raw = self.rfile.read(length)
+            if len(raw) != length:
+                raise ValueError('Incomplete request body')
+            body = json.loads(raw)
             if not isinstance(body, dict):
                 raise ValueError('JSON object required')
             action, target, stops = body.get('action'), body.get('target'), body.get('stops', [])
@@ -313,11 +357,11 @@ class Handler(BaseHTTPRequestHandler):
                     STATE.update(busy=False, job=None, phase='failed', message='Could not start operation', error='Could not start operation')
                 return self.respond(503, {'error': 'Could not start operation'})
             return self.respond(202, {'message': 'Accepted. Monitor the operation status.'})
-        except (ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        except (ValueError, KeyError, TypeError, RecursionError) as exc:
             return self.respond(400, {'error': str(exc)})
 
 def main():
-    httpd = ThreadingHTTPServer(('127.0.0.1', PORT), Handler)
+    httpd = LocalHTTPServer(('127.0.0.1', PORT), Handler)
     port = httpd.server_address[1]
     url = f'http://127.0.0.1:{port}/?token={TOKEN}'
     print(f'AI Model Manager v5 — local-only at http://127.0.0.1:{port} (Ctrl+C to stop)', flush=True)

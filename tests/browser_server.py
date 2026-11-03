@@ -32,7 +32,7 @@ def main():
         stack.enter_context(patch.object(core, 'STATE_DIR', Path(directory)))
         stack.enter_context(patch.object(core, 'LOG_PATH', Path(directory) / 'operations.jsonl'))
         stack.enter_context(patch.object(server, 'TOKEN', FIXTURE_TOKEN))
-        httpd = server.ThreadingHTTPServer(('127.0.0.1', 0), server.Handler)
+        httpd = server.LocalHTTPServer(('127.0.0.1', 0), server.Handler)
         try:
             # This output contains only a port; no credentials or launch URLs.
             print(json.dumps({'port': httpd.server_address[1]}), flush=True)

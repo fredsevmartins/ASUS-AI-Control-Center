@@ -223,7 +223,7 @@ class IntelligenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory)/'events.jsonl'
             path.write_text('bad\n{}\n{"operation":"load"}\n[]\n')
-            with patch.object(core, 'LOG_PATH', path):
+            with patch.object(core, 'LOG_PATH', path), patch.object(core, 'STATE_DIR', Path(directory)):
                 events = server.activity()
                 self.assertEqual(len(events), 2)
                 self.assertEqual(events[0]['operation'], 'load')

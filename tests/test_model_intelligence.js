@@ -23,6 +23,12 @@ const plan={id:'plan',expires_at:Date.now()/1000+120,stops:[],loaded_models:[{ke
 context.state.models=[fixture,{key:'old',name:'Previous model',loaded:true,runtime:'SGLang',state:'ready'}];
 let html=context.modelCardHTML(fixture,true);
 assert(html.includes('&lt;script&gt;')&&!html.includes('<script>'),'runtime names are escaped');
+const malicious='"><img src=x onerror=alert(1)><script>alert(1)</script>&\'';
+const injected=context.modelCardHTML({...fixture,key:malicious,name:malicious,runtime:malicious,
+  metadata:{parameters:{value:malicious,source:malicious,confidence:malicious}},
+  health:{readiness:malicious,failure_reason:malicious}},true);
+assert(!injected.includes('<img')&&!injected.includes('<script>'),'metadata cannot introduce markup');
+assert(injected.includes('&quot;')&&injected.includes('&#39;'),'attribute quotes are escaped');
 assert(html.includes('8B')&&html.includes('Q4_K_M')&&html.includes('Verified from runtime'));
 assert(html.includes('Unknown requirement')&&html.includes('Last health check')&&html.includes('&lt;network failure&gt;'));
 assert(html.includes('data-action="load"')&&html.includes('data-action="switch"'));

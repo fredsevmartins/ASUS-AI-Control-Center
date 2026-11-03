@@ -106,3 +106,45 @@ remain **NOT VERIFIED** in a browser. Existing mocked focus, operation, gauge an
 chart regressions pass, but cannot close these visual acceptance gates. Release
 readiness remains withheld until the guarded browser suite and manual checks run
 in an environment with the prerequisites described above.
+
+
+## Public release security pass — 2026-11-03
+
+Run the focused security regressions and optional read-only repository scanner:
+
+```sh
+python3 -m unittest discover -s tests -p test_security.py -v
+python3 tests/security_scan.py
+```
+
+The complete Python suite now passes **101 tests**, including 16 security cases.
+All three existing JavaScript suites pass with additional metadata/attribute
+injection and crafted Demo Mode destination checks. Python compilation, JS
+syntax, installer shell syntax and whitespace checks pass. No installer ran.
+
+The security suite uses temporary state and NAS stand-ins and mocked runtime
+adapters. It covers state symlink/hardlink/FIFO rejection, private permissions,
+bounded logs, NAS directory substitution, metadata FIFO/deep JSON, enumeration
+budgets, missing/invalid authentication, duplicate headers, body limits,
+unsupported HTTP methods, path traversal, invalid model selection, worker caps,
+thread failure release, unsafe runtime destinations and loopback startup.
+Complete handler parsing uses fake byte-stream connections, not network sockets.
+Existing tests retain forged Host/Origin, concurrent confirmations, one-use plans,
+recovery, SGLang/Ollama contracts and demo/live isolation coverage.
+
+Three filesystem cases were also run against isolated original-HEAD source:
+symlink logging and directory escape reproduced; the FIFO test detected missing
+nonblocking flags before performing a potentially blocking open. All pass after
+correction. Every reproduction uses synthetic temporary files only.
+
+The scanner emits location/type/fingerprint records, never matched credential
+values. It covers all locally available Git objects, not remote-only releases or
+artifacts; signatures are heuristic and require private triage. No maintained
+secret scanner was installed. See the audit for the initial 11-commit/99-blob
+inventory and false-positive classification.
+
+Both browser commands still exit **2 / BLOCKED** because Playwright is missing;
+a fresh loopback socket probe was denied. Real transport, rendered appearance,
+Firefox ARM64 and effective host/runtime permissions remain unverified. The
+[security report](docs/audits/PUBLIC_RELEASE_SECURITY_AUDIT.md) records
+**INCOMPLETE_AUDIT**, not a publication or deployment security certification.

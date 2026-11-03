@@ -37,18 +37,38 @@ HEALTH_LOCK = threading.Lock()
 
 
 @contextmanager
+def state_file(name, flags, create=False):
+    """Open private state through a pinned directory, never links or devices."""
+    if create:
+        STATE_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
+    directory = os.open(STATE_DIR, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    fd = None
+    try:
+        info = os.fstat(directory)
+        if info.st_uid != os.getuid() or info.st_mode & 0o077:
+            raise OSError('Application state directory must be private and owned by the current user')
+        fd = os.open(name, flags | os.O_NOFOLLOW | os.O_NONBLOCK, 0o600, dir_fd=directory)
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_nlink != 1:
+            raise OSError('Unsafe application state file')
+        if create:
+            os.fchmod(fd, 0o600)
+        yield fd
+    finally:
+        if fd is not None:
+            os.close(fd)
+        os.close(directory)
+
+
+@contextmanager
 def lifecycle_lock():
     """Coordinate lifecycle workers across copies of this application (Linux)."""
-    STATE_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
-    fd = os.open(STATE_DIR / 'lifecycle.lock', os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
-    try:
+    with state_file('lifecycle.lock', os.O_CREAT | os.O_RDWR, create=True) as fd:
         try:
             fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
             raise RuntimeError('Another Control Center instance is running a lifecycle operation') from None
         yield
-    finally:
-        os.close(fd)
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -78,12 +98,11 @@ def runtime_http(origin, path, payload=None, timeout=2, health=False, headers=No
 def log_event(operation, stage, model=None, detail=None):
     """Append bounded, non-sensitive operation metadata (never model prompts)."""
     try:
-        STATE_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
-        with LOG_PATH.open('a', encoding='utf-8') as f:
-            f.write(json.dumps({'time': datetime.now(timezone.utc).isoformat(),
-                                'operation': operation, 'stage': stage,
-                                'model': model, 'detail': str(detail)[:500] if detail else None}, ensure_ascii=False) + '\n')
-        LOG_PATH.chmod(0o600)
+        record = {key: str(value)[:500] if value is not None else None for key, value in
+                  (('operation', operation), ('stage', stage), ('model', model), ('detail', detail))}
+        record['time'] = datetime.now(timezone.utc).isoformat()
+        with state_file(LOG_PATH.name, os.O_CREAT | os.O_WRONLY | os.O_APPEND, create=True) as fd:
+            os.write(fd, (json.dumps(record, ensure_ascii=False) + '\n').encode('utf8'))
     except OSError:
         pass
 
@@ -197,57 +216,65 @@ def gpu_info():
 
 
 def _nas_scan():
-    """Bounded metadata discovery; never follow links, read weights or recurse indefinitely.
-
-    Scan 3 levels below share root. A directory with recognized weights is a
-    model candidate; an index directory by itself is not a loadable model.
-    """
+    """Bounded read-only inventory, anchored to directory descriptors on Linux."""
     if not NAS_MODELS.is_mount():
         return [], 'NAS share is not mounted'
-    found = []
-    examined = 0
-    metadata_reads = 0
-    stack = [(NAS_MODELS, 0)]
+    found, examined, metadata_reads = [], 0, 0
+    stack = [((), 0)]
+    root = None
     try:
+        root = os.open(NAS_MODELS, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
         while stack and examined < MAX_NAS_ENTRIES:
-            directory, depth = stack.pop()
-            with os.scandir(directory) as iterator:
-                # Consume only the remaining budget, including hidden entries.
-                import itertools
-                entries = list(itertools.islice(iterator, MAX_NAS_ENTRIES - examined))
-            for item in entries:
-                if examined >= MAX_NAS_ENTRIES:
-                    break
-                examined += 1
-                if item.name.startswith(('.', '#')):
-                    continue
-                relative = str(Path(item.path).relative_to(NAS_MODELS))
-                if item.is_file(follow_symlinks=False):
-                    suffix = Path(item.name).suffix.lower()
-                    kind = ('Weight file' if suffix in MODEL_FILES else
-                            'Weight index' if item.name.endswith(('.safetensors.index.json', '.bin.index.json')) else
-                            'Configuration' if item.name in ('config.json', 'model_index.json', 'adapter_config.json') else
-                            'Tokenizer' if item.name in ('tokenizer.json', 'tokenizer.model', 'tokenizer_config.json', 'vocab.json', 'merges.txt', 'special_tokens_map.json') else None)
-                    if kind:
-                        evidence = {'path': relative, 'format': suffix[1:].upper(),
-                                    'size': item.stat(follow_symlinks=False).st_size, 'kind': kind}
-                        if kind in ('Configuration', 'Weight index') and evidence['size'] <= 262144 and metadata_reads < 32:
-                            try:
-                                metadata_reads += 1
-                                # Reject file symlinks even if replaced after scandir.
-                                fd = os.open(item.path, os.O_RDONLY | os.O_NOFOLLOW)
-                                with os.fdopen(fd, 'r', encoding='utf8') as fp:
-                                    value = json.loads(fp.read(262145))
-                                if isinstance(value, dict):
+            parts, depth = stack.pop()
+            directory = os.dup(root)
+            try:
+                # Reopen each component relative to the pinned root. A renamed
+                # ancestor cannot redirect traversal through a replacement link.
+                for part in parts:
+                    child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=directory)
+                    os.close(directory)
+                    directory = child
+                with os.scandir(directory) as iterator:
+                    import itertools
+                    entries = list(itertools.islice(iterator, MAX_NAS_ENTRIES - examined))
+                for item in entries:
+                    examined += 1
+                    if item.name.startswith(('.', '#')):
+                        continue
+                    relative = '/'.join((*parts, item.name))
+                    if item.is_file(follow_symlinks=False):
+                        suffix = Path(item.name).suffix.lower()
+                        kind = ('Weight file' if suffix in MODEL_FILES else
+                                'Weight index' if item.name.endswith(('.safetensors.index.json', '.bin.index.json')) else
+                                'Configuration' if item.name in ('config.json', 'model_index.json', 'adapter_config.json') else
+                                'Tokenizer' if item.name in ('tokenizer.json', 'tokenizer.model', 'tokenizer_config.json', 'vocab.json', 'merges.txt', 'special_tokens_map.json') else None)
+                        if kind:
+                            evidence = {'path': relative, 'format': suffix[1:].upper(),
+                                        'size': item.stat(follow_symlinks=False).st_size, 'kind': kind}
+                            if kind in ('Configuration', 'Weight index') and evidence['size'] <= 262144 and metadata_reads < 32:
+                                try:
+                                    metadata_reads += 1
+                                    fd = os.open(item.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
+                                    with os.fdopen(fd, 'r', encoding='utf8') as fp:
+                                        if not stat.S_ISREG(os.fstat(fp.fileno()).st_mode):
+                                            raise ValueError('Not a regular metadata file')
+                                        value = json.loads(fp.read(262145))
+                                    if not isinstance(value, dict):
+                                        raise ValueError('Metadata object required')
                                     evidence['config'] = {k: value[k] for k in ('model_type', 'architectures', 'max_position_embeddings', 'quantization_config', 'weight_map') if k in value}
-                            except (OSError, ValueError):
-                                evidence['metadata_error'] = 'Unreadable or malformed metadata'
-                        found.append(evidence)
-                elif item.is_dir(follow_symlinks=False) and depth < 3:
-                    stack.append((Path(item.path), depth + 1))
+                                except (OSError, ValueError, RecursionError):
+                                    evidence['metadata_error'] = 'Unreadable or malformed metadata'
+                            found.append(evidence)
+                    elif item.is_dir(follow_symlinks=False) and depth < 3:
+                        stack.append(((*parts, item.name), depth + 1))
+            finally:
+                os.close(directory)
         return sorted(found, key=lambda x: x['path'].casefold()), ('NAS scan limit reached; results are partial' if examined >= MAX_NAS_ENTRIES else 'NAS inventory (read-only)')
-    except (OSError, PermissionError) as exc:
-        return found, f'NAS scan incomplete: {exc}'
+    except OSError:
+        return found, 'NAS scan incomplete: directory unavailable or changed during scan'
+    finally:
+        if root is not None:
+            os.close(root)
 
 
 def health_record(key, available, loaded, ready, reason=None, service=None):

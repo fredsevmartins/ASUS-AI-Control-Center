@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — Public release security audit (2026-11-03)
+
+- Reject linked, non-regular or unsafe-owner state/log files and pin state/NAS directory traversal; prevent NAS directory-swap escape and blocking FIFO metadata opens.
+- Bound all operation-log fields; cap HTTP workers at 16 with 10-second socket inactivity timeouts and reliable slot release.
+- Reject duplicate security headers and incomplete/recursive JSON requests; extend response security headers and CSP form restrictions.
+- Add 16 isolated security regressions (101 Python tests total), expand frontend injection/demo tests and provide a redacted local repository/history scanner.
+- Document verified evidence and remaining remote/host/browser gaps in the public release audit. Classification: INCOMPLETE_AUDIT; no visibility, installation, runtime or privileged configuration change.
+
 ## Unreleased — Complete integration audit (2026-11-03)
 
 - Preserve independent Ollama installed/resident discovery across failures; keep orphan installation unknown, reject identity conflicts and tolerate malformed optional metadata.

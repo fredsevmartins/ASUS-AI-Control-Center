@@ -7,7 +7,7 @@ const source=fs.readFileSync('web/app.js','utf8');
 const timers=[];
 let networkCalls=0;
 const context={URLSearchParams,structuredClone,Date,JSON,Error,setTimeout:fn=>timers.push(fn),update:()=>{},
-  $:()=>({setAttribute:()=>{}}),fetch:()=>{networkCalls++;throw Error('Network forbidden');},TOKEN:'test'};
+  $:()=>({setAttribute:()=>{}}),fetch:()=>{networkCalls++;throw Error('Network forbidden');},TOKEN:'synthetic-security-fixture-token'};
 vm.createContext(context);
 const fixture=source.slice(source.indexOf('const demoState='),source.indexOf('const navigationIcons='));
 const request=source.slice(source.indexOf('async function request('),source.indexOf('function setPage('));
@@ -39,7 +39,10 @@ vm.runInContext('const DEMO=true;let failNextDemo=false;'+fixture+request,contex
   const confirmed={...confirmation,plan_id:plan.id,confirmed:true,acknowledge_risks:true};
   await context.request('/api/action',{body:JSON.stringify(confirmed)});timers.shift()();
   await assert.rejects(context.request('/api/action',{body:JSON.stringify(confirmed)}),/new preflight/);
-  assert.strictEqual(networkCalls,0,'demo must never reach fetch');
+  for(const path of ['http://127.0.0.1:1/api/action','/api/action?demo=0','//example.invalid/api/action']){
+    await assert.rejects(context.request(path,{body:'{}'}),/Unknown prototype/);
+  }
+  assert.strictEqual(networkCalls,0,'demo must never reach fetch, including crafted destinations');
   const guard=source.slice(source.indexOf('function modelBlocked('),source.indexOf('const phaseLabels='));
   const safety={connectionHealthy:true,submitting:false,state:{operation:{busy:false}}};
   vm.createContext(safety);vm.runInContext(guard,safety);

@@ -18,7 +18,7 @@ Monitoring uses metadata/process-list requests and the non-generating SGLang `/r
 
 Recovery is limited to authorized stops and verifies them before claiming their previous selected state. If target absence is uncertain, it reports incomplete recovery and avoids adding memory pressure. No automatic target cleanup, deletion, NAS import, backup change or runtime reconfiguration is performed. External automatic evictions and client activity remain outside this application's authority.
 
-NAS JSON reads are size/count bounded, weight files are never opened, and discovered symlinks are skipped. Structural classification and inferred compatibility never create an executable model. This scanner assumes the existing local/NAS filesystem is trusted against concurrent hostile directory replacement; it is not a filesystem security boundary and cannot guarantee responsiveness of a hung mount.
+NAS JSON reads are size/count bounded, weight files are never opened, and discovered symlinks are skipped. Structural classification and inferred compatibility never create an executable model. Traversal now pins the model root and opens each directory component and JSON file relative to directory descriptors with no-follow flags. Metadata files must be regular and are opened nonblocking. This rejects replacement symlinks/FIFOs, but cannot guarantee responsiveness of a hung mount or isolate the process from its OS account privileges.
 
 No elevated privileges were requested or added. On the installed workstation, the app requires existing user access to Ollama HTTP, read access to the registered SGLang unit, existing read permission for the fixed Docker inspect command, and the pre-existing controller's ability to start/stop its one service. It also needs write access to its existing private user state directory for logs and the lifecycle lock. Missing permissions must produce unavailable/blocked/error states; do not add sudo rules, Docker group membership or new service permissions automatically. Tests mock these interfaces and use temporary lock/log paths.
 
@@ -33,3 +33,32 @@ Readiness authentication errors and missing endpoints do not justify weakening s
 The browser E2E server uses a clearly synthetic session token, temporary state, and guards that reject every runtime/NAS discovery and lifecycle entry point. Its actual application interactions use explicit Demo Mode, and its offline test intercepts API requests. It never substitutes a live server for missing fixture support. The runner reports BLOCKED when Playwright/browser/socket prerequisites fail; it must not be counted as security or browser validation.
 
 Current evidence: 85 Python tests and all JavaScript suites pass; no live model or service operation was performed. Remaining risks include existing launch-token exposure to local history/processes, local-user access, external scheduler races, absent client detection, uncalibrated memory estimates, non-durable jobs, unrotated logs and potentially blocking NAS filesystem calls. This source/mocked audit is not an independent penetration test or a live runtime security certification. See [the validation report](docs/audits/INTEGRATION_VALIDATION_REPORT.md) for acceptance gates.
+
+
+## Public release audit — 2026-11-03
+
+The [public release security audit](docs/audits/PUBLIC_RELEASE_SECURITY_AUDIT.md)
+classifies the overall decision as **INCOMPLETE_AUDIT**. No live secret or P0/P1
+issue was confirmed within inspected local source/history. Remote artifacts and
+security settings, effective host privilege policy and real browser/transport
+acceptance still lack sufficient evidence. Publishing code does not create a
+route to the workstation. Do not use older `main` as the audited release.
+
+Application corrections pin private state files and NAS traversal to directory
+descriptors, reject links/devices, bound log fields, cap HTTP request workers at
+16 and apply a 10-second socket inactivity timeout. Duplicate security headers
+and incomplete bodies are rejected; response policies cover static/error paths.
+State directories must be owned by the running account and private (0700);
+unsafe existing state fails closed without an automatic permission change.
+These limits do not prevent sustained local denial of service or a hung mount.
+
+The authenticated launch URL remains a credential. Same-user processes or
+browser extensions may obtain it; Demo Mode does not revoke a live token.
+Only theme preference is stored in localStorage. Keep URLs out of tickets,
+screenshots and shared browser history; restart the app after token exposure.
+
+Current isolated evidence: 101 Python tests, all three JavaScript suites and
+syntax/whitespace checks pass. Chromium/Firefox fixture execution remains
+BLOCKED. No installer, live model operation or privileged configuration change
+was performed. See the audit for exact prerequisites, findings, residual risks
+and administrator-only recommendations.

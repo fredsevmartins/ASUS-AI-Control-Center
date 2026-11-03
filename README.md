@@ -7,7 +7,7 @@ The development assessment is **PARTIAL**: automated regressions pass, but live 
 ## Run development alongside the installed application
 
 ```sh
-cd /home/frederico/Projetos/ASUS-AI-Control-Center
+cd /path/to/ASUS-AI-Control-Center
 git switch dev/premium-control-center
 AI_MANAGER_PORT=0 python3 server.py
 ```
@@ -41,7 +41,7 @@ bash -n install.sh
 git diff --check
 ```
 
-Current result: **85 Python tests and all three JavaScript suites pass**. Runtime operations are mocked and lock/log tests use temporary directories.
+Current result: **101 Python tests and all three JavaScript suites pass**. Runtime operations are mocked and lock/log tests use temporary directories.
 
 Real-browser acceptance is a separate required release gate:
 
@@ -54,3 +54,20 @@ AI_MANAGER_E2E_BROWSER=firefox node tests/browser_e2e.mjs
 The optional test tooling requires an existing Playwright package and compatible browser. The runner downloads nothing, starts an isolated loopback fixture server, exercises the explicit demo mode and forbids live runtime/NAS adapters. It exits **2 / BLOCKED** if prerequisites are unavailable; blocked checks are not passes. See [TESTING.md](TESTING.md) for coverage, artifacts and hardware validation boundaries.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md), [ROADMAP.md](ROADMAP.md) and [AGENTS.md](AGENTS.md) for implementation contracts, risks and contributor constraints. Live load/unload/switch or inference validation requires separate explicit approval and an appropriate client interruption window.
+
+
+## Public release security status
+
+The [public release security audit](docs/audits/PUBLIC_RELEASE_SECURITY_AUDIT.md)
+is **INCOMPLETE_AUDIT**: local source/history inspection found no confirmed live
+secret, and application hardening passes isolated regression tests, but remote
+publication artifacts/settings and effective workstation/browser protections
+remain unverified. The repository remains private. Publishing source does not
+expose a loopback workstation service by itself.
+
+The audited development branch includes safe state-file/NAS traversal and
+bounded HTTP workers; older `main` lacks these and earlier lifecycle protections.
+Review and merge the audited changes before distributing a release. Keep the
+checkout and installation paths trusted, and never run the installer with sudo.
+See [SECURITY.md](SECURITY.md) for the local-process, launch-token and NAS trust
+boundaries. No installed application or host configuration was changed by the audit.
