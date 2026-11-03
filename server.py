@@ -25,7 +25,8 @@ def cpu_usage():
     try:
         with open('/proc/stat', encoding='ascii') as f:
             vals = [int(x) for x in f.readline().split()[1:]]
-        idle, total = vals[3] + vals[4], sum(vals)
+        # guest and guest_nice are already included in user and nice.
+        idle, total = vals[3] + vals[4], sum(vals[:8])
         prev = CPU_SAMPLE
         CPU_SAMPLE = (idle, total)
         if prev and total > prev[1]:
@@ -165,14 +166,24 @@ class Handler(BaseHTTPRequestHandler):
             if length > 8192 or length <= 0:
                 raise ValueError('Invalid body length')
             body = json.loads(self.rfile.read(length))
+            if not isinstance(body, dict):
+                raise ValueError('JSON object required')
             action, target, stops = body.get('action'), body.get('target'), body.get('stops', [])
-            if action not in ('load', 'unload', 'switch') or not isinstance(target, str) or not isinstance(stops, list):
+            if (action not in ('load', 'unload', 'switch') or not isinstance(target, str)
+                    or not target or not isinstance(stops, list)
+                    or any(not isinstance(stop, str) or not stop for stop in stops)
+                    or len(stops) != len(set(stops))):
                 raise ValueError('Invalid operation')
             with LOCK:
                 if STATE['busy']:
                     return self.respond(409, {'error': 'An operation is already running'})
                 STATE.update(busy=True, job=f'{action}: {target}', error=None, message='Operation started')
-            threading.Thread(target=run_job, args=(action, target, stops), daemon=True).start()
+            try:
+                threading.Thread(target=run_job, args=(action, target, stops), daemon=True).start()
+            except RuntimeError:
+                with LOCK:
+                    STATE.update(busy=False, job=None, message='Could not start operation', error='Could not start operation')
+                return self.respond(503, {'error': 'Could not start operation'})
             return self.respond(202, {'message': 'Accepted. Monitor the operation status.'})
         except (ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
             return self.respond(400, {'error': str(exc)})

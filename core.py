@@ -93,6 +93,26 @@ def command(args, timeout=12):
     return subprocess.run(args, text=True, capture_output=True, timeout=timeout)
 
 
+def sglang_state():
+    """Return process state only when both independent observations agree."""
+    try:
+        service = command(['systemctl', 'is-active', QWEN_SERVICE])
+        value = service.stdout.strip()
+        service_state = True if service.returncode == 0 and value == 'active' else (
+            False if service.returncode == 3 and value in ('inactive', 'failed') else None)
+    except (OSError, subprocess.TimeoutExpired):
+        service_state = None
+    try:
+        container = command(['docker', 'inspect', '-f', '{{.State.Running}}', 'qwen38-sglang'])
+        value = container.stdout.strip()
+        container_state = (value == 'true') if container.returncode == 0 and value in ('true', 'false') else None
+    except (OSError, subprocess.TimeoutExpired):
+        container_state = None
+    if service_state is None or container_state is None or service_state != container_state:
+        return None
+    return service_state
+
+
 def human(value):
     return '—' if value is None else f'{value / 1024**3:.1f} GiB'
 
@@ -155,13 +175,11 @@ def _nas_scan():
 def snapshot(include_nas=False):
     total, available = memory()
     errors = []
-    active = command(['systemctl', 'is-active', QWEN_SERVICE])
-    docker = command(['docker', 'inspect', '-f', '{{.State.Running}}', 'qwen38-sglang']) if shutil.which('docker') else None
-    service_active = active.stdout.strip() == 'active'
-    container_active = bool(docker and docker.returncode == 0 and docker.stdout.strip() == 'true')
-    running = service_active and container_active
-    qwen_status = 'Loaded / active' if running else ('Check service' if service_active or container_active else 'Unloaded')
-    rows = [{'name': QWEN_NAME, 'runtime': 'SGLang', 'status': qwen_status, 'memory': 'Not available', 'key': 'sglang', 'loaded': running, 'uncertain': service_active != container_active}]
+    running = sglang_state()
+    qwen_status = 'Loaded / active' if running is True else ('Unloaded' if running is False else 'Check service')
+    rows = [{'name': QWEN_NAME, 'runtime': 'SGLang', 'status': qwen_status, 'memory': 'Not available', 'key': 'sglang', 'loaded': running is True, 'uncertain': running is None}]
+    if running is None:
+        errors.append('SGLang process state could not be established; actions are blocked.')
     try:
         installed = api('/api/tags').get('models', [])
         ps = api('/api/ps').get('models', [])
@@ -182,9 +200,10 @@ def snapshot(include_nas=False):
 
 def is_loaded(row):
     if row['runtime'] == 'SGLang':
-        active = command(['systemctl', 'is-active', QWEN_SERVICE]).stdout.strip() == 'active'
-        docker = command(['docker', 'inspect', '-f', '{{.State.Running}}', 'qwen38-sglang'])
-        return active and docker.returncode == 0 and docker.stdout.strip() == 'true'
+        state = sglang_state()
+        if state is None:
+            raise RuntimeError('SGLang state is uncertain; service and container must both be observable and agree.')
+        return state
     models = api('/api/ps', timeout=15).get('models', [])
     return any((m.get('name') or m.get('model')) == row['name'] for m in models)
 
@@ -267,7 +286,8 @@ def swap_with_rollback(stops, target):
             except Exception as restoration_error:
                 problems.append(f'{row["name"]}: {restoration_error}')
                 log_event('rollback', 'failed', row['name'], restoration_error)
-        return False, (f'Switch failed: {exc}\nRestoration attempted for {len(restore)} model(s); '
+        return False, (f'Switch failed: {exc}\nThe target may be partially loaded; its state has not been cleaned up. '
+                       f'Restoration attempted for {len(restore)} model(s); '
                        f'{restored} verified. '
                        + ('Restoration issues: ' + '; '.join(problems) if problems else 'No restoration errors detected.')
                        + '\nCheck the actual runtime state before relying on the services.')

@@ -1,0 +1,3 @@
+# Contributor instructions
+
+This is a local-first control panel for an existing workstation. Preserve the v5 installation and runtime configuration. Never run model load, unload or switch operations during development without explicit approval; tests must mock runtime operations. Do not modify services, Docker, Ollama, NAS configuration, or model files. Keep the HTTP server bound to loopback and retain API authentication. Avoid destructive Git commands and direct pushes to main. Treat NAS weights as discovered assets, not runnable models. Document limitations and verify changes with the tests in TESTING.md.
