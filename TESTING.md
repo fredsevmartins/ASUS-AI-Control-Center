@@ -148,3 +148,33 @@ a fresh loopback socket probe was denied. Real transport, rendered appearance,
 Firefox ARM64 and effective host/runtime permissions remain unverified. The
 [security report](docs/audits/PUBLIC_RELEASE_SECURITY_AUDIT.md) records
 **INCOMPLETE_AUDIT**, not a publication or deployment security certification.
+
+
+## Desktop UI follow-up — 2026-11-03
+
+The current follow-up refines the existing seven-page presentation, responsive
+model-card widths, evidence spacing, gauge proportions, workspace footers,
+dark-mode interaction feedback, long-content wrapping and mobile targets.
+Appearance controls and Library view selection now expose their selected state.
+The frontend suite checks restored and toggled appearance state on both controls.
+
+Validation: **101 Python tests passed**, all three JavaScript suites passed;
+Python browser-fixture compilation, application/runner JavaScript syntax,
+installer shell syntax and `git diff --check` passed. The installer was not run.
+The optional read-only security scanner completed with heuristic findings in
+existing history/fixtures; this is not a new security certification.
+
+Both prescribed real-browser commands exited **2 / BLOCKED** because Playwright
+is missing. A fresh random loopback bind failed with PermissionError and the
+computer-use inventory returned no apps/browsers. No screenshots were captured.
+The Impeccable detector exited 2 in degraded regex mode with advisory
+palette/type/radius findings, including legacy CSS literals; custom-property
+resolution, selector matching and computed contrast were unavailable. Its result
+is not a passing visual audit. Existing recorded color calculations are historical,
+not a rendered audit of this follow-up.
+
+Real light/dark rendering, Firefox ARM64, desktop/mobile/zoom, keyboard and screen
+reader acceptance remain **NOT VERIFIED**; release readiness is withheld.
+[Desktop-window investigation](docs/design/DESKTOP-EXPERIENCE.md) documents the
+recommended candidate without modifying the installed shortcut or backend.
+No live model operations, runtime/service/Docker/NAS changes or installation ran.

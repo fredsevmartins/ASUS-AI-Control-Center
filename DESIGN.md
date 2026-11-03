@@ -81,7 +81,7 @@ The direction is a polished native macOS utility: neutral light and dark surface
 
 This document records the final presentation in `web/style.css` and the chart/icon presentation in `web/app.js`. The semantic token block and trailing native-utility rules supersede earlier declarations in the stylesheet. The redesign is visual only; lifecycle behavior, metadata, available actions and backend contracts remain unchanged.
 
-Validation evidence: 85 Python tests and all three JavaScript suites pass; the mechanical design detector returned `[]`. Source-level contrast samples range from 4.91:1 to 15.74:1. These are not rendered accessibility or visual certification. Browser checks are **NOT VERIFIED**: Playwright is missing, local socket access was denied and CUA exposed no usable browser surface. There are no screenshots. Desktop/mobile rendering, both themes, 200% zoom, focus order, screen-reader announcements and rendered contrast remain acceptance gates; this evidence does not establish release readiness.
+Current validation evidence: 101 Python tests and all three JavaScript suites pass. The latest mechanical detector ran in degraded regex mode and reported advisory palette/type/radius findings, including superseded legacy declarations; it did not evaluate computed styles. Source-level contrast samples range from 4.91:1 to 15.74:1. These are not rendered accessibility or visual certification. Browser checks are **NOT VERIFIED**: Playwright is missing, local socket access was denied and CUA exposed no usable browser surface. There are no screenshots. Desktop/mobile rendering, both themes, 200% zoom, focus order, screen-reader announcements and rendered contrast remain acceptance gates; this evidence does not establish release readiness.
 
 ## Colors
 
@@ -97,20 +97,20 @@ Use the system stack in the frontmatter without downloading fonts. Body text is 
 
 Navigation and model fact values use 13px; model descriptions, supporting labels and disclosure summaries use 12px; provenance and fact labels use 11px. Status pills use 11px, while compact badges and gauge scales use 10px. Supporting descriptions use 1.6–1.8 line heights where defined. Preserve source/confidence text when reducing card density.
 
-Telemetry uses tabular numerals. The overview count is 44px/600; overview gauge values use `clamp(25px, 2.3vw, 32px)` and 13px units. Performance gauges retain their larger responsive value scale. Chart axis labels use a 12px system font. Heading tracking is restrained, typically between -.015em and -.03em.
+Telemetry uses tabular numerals. The overview count is 44px/600; overview gauge values use `clamp(25px, 2.3vw, 32px)` and 13px units. Performance gauges retain their larger responsive value scale within a 250px maximum visual width; Overview remains capped at 210px. Chart axis labels use a 12px system font. Heading tracking is restrained, typically between -.015em and -.03em.
 
 ## Layout
 
-The application is a flex shell with a sticky 228px sidebar and a flexible main region. The top bar is 62px tall. Content is centered with a 1540px maximum width and padding of `32px clamp(20px, 3vw, 44px) 48px`. Panels use 24px padding; related dashboard grids use 18px gaps and 20px bottom spacing.
+The application is a flex shell with a sticky 228px sidebar and a flexible main region. The top bar is 62px tall and sticky, with an 80px scroll offset for keyboard targets. The sidebar scrolls independently on short desktop windows. Content is centered with a 1540px maximum width and padding of `32px clamp(20px, 3vw, 44px) 48px`. Panels use 24px padding; related dashboard grids use 18px gaps and 20px bottom spacing.
 
 The overview has four equal columns, with no feature-card span. It changes to two columns at 1200px and below, then one at 420px and below. Overview gauges have a maximum visual width of 210px. The separate Performance gauge grid has three columns, changes to auto-fit columns with a 220px minimum at 1150px and below, and one column at 720px and below. The dashboard's two-column content region also stacks at 1150px.
 
-Model cards use two equal columns by default, three at 1500px and above, and one at 1000px and below. Cards align to the top, use 18px gaps and 20px internal padding. Facts remain in two columns, with the final fact spanning both; gaps are 12px vertically and 16px horizontally. Expanded evidence stays within its own card. Actions wrap without hiding available controls.
+Model cards use two equal columns by default, three at 1760px and above, and one at 1000px and below. Cards align to the top, use 18px gaps and 20px internal padding. Facts remain in two columns, with the final fact spanning both; gaps are 14px vertically and 20px horizontally. Expanded evidence stays within its own card. Actions wrap without hiding available controls.
 
 Responsive rules:
 
 - At 1000px and below, the sidebar narrows to 208px; the manager toolbar stacks, search becomes full width, and capacity content wraps.
-- At 720px and below, navigation becomes a horizontal scrolling row above the content. The sidebar is full width and static; secondary sidebar content and navigation icons are hidden while destination labels remain. The top bar is 54px, the breadcrumb is hidden, and content padding is `24px 16px 40px`.
+- At 720px and below, navigation becomes a horizontal scrolling row above the content. The sidebar is full width and static; secondary sidebar content and navigation icons are hidden while destination labels remain. The top bar is 62px, the breadcrumb is hidden, and content padding is `24px 16px 40px`.
 - At 720px and below, panel/settings padding is 20px, model-card padding is 18px, workspace and asset grids become one column, and quick actions retain two columns. Hero status is hidden; essential operational state remains in its dedicated components. Settings rows and detail rows can stack or wrap.
 - At 420px and below, filters wrap into multiple rows, legends and runtime/disk rows wrap, and model fact column gaps shrink to 12px.
 
@@ -139,7 +139,7 @@ The signature gauge remains a semicircle with rounded stroke caps and a 9px arc/
 ## Components
 
 - **Navigation:** seven named destinations with `aria-current`, 44px minimum target height and 13px text on desktop. Active navigation uses a surface fill, control shadow and stronger weight. Hover uses the accent-tinted background. Mobile labels use 12px text and remain accessible through horizontal scrolling.
-- **Buttons and fields:** primary actions use action blue, white text, 36px minimum height and `7px 14px` padding. Secondary actions use a bordered surface. Hover changes background/border; active buttons remove their shadow. Disabled buttons retain a not-allowed cursor and reduced opacity. Search is 38px tall with a neutral border, 8px corners and 13px text. Segmented options have 30px minimum height and `6px 12px` padding.
+- **Buttons and fields:** primary actions use action blue, white text, 36px minimum height and `7px 14px` padding. Secondary actions use a bordered surface. Hover changes background/border; active buttons remove their shadow. Disabled buttons retain a not-allowed cursor and reduced opacity. Search is 38px tall with a neutral border, 8px corners, explicit theme text color and 13px text. On small screens, buttons and search have a 44px minimum target height. Segmented options have 30px minimum height and `6px 12px` padding.
 - **Keyboard focus:** interactive controls use a 3px accent outline offset by 3px. A visible-on-focus skip link leads into the content. Segmented controls allow focus outlines to escape the scrolling container. Preserve semantic buttons, inputs, native disclosures and accessible names.
 - **Icons:** local inline SVGs use `currentColor`, no fill, a 1.6px stroke and rounded caps/joins. Standard icons are 20px; workspace icons are 24px. Workspace symbols use the same line-icon family as navigation and quick actions. Icons supplement labels rather than replacing essential text.
 - **Gauges and charts:** retain original semicircular gauges, valid-value interpolation and unavailable states. Arc blue matches the chart series. Telemetry values and interaction semantics stay unchanged. Native progress elements represent valid capacity measurements; unavailable capacity omits the bar.
@@ -147,7 +147,7 @@ The signature gauge remains a semicircle with rounded stroke caps and a 9px arc/
 - **Model evidence and filters:** technical evidence uses a raised inset surface with readable separators. Search and exclusive status filters retain their existing behavior, `aria-pressed` state and informative empty state. Metadata loading remains budgeted, refreshes on disclosure and after one minute/manual Refresh, and prioritizes current allocation/context over cached details. Compact styling does not remove metadata or actions.
 - **Operation feedback:** a persistent bordered status region exposes observed workflow phases and errors. Busy feedback uses native indeterminate progress without invented percentages. Failed action requests remain available until review/Refresh; refreshing the browser does not cancel the backend job.
 - **Protected confirmation:** preserve the accessible name/description, Cancel-first focus, inert background, Tab trap including disclosure summaries, Escape dismissal and trigger-focus restoration. Stop choices begin unchecked. Selection changes invalidate the prior plan and acknowledgement; stale preflight responses are ignored. Capacity, requirement type and system reserve remain visible. Advanced details retain selection lists, projected reclamation, assumptions, client risk and recovery limitations. Confirm requires a valid unblocked single-use plan and separate risk acknowledgement; expired plans require review again.
-- **Other surfaces:** Asset Library uses compact divider rows and retains its non-executable discovered-asset boundary. Workspace cards use modest line icons and 17px titles. Activity uses readable divided entries. Settings use an 850px maximum panel width and browser-local theme preference. Demo Mode retains its persistent banner and simulated failure toggle; representative data never silently replaces live observations.
+- **Other surfaces:** Asset Library uses compact divider rows and retains its non-executable discovered-asset boundary. Workspace cards use modest line icons on 44px accent-tinted tiles and 17px titles; a divided footer separates the suggested category from the description. Activity uses readable divided entries. Settings use an 850px maximum panel width and browser-local theme preference. Both appearance controls expose the saved dark-mode state with aria-pressed; Library view buttons expose their exclusive selection in the same way. Demo Mode retains its persistent banner and simulated failure toggle; representative data never silently replaces live observations.
 
 Motion remains functional: 140ms background/border feedback on buttons and the existing 700ms gauge interpolation when valid readings change. There is no page entrance animation. `prefers-reduced-motion: reduce` suppresses gauge interpolation and reduces global transition/animation durations to effectively immediate changes.
 
@@ -162,3 +162,27 @@ Motion remains functional: 140ms background/border feedback on buttons and the e
 - **Don't** treat absent requirements or reclamation as zero, omit the system reserve, automatically clean up partially loaded targets, or present discovered NAS weights as runnable models.
 - **Don't** remove the original semicircular gauges, introduce decorative gradients or remote visual dependencies, or use color alone to encode operational meaning.
 - **Don't** count source inspection, contrast calculations or VM/DOM tests as rendered browser evidence. The accessibility target is WCAG 2.2 AA; browser and runtime acceptance remain NOT VERIFIED or BLOCKED when prerequisites are missing.
+
+
+## Desktop window and current acceptance
+
+The existing system-font stack, neutral palette, line icons and semantic status
+colors remain the visual authority. This follow-up refines that system without
+adding assets, dependencies, backend features or lifecycle behavior. Native
+controls retain Firefox styling support and reduced-motion rules remain intact.
+Dark secondary/quick-action hover rules now match the specificity of their base
+rules, so the feedback is available in both themes. Long activity identifiers,
+NAS paths and confirmation headings wrap within their surfaces.
+
+See [desktop launch investigation](docs/design/DESKTOP-EXPERIENCE.md) for the
+recommended existing-browser app-window approach. Compatibility is **NOT
+VERIFIED**, so no launcher or installed shortcut was changed.
+
+The 2026-11-03 follow-up has no screenshots: Playwright is absent, fresh random
+loopback binding raises PermissionError, and computer-use inventory has no
+browser. Desktop/mobile, both themes, 200% zoom, actual Firefox ARM64, rendered
+contrast and assistive-technology checks remain outstanding. The detector's
+advisory findings include old palette/radius/type literals in earlier overridden
+CSS and documentation-ramp mismatches; no computed-style parser was available.
+They are recorded as maintenance debt, not suppressed or counted as visual
+acceptance. Release readiness remains withheld.

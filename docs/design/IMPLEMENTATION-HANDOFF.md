@@ -47,3 +47,22 @@ Review the prototype using mocked/static serving only. Never call /api/action ag
 ## Review evidence
 
 Independent static review scored the six reported fixes resolved: polling summary focus, dialog focus return, LIVE badge contrast, first connection failure feedback, reported glyph icons and initial Overview copy. The badge token pairs calculate to 4.93:1 in light mode and 6.67:1 in dark mode. This is a targeted source review, not whole-interface visual approval. Documentation discrepancies were reconciled and narrow dark-mode card padding aligned with light mode.
+
+
+## Desktop UI follow-up — 2026-11-03
+
+The existing neutral visual system is retained and refined in place. Review the
+updated DESIGN.md and [desktop-window investigation](DESKTOP-EXPERIENCE.md).
+The two-column model layout now lasts until 1760px, avoiding cramped intermediate
+three-column cards. Shared controls, sticky chrome, mobile target sizes, metadata
+spacing, workspace footers and long-content handling are refined. Appearance
+controls and Library selection announce their state. Backend and launch files
+are unchanged; no dependencies were added.
+
+The current tree started clean on dev/premium-control-center. All 101 Python
+cases and three JavaScript suites pass. Browser acceptance is BLOCKED by missing
+Playwright, denied loopback sockets and absent computer-use surfaces. No visual
+sign-off or READY classification is claimed. Detector findings remain advisory
+maintenance debt in the layered stylesheet and design-document ramps; avoid
+assuming its regex fallback resolves the cascade. Test on the guarded fixture
+before deployment, with manual zoom, Firefox and assistive-technology checks.

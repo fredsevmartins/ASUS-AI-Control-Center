@@ -201,3 +201,29 @@ vm.runInNewContext(escapeSource+activitySource,activityContext);
   assert(activityElement.textContent.includes('Refresh to retry'));
   console.log('Activity CSP and persistent error regressions passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+// Theme state must be announced consistently from either appearance control,
+// including restoration of the existing browser-local preference.
+const themeSource = source.slice(source.indexOf("$('#theme-btn').onclick="), source.indexOf('function storagePercent('));
+for (const savedTheme of ['light', 'dark']) {
+  let dark = false;
+  const attributes = new Map();
+  const controls = Object.fromEntries(['#theme-btn', '#settings-theme'].map(id => [id, {
+    setAttribute: (key, value) => attributes.set(id + key, value)
+  }]));
+  const stored = new Map([['ai-manager-theme', savedTheme]]);
+  vm.runInNewContext(themeSource, {
+    $: id => controls[id], drawCharts: () => {},
+    document: {body: {classList: {
+      contains: () => dark, add: () => { dark = true; }, toggle: () => { dark = !dark; }
+    }}},
+    localStorage: {getItem: key => stored.get(key), setItem: (key, value) => stored.set(key, value)}
+  });
+  for (const expected of [savedTheme === 'dark', savedTheme !== 'dark']) {
+    assert.equal(attributes.get('#theme-btnaria-pressed'), String(expected));
+    assert.equal(attributes.get('#settings-themearia-pressed'), String(expected));
+    if (expected === (savedTheme === 'dark')) controls['#theme-btn'].onclick();
+  }
+  assert.equal(stored.get('ai-manager-theme'), savedTheme === 'dark' ? 'light' : 'dark');
+}
+console.log('Appearance preference and accessible toggle state regressions passed');
