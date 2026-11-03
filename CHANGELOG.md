@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Keep memory chart height stable across repeated redraws on high-density displays.
+- Clarify that process state does not establish inference readiness and that workspace presets are informational.
+
 - Reject malformed operation payloads before starting a worker, and recover if a worker cannot start.
 - Explicitly warn when a failed switch may have left the target partially loaded.
 

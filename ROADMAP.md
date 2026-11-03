@@ -1,5 +1,10 @@
 # Prioritized roadmap
 
+## Completed in this pass
+
+- Prevent high-density memory chart backing height from growing on repeated redraws, with a simulated canvas regression.
+- Clarify process-state and informational workspace copy.
+
 ## P0 — safety and correctness
 
 - Establish runtime-aware inference readiness without changing live configuration; distinguish process activity, API health and model readiness.
@@ -20,3 +25,5 @@
 - Add configurable, persisted workspaces that remain non-executing until safe adapters and explicit action semantics are defined.
 - Add compatibility analysis based on runtime-specific requirements and metadata, with explicit unknown results; file existence alone is not evidence of executability.
 - Introduce supported multimodal runtime adapters only after defining readiness, resource preflight, recovery and permission boundaries. Do not modify runtime configuration.
+
+Browser validation of all pages, both themes, responsive layouts, accessibility, and live chart updates remains outstanding: the development sandbox cannot bind localhost and has no browser surface.
