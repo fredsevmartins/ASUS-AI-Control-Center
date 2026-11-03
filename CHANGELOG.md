@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add compact Overview GPU and CPU gauges and show measured GPU temperature and available memory on the gauges.
+
 - Add telemetry-driven semicircular memory, GPU and CPU gauges with unavailable states and reduced-motion support.
 
 - Use a fixed 0–128 GiB memory scale in both charts, with 16 GiB ticks, local 24-hour timestamps, and sample tooltips.

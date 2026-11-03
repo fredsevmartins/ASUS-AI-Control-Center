@@ -2,6 +2,8 @@
 
 ## Completed in this pass
 
+- Add compact Overview utilization gauges and show available memory and GPU temperature when reported.
+
 - Add responsive memory, GPU and CPU gauges using observed telemetry and dynamic memory capacity.
 
 - Show both memory charts with a fixed GiB scale, local timestamps, and sample inspection.
@@ -34,3 +36,5 @@
 - Introduce supported multimodal runtime adapters only after defining readiness, resource preflight, recovery and permission boundaries. Do not modify runtime configuration.
 
 The user confirmed that the earlier Memory Timeline renders in Firefox and that Overview and Performance display live telemetry on GX10. Browser validation of the new storage bars and chart interactions, responsive layouts, contrast, and both themes remains outstanding: this development sandbox cannot bind localhost and has no browser surface.
+
+The existing Performance gauges were visually validated in Firefox on the GX10. The new Overview gauges and additional telemetry labels still need browser validation across themes and viewport sizes.

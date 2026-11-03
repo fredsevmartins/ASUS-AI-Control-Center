@@ -124,7 +124,7 @@ console.log('Timeline interaction regressions passed');
 // Gauges use telemetry only; invalid values never become plausible measurements.
 const gaugeSource = source.slice(source.indexOf('function gaugePercent('), source.indexOf('initGauges();'));
 const cards = {};
-for (const id of ['overview-memory-gauge','performance-memory-gauge','performance-gpu-gauge','performance-cpu-gauge']) {
+for (const id of ['overview-memory-gauge','overview-gpu-gauge','overview-cpu-gauge','performance-memory-gauge','performance-gpu-gauge','performance-cpu-gauge']) {
   const fields = {};
   for (const selector of ['.gauge-arc','.gauge-value','.gauge-unit','.gauge-percent','.gauge-detail','.gauge-accessible']) fields[selector] = {textContent:'',style:{}};
   cards[id] = {fields, dataset:{}, classList:{toggle:noop}, querySelector:selector=>fields[selector]};
@@ -133,28 +133,51 @@ const gaugeContext = {document:{getElementById:id=>cards[id]}};
 vm.runInNewContext(gibSource + gaugeSource, gaugeContext);
 const unit = 1073741824;
 for (const percent of [0,50,100]) {
-  gaugeContext.renderGauges({total:120*unit,used:120*unit*percent/100},percent,percent);
+  gaugeContext.renderGauges({total:120*unit,used:120*unit*percent/100,available:120*unit*(100-percent)/100},{load:percent,temp:53},percent);
   const card = cards['overview-memory-gauge'];
   assert.strictEqual(card.fields['.gauge-value'].textContent,(120*percent/100).toFixed(1));
   assert.strictEqual(card.fields['.gauge-percent'].textContent,`${percent.toFixed(1)}% used`);
-  assert.strictEqual(card.fields['.gauge-detail'].textContent,'120.0 GiB total usable memory');
+  assert.strictEqual(card.fields['.gauge-detail'].textContent,`120.0 GiB total · ${(120*(100-percent)/100).toFixed(1)} GiB available`);
   assert.strictEqual(card.fields['.gauge-arc'].style.strokeDashoffset,String(100-percent));
   assert.strictEqual(card.fields['.gauge-arc'].style.visibility,percent ? 'visible' : 'hidden');
   assert.strictEqual(cards['performance-cpu-gauge'].fields['.gauge-value'].textContent,percent.toFixed(1));
+  assert.strictEqual(cards['overview-cpu-gauge'].fields['.gauge-value'].textContent,percent.toFixed(1));
+  assert.strictEqual(cards['overview-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: 53°C');
+  assert.strictEqual(cards['performance-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: 53°C');
 }
 for (const reading of [null, {total:0,used:0}, {total:100,used:-1}, {total:100,used:101}, {total:100,used:NaN}, {total:Infinity,used:1}]) {
-  gaugeContext.renderGauges(reading,-1,101);
+  gaugeContext.renderGauges(reading,{load:-1,temp:NaN},101);
   for (const card of Object.values(cards)) {
     assert.strictEqual(card.fields['.gauge-value'].textContent,'—');
     assert.strictEqual(card.fields['.gauge-arc'].style.visibility,'hidden');
     assert(card.fields['.gauge-accessible'].textContent.includes('unavailable'));
   }
 }
+gaugeContext.renderGauges({total:120*unit,used:40*unit,available:null},{load:NaN,temp:0},null);
+assert(cards['overview-memory-gauge'].fields['.gauge-detail'].textContent.includes('Available memory unavailable'));
+assert.strictEqual(cards['overview-gpu-gauge'].fields['.gauge-value'].textContent,'—');
+assert.strictEqual(cards['overview-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: 0°C');
+gaugeContext.renderGauges({total:120*unit,used:40*unit,available:80*unit},{load:50,temp:NaN},40);
+assert.strictEqual(cards['performance-gpu-gauge'].fields['.gauge-detail'].textContent,'GPU temperature: Unavailable');
 assert.strictEqual(gaugeContext.gaugePercent(null),null);
 assert.strictEqual(gaugeContext.gaugePercent(Infinity),null);
 const css = fs.readFileSync('web/style.css','utf8');
 assert(gaugeContext.gaugeMarkup('test','Test').includes('viewBox="0 0 240 140"'), 'gauge should use scalable vector graphics');
+assert(css.includes('.gauge-compact .gauge-visual,.gauge-compact .gauge-scale{width:min(100%,190px)}'), 'Overview gauges must be compact');
 assert(css.includes('body.dark .gauge-card'), 'gauge colors must support dark mode');
 assert(css.includes('prefers-reduced-motion:reduce') && css.includes('.gauge-animated .gauge-arc{transition:none}'));
 assert(css.includes('grid-template-columns:repeat(auto-fit,minmax(220px,1fr))') && css.includes('.gauge-grid{grid-template-columns:1fr}'), 'gauges must have responsive layouts');
 console.log('Telemetry gauge regressions passed');
+
+const gpuSource = source.match(/function gpuValues\(\)\{[^\n]+\}/)[0];
+const gpuContext = {state:{gpu:'GPU: 27% utilization · 0°C'}};
+vm.runInNewContext(gpuSource, gpuContext);
+assert.strictEqual(gpuContext.gpuValues().load,27);
+assert.strictEqual(gpuContext.gpuValues().temp,0);
+gpuContext.state.gpu='GPU telemetry unavailable';
+assert(Number.isNaN(gpuContext.gpuValues().load));
+assert(Number.isNaN(gpuContext.gpuValues().temp));
+const html = fs.readFileSync('web/index.html','utf8');
+assert(html.includes('id="overview-gpu-gauge"') && html.includes('id="overview-cpu-gauge"'));
+assert(html.includes('id="loaded-main"'), 'model count remains available');
+console.log('Overview telemetry regressions passed');
