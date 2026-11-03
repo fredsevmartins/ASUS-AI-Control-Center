@@ -1,6 +1,7 @@
 import io
 import json
 import subprocess
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -60,7 +61,8 @@ class ApiTests(unittest.TestCase):
     def request(self, method, path, body=None, headers=None):
         handler = server.Handler.__new__(server.Handler)
         handler.path = path
-        handler.headers = headers or {}
+        handler.server = SimpleNamespace(server_address=('127.0.0.1', 8765))
+        handler.headers = {'Host': '127.0.0.1:8765', **(headers or {})}
         payload = (body or '').encode()
         if payload:
             handler.headers['Content-Length'] = str(len(payload))

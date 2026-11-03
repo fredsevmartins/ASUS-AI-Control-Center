@@ -1,39 +1,56 @@
 # ASUS AI Control Center v5
 
-Local-first workstation dashboard for the ASUS GX10 (ARM64 Ubuntu). macOS-inspired design built with zero external web dependencies. The UI is English-only; it is served on a random **localhost-only** HTTP port and opens in the default browser. No cloud services, CDNs, remote calls, Python packages, npm build, or desktop environment replacements required.
+Local-first workstation dashboard for the ASUS GX10 (Ubuntu ARM64). The Python standard-library backend and dependency-free HTML/CSS/JavaScript frontend provide Overview, Model Manager, Model Library, Performance, Workspaces, Activity and Settings. The interface is English-only and uses local assets.
 
-## Install
+The development assessment is **PARTIAL**: automated regressions pass, but live runtime and rendered browser acceptance are blocked in the development sandbox. See [the integration validation report](docs/audits/INTEGRATION_VALIDATION_REPORT.md) for evidence and release gates. SGLang inference readiness remains **UNVERIFIED** when its safe readiness endpoint is unsupported.
 
-```bash
-cd ~/Downloads
-unzip -o ASUS-AI-Model-Manager-v5.zip
-bash ai-model-manager-v5/install.sh
+## Run development alongside the installed application
+
+```sh
+cd /home/frederico/Projetos/ASUS-AI-Control-Center
+git switch dev/premium-control-center
+AI_MANAGER_PORT=0 python3 server.py
 ```
 
-Open **ASUS AI Control Center v5** from the desktop or application menu. Keep the launcher running as long as you use the panel. To start from a terminal: `python3 ~/.local/share/asus-ai-model-manager-v5/server.py`.
+The development server binds to a random `127.0.0.1` port and opens its authenticated launch page in the default browser. It does not replace the installed v5 files or launcher. Keep its terminal open while using it. Do not run `install.sh` for development validation; the installer updates the installed application. The stable application remains available through its existing desktop shortcut or `python3 ~/.local/share/asus-ai-model-manager-v5/server.py`.
 
-## Safety / scope
+Never share the launch URL, session token or runtime credentials. Do not expose the application through a reverse proxy, forwarding or LAN binding.
 
-- Installs **alongside** v4; does not replace its launcher or scripts.
-- Uses existing `~/.local/bin/qwen38-control` for SGLang; no new sudo permissions.
-- Calls Ollama's local API and the existing Ollama CLI; does not pull, delete, or migrate models.
-- NAS inventory is read-only and scans at most 1,800 directory entries to depth 4, ignoring symlinks.
-- All writes to runtimes require explicit UI confirmation; switch can ask which active models to stop.
-- Rollback is best effort. Busy indicator reports running work; health is not inferred solely from service activation.
-- Workspaces are **informational presets** in v5, not one-click execution.
-- Metrics are sampled while the UI is open; they are ephemeral and not retained across runs.
-- GPU memory is unified on GB10. `nvidia-smi` data may be unavailable. SGLang process memory is not individually measured.
-- **Local security:** ephemeral random browser token for API calls; bound to `127.0.0.1` only. Do not expose the port using a reverse proxy.
+## Runtime discovery and safety
 
-## Test
+- Ollama `/api/tags`, `/api/ps` and `/api/show` supply independent installation, residency and metadata evidence. A failed installed inventory does not hide observable residents. Residency alone never means inference Ready.
+- SGLang keeps systemd, container, model identity and endpoint readiness separate. Its private gateway requires bearer authentication. The recognized gateway setup uses the existing `~/.config/qwen38/api-key` compatibility file in memory only.
+- If necessary, set application-only `SGLANG_URL` to an already published HTTP loopback gateway origin and `SGLANG_API_KEY_FILE` to an existing credential file. No key belongs in a URL or command argument. Missing bindings/credentials fail closed; discovery never bypasses the gateway or changes the runtime.
+- `/get_model_info` identifies the model; `/ready` is tried only after identity matches. Unsupported `/ready`, authentication failure and timeout leave readiness Unverified. Monitoring never calls `/health`, `/health_generate` or inference endpoints.
+- Model operations require an exact, unexpired single-use preflight plan, explicit confirmation and risk acknowledgement. Only explicitly selected models may be stopped. Memory estimates are conservative heuristics, not measured model requirements; the system reserve applies even when target size is unknown.
+- The existing SGLang controller and fixed Ollama APIs remain the lifecycle adapters. No model pulls, deletions, migration, runtime configuration changes or automatic partial-target cleanup are supported. Recovery is limited to selected stops and verifies its result.
+- NAS discovery reads bounded metadata and file sizes, never weights. All discovered assets remain non-runnable. Workspaces are informational presets.
+- CPU/memory history is bounded, sampled while the application is open and lost on restart. Unified GB10 memory cannot reliably be attributed to individual models. GPU telemetry may be unavailable.
 
-```bash
-cd ~/Downloads/ai-model-manager-v5
+## Tests
+
+```sh
 python3 -m unittest discover -s tests -v
+node tests/test_frontend.js
+node tests/test_model_manager.js
+node tests/test_model_intelligence.js
+python3 -m py_compile tests/browser_server.py
+node --check web/app.js
+node --check tests/browser_e2e.mjs
+bash -n install.sh
+git diff --check
 ```
 
-The tests use fake processes and never invoke live systemd/Ollama actions. Verify read-only dashboard first, then optionally perform a controlled model load/unload with no active clients. Real hardware integration and UI E2E are not validated by these tests.
+Current result: **85 Python tests and all three JavaScript suites pass**. Runtime operations are mocked and lock/log tests use temporary directories.
 
-## Additional hardening before wider use
+Real-browser acceptance is a separate required release gate:
 
-For production-grade automation: runtime-aware readiness probes, persisted job state, background service ownership, clear client-use detection, cancellation handling, model memory attribution, local socket or stricter API authentication, and real-browser E2E coverage are needed.
+```sh
+node tests/browser_e2e.mjs
+# With an already provisioned Firefox Playwright browser:
+AI_MANAGER_E2E_BROWSER=firefox node tests/browser_e2e.mjs
+```
+
+The optional test tooling requires an existing Playwright package and compatible browser. The runner downloads nothing, starts an isolated loopback fixture server, exercises the explicit demo mode and forbids live runtime/NAS adapters. It exits **2 / BLOCKED** if prerequisites are unavailable; blocked checks are not passes. See [TESTING.md](TESTING.md) for coverage, artifacts and hardware validation boundaries.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md), [ROADMAP.md](ROADMAP.md) and [AGENTS.md](AGENTS.md) for implementation contracts, risks and contributor constraints. Live load/unload/switch or inference validation requires separate explicit approval and an appropriate client interruption window.

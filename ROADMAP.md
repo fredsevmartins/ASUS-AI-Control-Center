@@ -1,64 +1,41 @@
 # Prioritized roadmap
 
-## Completed in this pass
+## Current integration assessment
 
-- Add compact Overview utilization gauges and show available memory and GPU temperature when reported.
+**PARTIAL**, based on the integration pass starting at `9534fc0` on `dev/premium-control-center`. Automated contracts pass; live runtime and browser acceptance remain blocked. See [the validation report](docs/audits/INTEGRATION_VALIDATION_REPORT.md) and [TESTING.md](TESTING.md). Historical Firefox observations are not acceptance evidence for the current revision.
 
-- Add responsive memory, GPU and CPU gauges using observed telemetry and dynamic memory capacity.
+## Completed on the development branch
 
-- Show both memory charts with a fixed GiB scale, local timestamps, and sample inspection.
+- Preserve the seven-section Astra interface, light/dark tokens, semicircular gauges, fixed GiB timelines, search/filter/details, protected confirmation and explicit demo isolation.
+- Add provenance-aware metadata and independent installed, resident, process and readiness evidence. Unknown values remain unknown; orphan Ollama residents are not marked verified installed.
+- Discover the existing private SGLang gateway without bypassing authentication or changing infrastructure. Unsupported non-generating readiness stays Unverified; permanent contract failures end verification promptly.
+- Preserve dynamic Ollama discovery when tags or process observations fail independently; block digest conflicts and revalidate identities before operations.
+- Require expiring single-use preflight plans, explicit risk acknowledgement, exact stop selection, fresh worker checks, memory reserve even for unknown requirements, and honest unknown reclamation.
+- Protect process/cross-instance lifecycle concurrency, verify only selected recovery state, retain partially loaded targets and serialize telemetry sampling.
+- Add exact Host/Origin/session/input guards; preserve loopback-only runtime origins, redirect/proxy restrictions, fixed subprocess arguments and credential-safe diagnostics.
+- Correct cached residency metadata, decimal GPU readings, persistent Activity errors and unmounted external-storage reporting.
+- Pass 85 mocked Python tests, three JavaScript suites and syntax/whitespace checks. Add a guarded real-browser fixture runner; its current execution is BLOCKED, not passed.
+- Verify local NAS mounts and a bounded 16-asset/four-collection metadata inventory read-only, with no executable NAS registration.
 
-- Correct storage bar rendering under the existing content security policy and validate capacity values.
-- Add memory chart axes and sample inspection with mouse, touch, and keyboard.
+## P0 — remaining release gates
 
-- Prevent high-density memory chart backing height from growing on repeated redraws, with a simulated canvas regression.
-- Clarify process-state and informational workspace copy.
+1. Obtain working read-only access in the validation environment to confirm actual SGLang package/version/routes, gateway exposure/authentication, Ollama server inventory and current model identity/residency. Do not change the runtimes or permissions to force readiness success.
+2. Run fixture browser acceptance with existing Playwright/browser tooling and working loopback sockets. Validate the live development dashboard separately in Firefox or another supported browser.
+3. Complete desktop/mobile light/dark, 200% zoom, keyboard/screen-reader, touch and rendered-contrast checks. Fix verified defects while retaining the existing design.
+4. Keep SGLang inference readiness UNVERIFIED if no supported non-generating contract is available. This is an acceptable honest status, not permission to infer Ready or invoke generating health checks.
+5. Reassess every acceptance criterion with actual evidence before changing PARTIAL to READY or READY_WITH_LIMITATIONS.
 
-## P0 — safety and correctness
+## P1 — reliability beyond the current tested contracts
 
-- Establish runtime-aware inference readiness without changing live configuration; distinguish process activity, API health and model readiness.
-- Design safe failed-target recovery and resource-aware preflight, including unknown state, active clients and external changes. Never assume rollback succeeds.
-- Bound status calls, make telemetry failure independent, protect against concurrent status sampling, and handle operation worker interruption.
-- Strengthen local request security, review token exposure and restrict configurable runtime endpoints to the intended local trust boundary.
+- Calibrate model memory allowances for context, KV dtype, parallelism and runtime reservations; do not represent model weight size as an allocation bound.
+- Add a bounded durable operation journal/log rotation and a crash-interruption report. Do not automatically resume mutations after restart.
+- Isolate NAS filesystem calls in a time-bounded worker so a hung mount cannot hold an HTTP worker indefinitely.
+- Define workload/client-use evidence only through supported cheap interfaces. Unknown busy state must remain explicit.
+- Only with separate explicit approval, perform controlled load/unload/switch/recovery validation during a client interruption window. No such live-operation approval is included in this development scope.
 
-## P1 — reliable operation and observability
+## P2 — maintainability and optional capabilities
 
-- Build mocked integration, API, browser E2E and visual regression suites; validate separately on GX10 with explicitly approved controlled operations.
-- Provide operation stages, elapsed time, recovery outcomes and durable bounded history with rotation and malformed-record tolerance.
-- Improve CPU, GPU and unified-memory telemetry and explain unavailable and unattributed values. Record model loading timings only when observed.
-- Make NAS scans genuinely bounded, resilient and searchable with category and format filters. Add local and NAS capacity diagnostics.
-
-## P2 — experience and capabilities
-
-- Refine accessible responsive layouts, keyboard navigation, dialogs, model cards, progress feedback, chart interaction and consistent light/dark themes.
-- Add configurable, persisted workspaces that remain non-executing until safe adapters and explicit action semantics are defined.
-- Add compatibility analysis based on runtime-specific requirements and metadata, with explicit unknown results; file existence alone is not evidence of executability.
-- Introduce supported multimodal runtime adapters only after defining readiness, resource preflight, recovery and permission boundaries. Do not modify runtime configuration.
-
-The user confirmed that the earlier Memory Timeline renders in Firefox and that Overview and Performance display live telemetry on GX10. Browser validation of the new storage bars and chart interactions, responsive layouts, contrast, and both themes remains outstanding: this development sandbox cannot bind localhost and has no browser surface.
-
-The existing Performance gauges were visually validated in Firefox on the GX10. The new Overview gauges and additional telemetry labels still need browser validation across themes and viewport sizes.
-
-## Intelligent management increment — 2026-11-03
-
-Completed on the development branch:
-
-- Preserve the existing Astra interface and application shell, with evidence-rich cards, inline details, health timestamps/errors and NAS structural classification.
-- Add dynamic structured Ollama metadata, controlled cached enrichment, SGLang configuration/identity inspection and non-generating readiness checks.
-- Separate installed evidence, residency, readiness, lifecycle intent and uncertainty; retain missing values and explicit provenance.
-- Require server-issued preflight, explicit confirmation, risk acknowledgement and exact stop selection; bind plans to current runtime evidence and recheck memory before target/recovery loads.
-- Serialize lifecycle workers within and across Control Center instances, retain job phase/ID across browser refresh, and verify every selected previous model before claiming recovery.
-- Use structured Ollama unload, skip unsafe restoration with partial target residency, bound NAS enumeration/JSON reads and make activity parsing bounded/malformed-record tolerant.
-- Pass 46 mocked Python tests, three JavaScript suites and syntax/whitespace checks; document actual implementation and limits.
-
-Next development phase, before release:
-
-1. Validate read-only runtime inventory, deployed SGLang endpoint support and metadata on GX10. Do not upgrade or reconfigure services to satisfy readiness probes.
-2. Run rendered desktop/mobile validation in both themes, keyboard/screen-reader testing, zoom, contrast and browser E2E with mocked adapters.
-3. Calibrate memory estimates for actual context, KV dtype, parallelism and SGLang reservations; keep unknowns explicit and avoid treating size as an upper bound.
-4. Add a bounded durable operation journal/log rotation and a crash-interruption report, without automatically resuming mutations after restart.
-5. Add workload/connected-client evidence only through supported cheap interfaces. Busy remains unavailable until verified.
-6. Isolate NAS filesystem discovery in a time-bounded worker and extend configuration variants without weakening its non-executable boundary.
-7. Only after separate explicit approval, validate controlled load/unload/switch/recovery in a client interruption window. No such live approval was provided for this development pass.
-
-Release assessment: implementation and mocked regression are ready for review; hardware integration and browser acceptance remain gates. The installed v5 application has not been overwritten and live runtimes/storage were not changed.
+- Extract the compressed frontend into small local modules with explicit static-routing/CSP tests; prefer keyed DOM updates that preserve focus.
+- Extend searchable NAS metadata and structural compatibility hints without creating runnable adapters from discovered weights.
+- Add persisted workspace planning only after defining safe adapter and confirmation semantics; current presets remain informational.
+- Add multimodal runtime adapters only with readiness, capacity, recovery and permission contracts. Do not reconfigure live runtimes as part of UI development.

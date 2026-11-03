@@ -17,6 +17,7 @@ BASE = Path(__file__).resolve().parent
 TOKEN = secrets.token_urlsafe(32)
 PORT = int(os.environ.get('AI_MANAGER_PORT', '0'))
 LOCK = threading.Lock()
+SAMPLING_LOCK = threading.Lock()
 STATE = {'busy': False, 'job': None, 'message': 'Ready', 'error': None}
 PLANS = {}
 PLAN_TTL = 120
@@ -40,7 +41,7 @@ def cpu_usage():
 
 def disk_info(path, label):
     try:
-        if path.startswith('/mnt/nas/') and not Path(path).is_mount():
+        if path.startswith('/mnt/') and not Path(path).is_mount():
             return {'name': label, 'online': False}
         st = os.statvfs(path)
         return {'name': label, 'online': True, 'total': st.f_blocks * st.f_frsize,
@@ -49,6 +50,12 @@ def disk_info(path, label):
         return {'name': label, 'online': False}
 
 def telemetry():
+    # Concurrent tabs must not race CPU deltas or append out-of-order samples.
+    with SAMPLING_LOCK:
+        return _telemetry()
+
+
+def _telemetry():
     rows, total, free, gpu, errors, _, _ = core.snapshot(False)
     out = {'models': rows, 'memory': {'total': total, 'available': free, 'used': total-free if total is not None and free is not None else None},
            'gpu': gpu, 'cpu': cpu_usage(), 'errors': errors, 'time': int(time.time()),
@@ -99,7 +106,10 @@ def progress(phase, **detail):
 def check_load_memory(row):
     estimate = intel.runtime_requirement(row)['bytes']
     total, available = core.memory()
-    if estimate is not None and available < estimate + max(4 * intel.GIB, total * .05):
+    if intel.positive(total) is None or intel.number(available) is None or available > total:
+        raise RuntimeError('Available memory cannot be verified; loading blocked.')
+    reserve = max(4 * intel.GIB, total * .05)
+    if available < reserve or (estimate is not None and available < estimate + reserve):
         raise RuntimeError('Available memory changed or unload reclaimed less than expected; loading blocked.')
 
 
@@ -109,6 +119,8 @@ def _run_job(action, target, stops, confirmed_plan=None):
     try:
         progress('precheck')
         if confirmed_plan is not None:
+            if confirmed_plan['expires_at'] <= time.time():
+                raise RuntimeError('Preflight plan expired before execution; review a new preflight.')
             current, rows = prepare(action, target, stops)
             if current['blocked'] or current['fingerprint'] != confirmed_plan['fingerprint']:
                 raise RuntimeError('Runtime state or memory changed after confirmation; review a new preflight.')
@@ -177,8 +189,20 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
     def authorized(self):
-        return self.headers.get('X-Session-Token') == TOKEN
+        value = self.headers.get('X-Session-Token', '')
+        return secrets.compare_digest(value.encode('utf8'), TOKEN.encode('utf8'))
+    def local_request(self):
+        """Reject DNS rebinding and cross-origin requests before reading bodies."""
+        address = self.server.server_address
+        expected_host = f'127.0.0.1:{address[1]}'
+        if self.headers.get('Host') != expected_host:
+            return False
+        origin = self.headers.get('Origin')
+        return ((origin is None or origin == 'http://' + expected_host)
+                and self.headers.get('Sec-Fetch-Site') not in ('cross-site', 'same-site'))
     def do_GET(self):
+        if not self.local_request():
+            return self.respond(403, {'error': 'Local same-origin access required'})
         parsed = urlparse(self.path)
         if parsed.path == '/':
             if parse_qs(parsed.query).get('token', [''])[0] != TOKEN:
@@ -223,11 +247,15 @@ class Handler(BaseHTTPRequestHandler):
             return self.respond(200, detail)
         return self.respond(404, {'error': 'Not found'})
     def do_POST(self):
+        if not self.local_request():
+            return self.respond(403, {'error': 'Local same-origin access required'})
         path = urlparse(self.path).path
         if path not in ('/api/action', '/api/preflight'):
             return self.respond(404, {'error': 'Not found'})
         if not self.authorized():
             return self.respond(403, {'error': 'Unauthorized'})
+        if self.headers.get('Transfer-Encoding'):
+            return self.respond(400, {'error': 'Transfer encoding is unsupported'})
         if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
             return self.respond(415, {'error': 'JSON required'})
         try:
@@ -240,7 +268,7 @@ class Handler(BaseHTTPRequestHandler):
             action, target, stops = body.get('action'), body.get('target'), body.get('stops', [])
             if (action not in ('load', 'unload', 'switch') or not isinstance(target, str)
                     or not target or not isinstance(stops, list)
-                    or any(not isinstance(stop, str) or not stop for stop in stops)
+                    or any(not isinstance(stop, str) or not stop or len(stop) > 512 for stop in stops)
                     or len(stops) > 128 or len(target) > 512
                     or len(stops) != len(set(stops)) or (action != 'switch' and stops)):
                 raise ValueError('Invalid operation')

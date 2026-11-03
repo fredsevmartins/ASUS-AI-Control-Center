@@ -110,7 +110,7 @@ class IntelligenceTests(unittest.TestCase):
     def test_sglang_verification_requires_readiness(self):
         with patch.object(core, 'is_loaded', return_value=True), \
              patch.object(core, 'sglang_observation', return_value={'state': 'loaded', 'uncertain': False}), \
-             patch.object(core.time, 'sleep'), patch.object(core.time, 'monotonic', side_effect=[0, 0, 2]):
+             patch.object(core.time, 'sleep'), patch.object(core.time, 'monotonic', side_effect=[0, 0, 2, 2]):
             self.assertFalse(core.verify({'runtime': 'SGLang'}, True, 1))
 
     def test_loopback_security_no_redirects(self):
@@ -269,7 +269,7 @@ class PlanApiTests(unittest.TestCase):
         with patch.object(core, 'lifecycle_lock', return_value=nullcontext()), \
              patch.object(server, 'prepare', return_value=({'blocked': False, 'fingerprint': 'new'}, {})), \
              patch.object(core, 'execute') as execute, patch.object(core, 'log_event'):
-            server.run_job('load', 'target', [], {'fingerprint': 'old'})
+            server.run_job('load', 'target', [], {'fingerprint': 'old', 'expires_at': server.time.time() + 120})
             execute.assert_not_called()
             self.assertEqual(server.STATE['phase'], 'failed')
 

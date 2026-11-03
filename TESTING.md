@@ -1,71 +1,83 @@
 # Testing
 
-Run from the repository root:
+## Required automated checks
 
-```sh
-python3 -m unittest discover -s tests -v
-node tests/test_frontend.js
-node --check web/app.js
-```
-
-Python tests mock runtime operations and exercise API handlers without opening sockets. The frontend regressions cover Performance navigation, storage percentages and invalid values, CSP-compatible progress markup, gauge telemetry validation, independent unavailable values, GPU temperature parsing, and CSS theme, responsive, and reduced-motion rules, fixed GiB axis ticks and byte-to-GiB mapping, local timestamps, empty state, resizing, theme drawing, high-density redraw sizing, and simulated pointer and keyboard sample selection on both charts. They are not browser rendering tests. No test should load, unload or switch live models. Tests do not change services or NAS files.
-
-The current sandbox forbids localhost sockets, so browser E2E, screenshot regression, and real HTTP integration could not be run here. Hardware, runtime readiness, long-running operations and recovery require validation on the target machine. Read-only checks should precede any controlled runtime operation, which requires explicit approval and no active clients. Do not run `install.sh` merely to test: it changes the installed v5 files and launcher.
-
-On the GX10, Firefox previously confirmed the Memory Timeline rendered and Overview and Performance displayed live telemetry. Recheck the updated storage bars, chart tooltip, keyboard and touch interaction, resizing, contrast, and both themes in a real browser. Storage used is total minus space available to the current user; reserved blocks may be included in used space.
-
-Both charts use a fixed 0–128 GiB scale; samples above 128 GiB are clipped visually and identified in the sample details. History is held in the server process (up to 180 status samples), survives page navigation, and is lost on server restart. The UI requests status every five seconds, though actual sampling can be affected by delays and other sessions.
-
-The gauges use current API readings and show unavailable for missing or out-of-range values. Memory capacity is supplied by telemetry and may differ from nominal installed memory. The automated gauge layout and theme checks inspect markup and CSS; they do not verify rendered contrast, animation, or screen-reader behavior. Validate those in a real browser at desktop and mobile widths, in both themes and with reduced motion.
-
-The user visually validated the existing Performance gauges in Firefox on the GX10. Validate the new compact Overview gauges and telemetry details in both themes and at multiple widths; automated checks do not test rendered layout.
-
-## Premium Model Manager prototype
-
-Run `node tests/test_model_manager.js` in addition to the commands above. This suite verifies zero-network prototype routing, explicit switch stop selection, busy rejection, simulated failure retention and stale/uncertain/submitting action guards. It evaluates JavaScript in a VM; it is not a rendered browser test.
-
-See `docs/design/IMPLEMENTATION-HANDOFF.md` for the static loopback-only prototype workflow and browser acceptance matrix. All demo data and operations are labeled and simulated. The current environment again rejected localhost socket creation; Chromium failed during snap initialization, and the browser connector required unavailable approval. Screenshots, rendered contrast, focus behavior and responsive layout remain unverified here. The design detector ran in regex fallback mode because parser modules are missing; an empty findings list does not validate contrast.
-
-## Intelligent model management — 2026-11-03
-
-Full regression commands (all required):
+Run from the repository root. These checks do not contact live runtimes or perform model operations:
 
 ```sh
 python3 -m unittest discover -s tests -v
 node tests/test_frontend.js
 node tests/test_model_manager.js
 node tests/test_model_intelligence.js
+python3 -m py_compile tests/browser_server.py
 node --check web/app.js
+node --check tests/browser_e2e.mjs
 bash -n install.sh
 git diff --check
 ```
 
-Baseline at `b980f88`: 14 Python tests, the existing frontend and prototype suites, and JavaScript syntax passed before editing. Current evidence: 46 Python tests and all three JavaScript suites pass; JavaScript/shell syntax and whitespace checks pass. The Impeccable mechanical detector returned `[]` for the changed web targets. These results do not establish rendered contrast or browser behavior.
+Latest integration pass, starting at `9534fc0`: **85 Python tests passed**, all three JavaScript suites passed, and JavaScript/shell syntax and whitespace checks passed. No tests were skipped in the Python suite. The prior baseline was 63 Python tests; this pass adds 22 audit regressions. These results establish mocked contracts and source/DOM behavior, not live runtime compatibility or rendered accessibility.
 
-New Python fixtures cover structured Ollama metadata/provenance, maximum vs active context, show caching/failure caching, malformed/missing responses, unavailable runtime/process information, orphan residents, SGLang model identity, `/ready` rejection/unsupported/timeout, last successful health check retention, readiness-required verification, loopback restrictions, redirect rejection, memory preflight, insufficiency, unknown requirements, KV calculation, stale fingerprints and unrelated metadata enrichment, plan expiry/selection binding/reuse, overlapping requests, advisory locks, worker startup failure, failed loads/unloads/readiness, partial targets, successful/failed restoration and final recovery verification. NAS fixtures cover bounded scans, file symlinks, malformed config and missing shards without touching NAS. Activity parsing tolerates corrupt records and system-memory failure does not remove model inventory.
+`bash -n install.sh` checks syntax only. Never execute the installer as validation: it changes installed v5 files and the launcher.
 
-The API integration test uses in-memory handlers and mocked runtime adapters through preflight → confirmed switch → refreshed status. It asserts that the unselected model remains active and that the operation reaches Complete. No sockets are opened. Advisory-lock tests write only to temporary directories. Mocked execute tests verify structured unload and empty embedding preload request shapes without performing them.
+## Automated coverage
 
-`test_model_intelligence.js` uses a VM and DOM harness to verify escaped model names/errors, provenance, cards, action validity, filters, details, unknown estimates, blocked plans, explicit acknowledgement, selection invalidation, stale asynchronous preflight responses, failure feedback and Tab wrapping including advanced disclosure summaries. Prototype tests also reject missing confirmation and reused plans, and assert zero fetch calls for status, details, library, preflight and actions. Existing tests retain navigation, gauges, memory charts, theme, responsive CSS and reduced-motion checks.
+| Area | Evidence |
+| --- | --- |
+| SGLang discovery/authentication | Independent systemd/container observations; model identity; 401/403 on metadata and readiness; unavailable transport; direct/wrapped timeout; 404/405/501 unsupported; explicit 503; authenticated GET success; stale last success; no generating fallback |
+| SGLang interface/security | Drop-in replacement, inspected published loopback bindings, unknown mappings, remote origins/credentials in URLs rejected, existing credential file validation, response size bound, proxies/redirects disabled, no credentials or upstream error bodies returned |
+| Ollama | Independent tags/ps failures, orphan residents with unknown installation, stored vs resident size, maximum vs active context, cached show/failures, incomplete/malformed architecture/digest data, identity conflicts and pre-mutation digest revalidation |
+| Metadata | Explicit value/source/confidence, missing values retained, current allocation/context supersede cached details, inferred SGLang NVFP4/parameter labels |
+| Preflight/authorization | Capacity and KV estimate, unknown requirements/reclamation, reserve enforcement, worker expiry recheck, stale fingerprints, exact selected stops, confirmation/risk acknowledgement, single-use/expired/tampered plans |
+| Lifecycle/recovery | Mocked load/unload/switch and failures, worker startup failure, readiness failure, selected restoration, final recovery verification, partially loaded target retained, failed restoration, transient retry deadline and permanent failure fast exit |
+| Concurrency/logging | Real simultaneous confirmation threads start one mocked worker, temporary advisory-lock contention, serialized sampling, bounded activity reads, malformed records, private temporary log directory/file |
+| HTTP/security | In-memory handlers: session protection for every API, exact Host, Origin/Fetch Metadata rejection, Unicode invalid tokens, JSON/body/stop limits, transfer encoding rejected, static path allowlist, CSP/no-store/referrer headers |
+| Frontend | Seven-view navigation source contract, storage validity/CSP markup, fixed 0–128 GiB charts, local times, sample selection, repeated high-DPI sizing, gauges/unavailable/decimal readings, filters/details, process/auth copy, preflight races, error retention, modal keyboard trapping and explicit stops |
+| Demo isolation | Zero fetch calls for simulated status/details/library/preflight/actions; simulated failure leaves previous models unchanged; missing confirmation and reused plans rejected |
+| NAS | Temporary bounded directory fixtures, symlinks ignored, malformed config and missing shards, structural classifications always non-runnable |
 
-### Outstanding release gates
+Python tests mock runtime operations and invoke API handlers without sockets. Lifecycle adapters, service/controller calls, inference and real model operations must never be used as unit-test fixtures. Logs and advisory locks must use temporary directories. JavaScript suites use VM/DOM/canvas harnesses and do not render a browser.
 
-No browser surfaces were exposed by the browser connector. This sandbox also rejects local runtime sockets. Browser screenshots/E2E, rendered themes/contrast, responsive layouts, focus restoration, assistive technology, real HTTP transport, installed Ollama inventory, actual SGLang version/endpoint support and GX10 memory calibration remain unverified. No live lifecycle action, service change, NAS scan or installer execution was performed for validation.
+## Real-browser E2E acceptance
 
-On GX10, first perform read-only checks: confirm installed inventory matches `/api/tags`, residents match `/api/ps`, provenance is accurate, endpoint identity matches the registered service and `/ready` is supported without generation. Verify that an unsupported `/ready` remains Loaded/unverified rather than Ready. Review both themes at desktop/mobile widths and 200% zoom, search/filter empty states, details, keyboard dialog order, stale/blocked preflight, explicit stop selection and risk acknowledgement. Demo Mode should produce no network traffic even when simulating failure.
+```sh
+node tests/browser_e2e.mjs
+AI_MANAGER_E2E_BROWSER=firefox node tests/browser_e2e.mjs
+```
 
-Any subsequent live load/unload/switch test requires a separate explicit approval and a client interruption window. Do not infer that approval from this development request. Do not install/update runtimes or change service configuration to make a test pass. If the deployed SGLang lacks safe readiness support, document it and keep conservative failure behavior.
+Use one command for an already provisioned Playwright browser. The application itself has no npm or Python package dependencies; this optional test runner requires an existing Playwright package and compatible browser binaries. It installs/downloads nothing. The runner exits 2 and prints BLOCKED for missing tooling/browser/socket access, 1 for assertion failure, and 0 only after passing its checks.
 
-## SGLang authentication regression — 2026-11-03
+The runner launches `tests/browser_server.py` on a separate random loopback port with a synthetic token. Every runtime/NAS discovery and lifecycle entry point is patched to reject live access, and state/log paths are temporary. It exercises the actual application HTML/CSS/JavaScript in explicit Demo Mode, not the installed stable application. Never point the operation tests at a live server or remove the fixture guards.
 
-Run every command in the full regression block above. Current result: 63 Python tests, all three JavaScript suites, JavaScript and shell syntax, and whitespace checks pass. The mechanical UI detector reports `[]` for `web/app.js`; this does not establish rendered accessibility or contrast.
+The implemented acceptance cases cover all seven sections; light/dark themes; 1440, 390 and 320 pixel widths; DPR 2 and reduced-motion emulation; search/filter/details/provenance; gauges, canvas backing-size stability and timeline keyboard inspection; native storage progress; Cancel/Escape/focus restoration and Tab trapping; unchecked stop selection; risk acknowledgement; simulated switch and failure; Activity feedback; and intercepted connection failure. Document/session/Origin rejection runs over the fixture's real HTTP transport. Production lifecycle API paths are separately covered by mocked Python integration tests.
 
-`tests/test_sglang.py` adds mocked regressions for 401 and 403 on both `/get_model_info` and `/ready`, connection refusal/unavailable runtime, direct and urllib-wrapped timeouts, service active with unknown readiness/container state, healthy authenticated metadata plus readiness, and unsupported `/ready` (404/405/501). It distinguishes `/ready` 503 from gateway/server errors, verifies matching identity before readiness, retains historical success without claiming current readiness, and blocks preflight when identity is unverified.
+On success, screenshots and `results.json` go to `/tmp/asus-ai-browser-evidence` by default; set `AI_MANAGER_E2E_ARTIFACTS` to a writable evidence directory. The results explicitly state fixture-only coverage and no live runtime validation. No launch URL, real session token or runtime credential is captured.
 
-Configuration/transport fixtures verify that the installed gateway-style `ExecStart` replacement prevents stale base-port inference, only inspected published loopback bindings are selected, unknown/remote bindings fail closed, explicit local origins work, proxies/redirects stay disabled, and only the two allowlisted non-generating GETs run with two-second I/O timeouts. Authentication fixtures use temporary files with synthetic tokens, test the default compatibility-file selection and explicit file override, reject empty/oversized/header-injection content, assert no network calls on invalid credentials, and assert credentials, paths and upstream error text/bodies are absent from observation results. No real credentials are read by the tests. Frontend regressions check that an active service/running container remains visible beside Unverified readiness and a 401 explanation, with model actions unavailable when identity is unknown.
+**Current result: BLOCKED**, exit 2, because Playwright is not installed. No browser cases ran and no screenshots/results artifact were produced. The browser connector independently failed because its profile was already in use; the alternate computer-use browser inventory was empty. An isolated Firefox headless attempt failed because snap-confine lacks the required permitted capability; it produced no screenshot. Both the development app and the isolated fixture server failed to bind loopback with PermissionError. The mechanical Impeccable detector used degraded regex mode and returned `[]`; HTML parser modules and computed-contrast checks were unavailable. This is not rendered UI acceptance.
 
-Read-only diagnosis inspected the base unit, security drop-ins, saved HAProxy configuration and saved deployment evidence. The exact request producing the reported 401 is identified from the old request order and configured origin: `GET http://127.0.0.1:30000/get_model_info`, before `/ready`. Saved gateway rules require a bearer header even for monitoring; saved loopback publication maps that interface to the private gateway. These are configuration observations, not a new live reproduction. systemd bus, Docker socket and loopback HTTP access are denied here; deployed SGLang version, current gateway bindings/mount, accepted credentials and `/ready` support remain unverified. No service/container restart, runtime reconfiguration, inference, lifecycle action, NAS access or installer execution was used for validation.
+## Fresh GX10 observations and blocked checks
 
-On the target workstation, refresh the development application's Model Manager using its existing launch/session authentication. Inspect process signals separately from `health.probes.metadata` and `health.probes.readiness`. For the recognized gateway deployment the application uses the existing compatibility file at `~/.config/qwen38/api-key`; if another existing credential is required, set the application-only `SGLANG_API_KEY_FILE` to its path. If Docker binding inspection is unavailable, set application-only `SGLANG_URL` to the already published HTTP loopback gateway origin. Never paste a key into a URL, command argument, screenshot, log or bug report. Do not change gateway/runtime settings or expose the backend to make discovery work.
+Verified read-only on this host during the current pass:
 
-A successful authenticated metadata response must match the registered model before readiness is attempted. Expect Ready only for `/ready` 200 with agreeing active processes; expect Loaded/unverified for unsupported readiness, and Unknown/Unverified with preserved process signals if metadata access cannot be verified. Recheck both themes and narrow widths for the added process facts. Real inference readiness and live lifecycle/recovery validation remain separate release gates; this assignment does not authorize inference or model operations.
+- Host `gx10-cbc7`, architecture `aarch64`, Python 3.12.3 and Node 22.23.1.
+- `/proc/meminfo` reported 130,593,968,128 total bytes; available memory was a transient sample, not a model capacity calibration.
+- `/mnt/nas/AI-Models` and `/mnt/nas/Storage` are mounts. `/mnt/ai-models` exists but is not a mount; it now reports offline.
+- A bounded NAS metadata scan found 16 recognized asset files in four collections, all classified Requires additional configuration and non-runnable. No weights were read or modified.
+- The base SGLang unit references `qwen38-dflash2:v1.2.3` and the registered Qwen identifier. The installed security drop-in starts existing gateway/network containers and attaches to the SGLang container. This is configuration evidence, not its running package version.
+- Existing compatibility/gateway credential files are regular files with mode 0600. Contents were not printed or copied during diagnosis.
+- Saved gateway rules require bearer authentication, contain no `/ready` exemption and do not rewrite paths/methods. Their current container mount could not be independently inspected.
+- The Ollama CLI reports version 0.30.8. The running server version/inventory remain unverified. The supported GPU query returned unavailable.
+
+Blocked by current sandbox permissions: systemd bus access, Docker socket inspection, Ollama `/api/version`, `/api/tags`, `/api/ps`, gateway HTTP probes and application loopback sockets. The user's reported active/resident SGLang state and `/ready` 404 were not independently reproduced here. Do not label these checks passed.
+
+No service/container restart, model load/unload/switch, inference, runtime/NAS configuration change, weight modification or installer execution was performed.
+
+## Remaining acceptance on the workstation
+
+Run the fixture browser suite with working local sockets/tooling. Separately run the development application from the checkout on a random loopback port and inspect read-only status, details and library against the actual runtimes. Confirm current gateway bindings, SGLang package version and route implementation with authorized read-only access; do not rely on an image tag or upstream main branch as deployed-version evidence.
+
+Confirm Ollama installed models match `/api/tags`, residents match `/api/ps`, provenance remains accurate and failures preserve independent evidence. Confirm authenticated metadata matches the registered SGLang model. Unsupported `/ready` must remain Loaded with Unverified inference readiness; auth/identity failures must retain process signals without claiming Ready. Never probe `/health` or `/health_generate` to resolve this gate without auditing the deployed implementation and separate approval for any inference.
+
+Rendered acceptance still requires desktop/mobile, both themes, 200% zoom, touch/pointer chart interaction, keyboard focus and assistive technology, long identifiers and contrast. The harness automates part of that matrix; manual screen-reader/zoom/touch checks remain separate. Earlier user confirmation that charts/gauges rendered in Firefox is historical evidence and does not validate this revision.
+
+Live lifecycle/recovery tests require separate explicit approval and an interruption window. Existing mocked adapters establish tested request/recovery contracts only. Memory estimates remain uncalibrated, connected clients cannot be reliably detected, process state does not prove inference readiness, and jobs/history are not crash-resumable. See the explicit release criteria in [the validation report](docs/audits/INTEGRATION_VALIDATION_REPORT.md).

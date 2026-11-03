@@ -30,6 +30,16 @@ html=context.modelCardHTML({...fixture,state:'unknown',uncertain:true});assert(!
 html=context.modelCardHTML({...fixture,runtime:'SGLang',state:'unknown',uncertain:true,health:{service_status:'active',container_status:'running',readiness:'Unverified',failure_reason:'Authentication required at /get_model_info (HTTP 401); inference readiness is unverified'}});
 assert(html.includes('Service process')&&html.includes('>active<')&&html.includes('Container process')&&html.includes('>running<'));
 assert(html.includes('Unverified')&&html.includes('HTTP 401')&&!html.includes('Not ready')&&!html.includes('data-action='));
+html=context.modelCardHTML({...fixture,runtime:'SGLang',installed:true,state:'loaded',loaded:true,uncertain:false,health:{service_status:'active',container_status:'running',readiness:'Resident; inference not verified',failure_reason:'Non-generating /ready endpoint unsupported (HTTP 404); inference readiness is unverified'}});
+assert(html.includes('>Loaded<')&&html.includes('>active<')&&html.includes('>running<')&&html.includes('HTTP 404'));
+assert(html.includes('inference not verified')&&!html.includes('Not ready')&&html.includes('data-action="unload"'));
+const fresh={...fixture,installed:null,metadata:{loaded_bytes:{value:null,source:'Current residency',confidence:'Unavailable'},configured_context:{value:null,source:'Current residency',confidence:'Unavailable'},quantization:{value:'Q4',source:'Current tags',confidence:'Verified from runtime'}}};
+const cached={loaded_bytes:{value:9000000000,source:'Old process',confidence:'Verified from runtime'},configured_context:{value:32768,source:'Old process',confidence:'Verified from runtime'},quantization:{value:'Q8',source:'Old tags',confidence:'Verified from runtime'},architecture:{value:'qwen',source:'Show',confidence:'Verified from runtime'}};
+const merged=context.currentMetadata(fresh,cached);
+assert.strictEqual(merged.loaded_bytes.value,null,'old allocation cannot replace missing current residency');
+assert.strictEqual(merged.configured_context.value,null,'old active context cannot replace current unknown');
+assert.strictEqual(merged.quantization.value,'Q4');assert.strictEqual(merged.architecture.value,'qwen');
+html=context.modelCardHTML(fresh);assert(html.includes('Installation')&&html.includes('Unverified'));
 html=context.modelCardHTML({...fixture,state:'error',loaded:true});assert(html.includes('data-action="unload"')&&!html.includes('data-action="load"'));
 assert.strictEqual(context.matchingModels(context.state.models,'ollama','all').length,1);
 assert.strictEqual(context.matchingModels(context.state.models,'','loaded').length,1);

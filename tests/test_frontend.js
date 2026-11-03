@@ -174,6 +174,9 @@ const gpuContext = {state:{gpu:'GPU: 27% utilization · 0°C'}};
 vm.runInNewContext(gpuSource, gpuContext);
 assert.strictEqual(gpuContext.gpuValues().load,27);
 assert.strictEqual(gpuContext.gpuValues().temp,0);
+gpuContext.state.gpu='GPU: 27.5% utilization · 46.5°C';
+assert.strictEqual(gpuContext.gpuValues().load,27.5);
+assert.strictEqual(gpuContext.gpuValues().temp,46.5);
 gpuContext.state.gpu='GPU telemetry unavailable';
 assert(Number.isNaN(gpuContext.gpuValues().load));
 assert(Number.isNaN(gpuContext.gpuValues().temp));
@@ -181,3 +184,20 @@ const html = fs.readFileSync('web/index.html','utf8');
 assert(html.includes('id="overview-gpu-gauge"') && html.includes('id="overview-cpu-gauge"'));
 assert(html.includes('id="loaded-main"'), 'model count remains available');
 console.log('Overview telemetry regressions passed');
+
+// The empty Activity view must respect style-src 'self'; failed refreshes stay
+// visible in the section and use textContent rather than rendering error HTML.
+const activityElement={innerHTML:'',textContent:''};
+const activityContext={$:()=>activityElement,request:async()=>[]};
+const activitySource=source.match(/async function refreshActivity\(\)\{[^\n]+\}/)[0];
+vm.runInNewContext(escapeSource+activitySource,activityContext);
+(async()=>{
+  await activityContext.refreshActivity();
+  assert(activityElement.innerHTML.includes('No operations recorded'));
+  assert(!activityElement.innerHTML.includes('style='),'Activity must not emit CSP-blocked inline style');
+  activityContext.request=async()=>{throw Error('<offline>');};
+  await activityContext.refreshActivity();
+  assert(activityElement.textContent.includes('Activity unavailable: <offline>'));
+  assert(activityElement.textContent.includes('Refresh to retry'));
+  console.log('Activity CSP and persistent error regressions passed');
+})().catch(error=>{console.error(error);process.exitCode=1;});

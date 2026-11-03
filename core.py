@@ -428,7 +428,10 @@ def discover_models():
     try:
         installed = intel.model_list(api('/api/tags', timeout=2))
     except Exception as exc:
-        return rows, errors + [f'Ollama unavailable: {exc}']
+        # Installation and residency are independent observations. Never hide
+        # running models merely because the installed-model index is unavailable.
+        installed = []
+        errors.append(f'Ollama unavailable: installed inventory: {exc}')
     try:
         processes = intel.model_list(api('/api/ps', timeout=2))
         loaded = {m.get('name') or m.get('model'): m for m in processes}
@@ -446,15 +449,20 @@ def discover_models():
             continue
         process = loaded.get(name)
         metadata = intel.ollama_metadata(model, process)
-        state = 'unknown' if ps_error else 'loaded' if process else 'unloaded'
+        identity = model.get('digest') if isinstance(model.get('digest'), str) else None
+        resident_identity = process.get('digest') if process and isinstance(process.get('digest'), str) else None
+        identity_error = ('Ollama registered and resident model identities disagree' if
+                          identity and resident_identity and identity != resident_identity else None)
+        observation_error = ps_error or identity_error
+        state = 'unknown' if observation_error else 'loaded' if process else 'unloaded'
         row = {'name': name, 'runtime': 'Ollama', 'key': 'ollama:' + name, 'loaded': bool(process),
-                     'installed': True if not model.get('_resident_only') or process else None,
+                     'installed': None if model.get('_resident_only') else True,
                      'registration_observed': not model.get('_resident_only', False),
-                     'uncertain': bool(ps_error), 'state': state, 'status': state.capitalize(),
+                     'uncertain': bool(observation_error), 'state': state, 'status': state.capitalize(),
                      'memory': human(metadata['loaded_bytes']['value']), 'metadata': metadata,
                      'embedding': ('embed' in name.lower() or 'nomic' in name.lower()),
-                     'identity': model.get('digest'),
-                     'health': health_record('ollama', not ps_error, None if ps_error else bool(process), None, ps_error),
+                     'identity': identity, 'resident_identity': resident_identity,
+                     'health': health_record('ollama', not ps_error, None if observation_error else bool(process), None, observation_error),
                      'runtime_config': {'endpoint': OLLAMA}}
         cache_key = ('show', row['key'], row.get('identity'))
         if intel.CACHE.peek(cache_key, 300) is not None:
@@ -486,7 +494,8 @@ def model_details(row):
                 result['metadata'][k] = v
         info = show.get('model_info', {})
         if isinstance(info, dict):
-            arch = info.get('general.architecture', '')
+            arch = info.get('general.architecture')
+            arch = arch if isinstance(arch, str) else ''
             heads = intel.positive(info.get(arch + '.attention.head_count'))
             embedding = intel.positive(info.get(arch + '.embedding_length'))
             result['kv_geometry'] = {'layers': info.get(arch + '.block_count'),
@@ -525,9 +534,16 @@ def is_loaded(row):
         state = sglang_state()
         if state is None:
             raise RuntimeError('SGLang state is uncertain; service and container must both be observable and agree.')
+        if state and row.get('identity'):
+            observed = sglang_observation()
+            if observed['uncertain'] or not observed['loaded'] or observed.get('identity') != row['identity']:
+                raise RuntimeError('SGLang model identity changed or cannot be verified; refresh before operating.')
         return state
     models = intel.model_list(api('/api/ps', timeout=2))
-    return any((m.get('name') or m.get('model')) == row['name'] for m in models)
+    process = next((m for m in models if (m.get('name') or m.get('model')) == row['name']), None)
+    if process and row.get('identity') and process.get('digest') != row['identity']:
+        raise RuntimeError('Ollama model identity changed or cannot be verified; refresh before operating.')
+    return process is not None
 
 
 def execute(row, load):
@@ -551,16 +567,26 @@ def verify(row, expected, timeout=150):
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         try:
-            if is_loaded(row) == expected:
-                if row['runtime'] == 'SGLang':
-                    observed = sglang_observation()
-                    if observed['state'] == ('ready' if expected else 'unloaded') and not observed['uncertain']:
-                        return True
-                else:
+            if row['runtime'] == 'SGLang':
+                observed = sglang_observation()
+                if row.get('identity') and observed.get('identity') != row['identity']:
+                    return False
+                if observed['state'] == ('ready' if expected else 'unloaded') and not observed['uncertain']:
                     return True
+                # Repeating permanent contract/authentication failures cannot
+                # establish readiness. Transient observations alone retry.
+                probes = observed.get('health', {}).get('probes', {})
+                if expected and any(p.get('status') in ('unsupported', 'authentication_required', 'access_denied',
+                                                        'authentication_configuration_error', 'identity_unverified')
+                                    for p in probes.values()):
+                    return False
+            elif is_loaded(row) == expected:
+                return True
         except Exception:
             pass
-        time.sleep(2)
+        remaining = deadline - time.monotonic()
+        if remaining > 0:
+            time.sleep(min(2, remaining))
     return False
 
 

@@ -134,6 +134,7 @@ def ollama_metadata(model, process=None, show=None):
     for target, key in [('family', 'family'), ('parameters', 'parameter_size'), ('format', 'format'), ('quantization', 'quantization_level')]:
         result[target] = field(extra.get(key) or details.get(key), 'Ollama /api/show' if extra.get(key) else source)
     architecture = info.get('general.architecture')
+    architecture = architecture if isinstance(architecture, str) else None
     result['architecture'] = field(architecture, 'Ollama /api/show model_info')
     result['context_window'] = field(positive(info.get(str(architecture) + '.context_length')), 'Ollama /api/show model_info (maximum)')
     result['parameters'] = result['parameters'] if result['parameters']['value'] else field(positive(info.get('general.parameter_count')), 'Ollama /api/show model_info')
@@ -201,7 +202,7 @@ def runtime_requirement(row):
 def fingerprint(rows, target=None):
     # Enriching unrelated descriptive metadata must not invalidate confirmation.
     # All residency/identity/configuration evidence and target sizing remain bound.
-    evidence = [(r['key'], r.get('loaded'), r.get('uncertain'), r.get('state'), r.get('identity'),
+    evidence = [(r['key'], r.get('loaded'), r.get('uncertain'), r.get('state'), r.get('identity'), r.get('resident_identity'),
                  r.get('runtime_config'), r.get('metadata') if r['key'] == target else
                  {k: r.get('metadata', {}).get(k, {}).get('value') for k in ('configured_context', 'loaded_bytes')},
                  r.get('kv_geometry') if r['key'] == target else None) for r in rows]
@@ -223,15 +224,20 @@ def preflight(rows, total, available, errors, action, target, stops):
         raise ValueError('A selected model is no longer verifiably loaded')
     estimate = runtime_requirement(row)
     loaded = [r for r in rows if r.get('loaded')]
-    released = sum(positive(by_key[s].get('metadata', {}).get('loaded_bytes', {}).get('value')) or 0 for s in stops)
+    allocations = [positive(by_key[s].get('metadata', {}).get('loaded_bytes', {}).get('value')) for s in stops]
+    released = sum(allocations) if all(v is not None for v in allocations) else None
     reserve = max(4 * GIB, total * .05) if positive(total) else 4 * GIB
-    projected = min(total, available + released) if positive(total) and number(available) is not None else None
+    # Unknown reclamation contributes nothing to a conservative capacity bound,
+    # but remains unknown in the public estimate rather than becoming zero.
+    projected = min(total, available + (released or 0)) if positive(total) and number(available) is not None else None
     reasons = []
     if action != 'unload':
         if errors or any(r.get('uncertain') for r in rows):
             reasons.append('Runtime inventory is incomplete; loaded-model conflicts cannot be established.')
         if projected is None:
             reasons.append('Available unified memory is unavailable.')
+        elif projected < reserve:
+            reasons.append('Available memory is below the system reserve, even before allocating the target.')
         elif estimate['bytes'] is not None and projected < estimate['bytes'] + reserve:
             reasons.append('Insufficient estimated memory, including the system reserve. Select explicit stops or reduce other usage.')
     warnings = ['Connected clients cannot be reliably detected. Unloading may interrupt active requests.',
@@ -239,6 +245,8 @@ def preflight(rows, total, available, errors, action, target, stops):
                 'Memory estimates and reclaimed allocations are uncertain; available memory is checked again before loading.']
     if estimate['bytes'] is None and action != 'unload':
         warnings.append('Target runtime requirement is unknown. Confirmation accepts the risk of allocation failure.')
+    if released is None:
+        warnings.append('Selected model allocations are unavailable; the projection counts no unverified memory reclamation.')
     if action == 'switch':
         warnings.append('Recovery restores only selected models and verifies them. A partially loaded target is never automatically removed; recovery may be incomplete.')
     return {'action': action, 'target': target, 'target_name': row['name'], 'runtime': row['runtime'], 'stops': stops,

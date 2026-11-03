@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Complete integration audit (2026-11-03)
+
+- Preserve independent Ollama installed/resident discovery across failures; keep orphan installation unknown, reject identity conflicts and tolerate malformed optional metadata.
+- Revalidate model identities and worker plan expiry; enforce the system reserve for unknown-size targets and retain unknown reclamation instead of displaying zero.
+- Stop SGLang verification promptly for unsupported/authentication contracts; retain Unverified readiness and bounded transient retries without generating probes.
+- Add Host/Origin/Fetch Metadata guards, constant-time session comparison, transfer-encoding rejection and bounded stop identifiers.
+- Serialize telemetry, mark unmounted external storage offline, parse decimal GPU readings, preserve current allocation/context over cached details and retain Activity errors with CSP-compatible empty markup.
+- Add 22 integration/security/concurrency regressions (85 Python tests total) and extend frontend regressions. Add an isolated fixture browser runner; its execution is BLOCKED by missing Playwright and loopback access, not passed.
+- Refresh contributor, architecture, security, testing and roadmap documentation and add `docs/audits/INTEGRATION_VALIDATION_REPORT.md`. Release classification remains PARTIAL; SGLang inference readiness remains UNVERIFIED without a supported safe endpoint.
+
 ## Unreleased — SGLang authentication diagnosis (2026-11-03)
 
 - Trace the reported 401 to the unauthenticated `/get_model_info` request against the loopback private gateway; account for the service's security drop-in instead of treating the base-unit port as a direct runtime interface.
