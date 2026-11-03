@@ -211,9 +211,9 @@ function drawChart(canvas, history) {
   const samples = chartSamples(history);
   const left = CHART_LEFT, right = Math.max(left+1, w-15), top = 16, bottom = h-48;
   ctx.scale(dpr,dpr); ctx.clearRect(0,0,w,h);
-  ctx.font = '11px sans-serif'; ctx.fillStyle = dark ? '#c4c9d8' : '#49516a';
+  ctx.font = '12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'; ctx.fillStyle = dark ? '#b0b7c2' : '#606772';
   ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
-  ctx.strokeStyle = dark ? '#525b70' : '#d4d8e2'; ctx.lineWidth = 1;
+  ctx.strokeStyle = dark ? '#41464f' : '#e2e5eb'; ctx.lineWidth = 1;
   for (let i=0; i<=8; i++) {
     const y = top+(bottom-top)*i/8;
     ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y); ctx.stroke();
@@ -234,18 +234,18 @@ function drawChart(canvas, history) {
   ctx.textBaseline = 'top'; ctx.textAlign = first === last ? 'center' : 'left'; ctx.fillText(chartTime(first), first === last ? (left+right)/2 : left, bottom+10);
   if (first !== last) {ctx.textAlign='right'; ctx.fillText(chartTime(last), right, bottom+10);}
   ctx.beginPath(); points.forEach((p,i) => i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y));
-  ctx.lineWidth = 2.5; ctx.strokeStyle = dark ? '#b8a5ff' : '#6046cf'; ctx.stroke();
+  ctx.lineWidth = 2.5; ctx.strokeStyle = dark ? '#91baff' : '#245fc4'; ctx.stroke();
   if (points.length === 1) {ctx.beginPath(); ctx.arc(points[0].x,points[0].y,3,0,2*Math.PI); ctx.fillStyle=ctx.strokeStyle; ctx.fill();}
   {
     const selected = points.find(p => p.sample.time === chartSelection[canvas.id]);
     const description = selected ? `${chartTime(selected.sample.time)} · ${gib(selected.sample.memory)} used${selected.sample.memory/GIB > CHART_MAX_GIB ? ' (above chart scale)' : ''}` : `${samples.length} samples.${samples.some(s => s.memory/GIB > CHART_MAX_GIB) ? ' Values above 128 GiB are clipped.' : ''} Hover, tap, or use arrow keys to inspect.`;
     $(selectionText).textContent = description;
     if (selected) {
-      ctx.beginPath(); ctx.arc(selected.x,selected.y,4,0,2*Math.PI); ctx.fillStyle=dark?'#ded6ff':'#4932af'; ctx.fill();
+      ctx.beginPath(); ctx.arc(selected.x,selected.y,4,0,2*Math.PI); ctx.fillStyle=dark?'#b9d2ff':'#1d53b1'; ctx.fill();
       ctx.font='12px sans-serif'; const width=Math.min(w-8,ctx.measureText(description).width+16);
       const x=Math.max(4,Math.min(w-width-4,selected.x-width/2)), y=Math.max(2,selected.y-34);
-      ctx.fillStyle=dark?'#f5f5fb':'#24243e'; ctx.fillRect(x,y,width,24);
-      ctx.fillStyle=dark?'#171a2a':'#ffffff'; ctx.textBaseline='middle'; ctx.textAlign='center'; ctx.fillText(description,x+width/2,y+12,width-12);
+      ctx.fillStyle=dark?'#edf0f5':'#202329'; ctx.fillRect(x,y,width,24);
+      ctx.fillStyle=dark?'#202329':'#ffffff'; ctx.textBaseline='middle'; ctx.textAlign='center'; ctx.fillText(description,x+width/2,y+12,width-12);
     }
   }
 }
@@ -336,6 +336,15 @@ $('#theme-btn').innerHTML=uiIcon('M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9');
 $('#refresh-btn').innerHTML=uiIcon('M20 9a8 8 0 1 0 0 6 M20 3v6h-6');
 $$('.quick-grid b').forEach((b,i)=>b.innerHTML=uiIcon(navigationIcons[[1,2,3,5][i]]));
 $('.metric-heading span').innerHTML=uiIcon(navigationIcons[1]);
+const workspaceIcons = [
+  'M8 6 2 12l6 6 M16 6l6 6-6 6 M14 4l-4 16',
+  'M9 3h6 M10 3v7L4 20h16l-6-10V3 M7 15h10',
+  'M12 3v4 M12 17v4 M3 12h4 M17 12h4 M8 8l8 8 M16 8l-8 8',
+  'M3 4h18v16H3z M3 16l5-5 4 4 3-3 6 6 M15 8h1',
+  'M3 5h18v14H3z M9 5v14 M15 5v14 M3 9h6 M15 9h6 M3 15h6 M15 15h6',
+  'M9 4a3 3 0 0 1 6 0v8a3 3 0 0 1-6 0z M6 11v1a6 6 0 0 0 12 0v-1 M12 18v3 M9 21h6'
+];
+$$('.workspace-card .symbol').forEach((element, i) => element.innerHTML = uiIcon(workspaceIcons[i]));
 $('#settings-theme').onclick=()=>$('#theme-btn').click();
 const prototypeURL=new URL(location.href);prototypeURL.searchParams.set('demo','1');$('#prototype-link').href=prototypeURL.href;
 setPage(DEMO?'models':'dashboard');

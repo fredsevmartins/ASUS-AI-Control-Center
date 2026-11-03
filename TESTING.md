@@ -81,3 +81,28 @@ Confirm Ollama installed models match `/api/tags`, residents match `/api/ps`, pr
 Rendered acceptance still requires desktop/mobile, both themes, 200% zoom, touch/pointer chart interaction, keyboard focus and assistive technology, long identifiers and contrast. The harness automates part of that matrix; manual screen-reader/zoom/touch checks remain separate. Earlier user confirmation that charts/gauges rendered in Firefox is historical evidence and does not validate this revision.
 
 Live lifecycle/recovery tests require separate explicit approval and an interruption window. Existing mocked adapters establish tested request/recovery contracts only. Memory estimates remain uncalibrated, connected clients cannot be reliably detected, process state does not prove inference readiness, and jobs/history are not crash-resumable. See the explicit release criteria in [the validation report](docs/audits/INTEGRATION_VALIDATION_REPORT.md).
+
+## Premium visual refinement — 2026-11-03
+
+This visual-only pass changes `web/style.css` and presentation code in `web/app.js`.
+All 85 Python tests and all three JavaScript regression suites passed. Python,
+JavaScript, installer shell syntax (without executing it), and diff whitespace
+checks passed. No live lifecycle adapters or model operations were exercised.
+
+Both Chromium and Firefox fixture commands remain **BLOCKED** (exit 2):
+Playwright is not installed. A fresh socket probe also failed with PermissionError
+before binding a random loopback port. The computer-use inventory returned no
+apps or browsers. No development server replaced the stable application, and no
+before/after screenshots could be captured.
+
+The design detector returned `[]`; this does not establish rendered acceptance.
+Calculated palette contrast for primary/secondary/accent text, warning text and
+primary buttons ranged from 4.91:1 to 15.74:1 across the sampled light/dark pairs.
+This is a source-color calculation, not a computed-style or rendered contrast audit.
+
+Light/dark rendering, desktop and small-screen resizing, actual Firefox ARM64
+rendering, focus visibility, dialog/loading-state readability and gauge appearance
+remain **NOT VERIFIED** in a browser. Existing mocked focus, operation, gauge and
+chart regressions pass, but cannot close these visual acceptance gates. Release
+readiness remains withheld until the guarded browser suite and manual checks run
+in an environment with the prerequisites described above.
