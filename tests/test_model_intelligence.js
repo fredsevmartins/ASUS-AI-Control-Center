@@ -27,6 +27,9 @@ assert(html.includes('8B')&&html.includes('Q4_K_M')&&html.includes('Verified fro
 assert(html.includes('Unknown requirement')&&html.includes('Last health check')&&html.includes('&lt;network failure&gt;'));
 assert(html.includes('data-action="load"')&&html.includes('data-action="switch"'));
 html=context.modelCardHTML({...fixture,state:'unknown',uncertain:true});assert(!html.includes('data-action='));
+html=context.modelCardHTML({...fixture,runtime:'SGLang',state:'unknown',uncertain:true,health:{service_status:'active',container_status:'running',readiness:'Unverified',failure_reason:'Authentication required at /get_model_info (HTTP 401); inference readiness is unverified'}});
+assert(html.includes('Service process')&&html.includes('>active<')&&html.includes('Container process')&&html.includes('>running<'));
+assert(html.includes('Unverified')&&html.includes('HTTP 401')&&!html.includes('Not ready')&&!html.includes('data-action='));
 html=context.modelCardHTML({...fixture,state:'error',loaded:true});assert(html.includes('data-action="unload"')&&!html.includes('data-action="load"'));
 assert.strictEqual(context.matchingModels(context.state.models,'ollama','all').length,1);
 assert.strictEqual(context.matchingModels(context.state.models,'','loaded').length,1);

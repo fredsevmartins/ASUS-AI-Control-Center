@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — SGLang authentication diagnosis (2026-11-03)
+
+- Trace the reported 401 to the unauthenticated `/get_model_info` request against the loopback private gateway; account for the service's security drop-in instead of treating the base-unit port as a direct runtime interface.
+- Discover the existing gateway's published loopback bindings read-only. Use the existing compatibility bearer file in memory, with application-only `SGLANG_URL` and `SGLANG_API_KEY_FILE` overrides; preserve authentication, proxy/redirect restrictions and runtime infrastructure.
+- Keep 401/403, transport failures, timeouts and unsupported readiness separate from explicit `/ready` rejection. Report Unverified when readiness is unknown; preserve independent systemd/container process evidence and conservative lifecycle guards.
+- Add 17 Python regressions (63 total) and frontend process/authentication evidence coverage. Full automated suites pass; live endpoint/version/credential support and browser rendering remain unverified due to sandbox access restrictions.
+
 ## Unreleased — Intelligent model management (2026-11-03)
 
 - Add provenance-aware runtime metadata, dynamic Ollama inventory/enrichment, SGLang configuration/identity inspection and non-generating readiness observations.

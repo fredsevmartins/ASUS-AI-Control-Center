@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 from datetime import datetime, timezone
 import shutil
+import stat
 import subprocess
 import threading
 import fcntl
@@ -16,7 +17,7 @@ from contextlib import contextmanager
 import time
 from urllib.request import Request
 from urllib.request import build_opener, HTTPRedirectHandler, ProxyHandler
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 import intelligence as intel
 
 OLLAMA = os.environ.get('OLLAMA_HOST', 'http://127.0.0.1:11434').rstrip('/')
@@ -29,6 +30,8 @@ MAX_NAS_ENTRIES = 1800
 STATE_DIR = Path.home() / '.local/state/asus-ai-model-manager'
 LOG_PATH = STATE_DIR / 'operations.jsonl'
 QWEN_UNIT = Path('/etc/systemd/system/qwen38-sglang.service')
+QWEN_DROPINS = Path('/etc/systemd/system/qwen38-sglang.service.d')
+QWEN_API_KEY = Path.home() / '.config/qwen38/api-key'
 HEALTH_SUCCESS = {}
 HEALTH_LOCK = threading.Lock()
 
@@ -53,14 +56,16 @@ class NoRedirect(HTTPRedirectHandler):
         return None
 
 
-def runtime_http(origin, path, payload=None, timeout=2, health=False):
+def runtime_http(origin, path, payload=None, timeout=2, health=False, headers=None):
     origin = intel.local_url(origin)
     data = None if payload is None else json.dumps(payload).encode('utf-8')
-    req = Request(origin + path, data=data, headers={'Content-Type': 'application/json'})
+    req = Request(origin + path, data=data, headers={'Content-Type': 'application/json', **(headers or {})})
     # Local APIs must not go through environment proxies or redirect elsewhere.
     with build_opener(ProxyHandler({}), NoRedirect()).open(req, timeout=timeout) as response:
         if health:
-            return response.status == 200
+            if response.status != 200:
+                raise ValueError('Unexpected readiness response')
+            return True
         raw = response.read(2 * 1024 * 1024 + 1)
         if len(raw) > 2 * 1024 * 1024:
             raise ValueError('Runtime metadata exceeds response limit')
@@ -138,8 +143,8 @@ def command(args, timeout=12):
     return subprocess.run(args, text=True, capture_output=True, timeout=timeout)
 
 
-def sglang_state():
-    """Return process state only when both independent observations agree."""
+def sglang_process_observation():
+    """Keep systemd and Docker evidence even when HTTP or the other check fails."""
     try:
         service = command(['systemctl', 'is-active', QWEN_SERVICE], timeout=2)
         value = service.stdout.strip()
@@ -153,9 +158,15 @@ def sglang_state():
         container_state = (value == 'true') if container.returncode == 0 and value in ('true', 'false') else None
     except (OSError, subprocess.TimeoutExpired):
         container_state = None
-    if service_state is None or container_state is None or service_state != container_state:
-        return None
-    return service_state
+    running = service_state if service_state is not None and service_state == container_state else None
+    return {'running': running,
+            'service_status': 'active' if service_state is True else 'inactive' if service_state is False else 'unknown',
+            'container_status': 'running' if container_state is True else 'stopped' if container_state is False else 'unknown'}
+
+
+def sglang_state():
+    """Lifecycle consensus remains independent of HTTP authentication/readiness."""
+    return sglang_process_observation()['running']
 
 
 def human(value):
@@ -249,57 +260,158 @@ def health_record(key, available, loaded, ready, reason=None, service=None):
             'model_loaded': loaded, 'endpoint_health': ready,
             'checked_at': now, 'last_success': last, 'failure_reason': reason,
             'readiness': 'Ready to accept requests' if ready is True else
-                         ('Resident; inference not verified' if loaded else 'Not ready')}
+                         'Not ready' if ready is False else
+                         'Resident; inference not verified' if loaded else 'Unverified'}
 
 
 def qwen_configuration():
+    config = {}
     try:
         with QWEN_UNIT.open(encoding='utf8') as unit:
             text = unit.read(65536)
         config = intel.sglang_config(text)
-        # Never guess a container port mapping. This adapter supports the existing
-        # host-network unit, or an explicitly configured loopback origin.
+        # The base unit can be superseded by systemd drop-ins. Retain its
+        # registered model metadata, but never treat its old port as effective.
+        dropins = sorted(QWEN_DROPINS.glob('*.conf'))
+        if len(dropins) > 16:
+            return config, None
+        sources = [text]
+        for path in dropins:
+            with path.open(encoding='utf8') as source:
+                sources.append(source.read(65536))
+        effective_start = None
+        for source in sources:
+            config.update(intel.sglang_config(source))
+            for line in source.replace('\\\n', ' ').splitlines():
+                if line.startswith('ExecStart='):
+                    effective_start = line[len('ExecStart='):].strip()
+        gateway = ('qwen38-private-network' in '\n'.join(sources[1:])
+                   and 'qwen38-gateway' in '\n'.join(sources[1:])
+                   and effective_start == '/usr/bin/docker start -a qwen38-sglang')
+        if gateway:
+            config['interface'] = 'private-gateway'
         endpoint = os.environ.get('SGLANG_URL')
-        if not endpoint and ('--network host' in text or '--network=host' in text):
+        if not endpoint and gateway:
+            # Inspect only published bindings; no full container environment or
+            # command, and no access to the namespace-only SGLang backend.
+            ports = command(['docker', 'inspect', '-f', '{{json .NetworkSettings.Ports}}',
+                             'qwen38-private-network'], timeout=2)
+            if ports.returncode == 0 and len(ports.stdout) <= 65536:
+                bindings = json.loads(ports.stdout).get('30002/tcp') or []
+                origins = sorted(intel.local_url('http://' + ('[' + b['HostIp'] + ']' if ':' in b['HostIp'] else b['HostIp'])
+                                                + ':' + b['HostPort']) for b in bindings)
+                endpoint = origins[0] if origins else None
+        if not endpoint and not gateway and effective_start and ('--network host' in effective_start or '--network=host' in effective_start):
             port = config.get('port')
             if port and port.isdigit():
                 endpoint = 'http://127.0.0.1:' + port
         return config, intel.local_url(endpoint) if endpoint else None
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, subprocess.TimeoutExpired):
+        return config, None
+
+
+def sglang_auth_headers(config):
+    """Read an existing bearer file in memory only; never scrape unit secrets."""
+    explicit = os.environ.get('SGLANG_API_KEY_FILE')
+    path = Path(explicit) if explicit else QWEN_API_KEY if config.get('interface') == 'private-gateway' else None
+    if path is None:
+        return {}
+    try:
+        # Nonblocking open plus fstat rejects FIFOs/devices, bounding secret reads.
+        fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK)
+        with os.fdopen(fd, 'rb') as source:
+            if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+                raise ValueError()
+            raw = source.read(4097)
+        token = raw.decode('ascii').rstrip('\r\n')
+        if len(raw) > 4096 or not token or any(ord(c) < 33 or ord(c) > 126 for c in token):
+            raise ValueError()
+        return {'Authorization': 'Bearer ' + token}
     except (OSError, ValueError):
-        return {}, None
+        # Never interpolate paths, file contents, or raw exception messages.
+        raise ValueError('SGLang authentication file unavailable or invalid; configure SGLANG_API_KEY_FILE') from None
+
+
+def sglang_probe(endpoint, path, headers, health=False):
+    """One allowlisted GET, no retries or generating fallback; safe diagnostics."""
+    if path not in ('/get_model_info', '/ready'):
+        raise ValueError('Unsupported monitoring endpoint')
+    probe = {'path': path, 'status': 'ok', 'http_status': None}
+    try:
+        value = runtime_http(endpoint, path, timeout=2, health=health, headers=headers)
+        probe['http_status'] = 200
+        return value, probe, None
+    except HTTPError as exc:
+        probe['http_status'] = exc.code
+        exc.close()  # Do not read or retain potentially sensitive error bodies.
+        if exc.code in (401, 403):
+            probe['status'] = 'authentication_required' if exc.code == 401 else 'access_denied'
+            reason = ('Authentication required' if exc.code == 401 else 'Access denied') + f' at {path} (HTTP {exc.code}); inference readiness is unverified'
+        elif exc.code in (404, 405, 501):
+            probe['status'] = 'unsupported'
+            reason = f'Non-generating {path} endpoint unsupported (HTTP {exc.code}); inference readiness is unverified'
+        elif health and exc.code == 503:
+            probe['status'] = 'not_ready'
+            return False, probe, '/ready reports not ready (HTTP 503)'
+        else:
+            probe['status'] = 'http_error'
+            reason = f'{path} HTTP {exc.code}; inference readiness is unverified'
+    except (TimeoutError, URLError) as exc:
+        timed_out = isinstance(exc, TimeoutError) or isinstance(getattr(exc, 'reason', None), TimeoutError)
+        probe['status'] = 'timeout' if timed_out else 'unavailable'
+        reason = f'{path} timed out; inference readiness is unverified' if timed_out else f'{path} unavailable; inference readiness is unverified'
+    except OSError:
+        probe['status'] = 'unavailable'
+        reason = f'{path} unavailable; inference readiness is unverified'
+    except Exception:
+        probe['status'] = 'invalid_response'
+        reason = f'{path} response could not be verified; inference readiness is unverified'
+    return None, probe, reason
 
 
 def sglang_observation():
-    process = sglang_state()
+    processes = sglang_process_observation()
+    process = processes['running']
     config, endpoint = qwen_configuration()
-    info, ready, reason, available = {}, None, None, False
+    info, ready, reason, available = {}, None, None, None
+    probes = {name: {'path': path, 'status': 'not_checked', 'http_status': None}
+              for name, path in (('metadata', '/get_model_info'), ('readiness', '/ready'))}
     identity = config.get('model-path')
     if endpoint:
         try:
-            info = runtime_http(endpoint, '/get_model_info', timeout=2)
-            if not isinstance(info.get('model_path'), str):
-                raise ValueError('SGLang metadata is missing model_path')
-            available = True
-            if not identity or info['model_path'] != identity:
-                raise ValueError('SGLang endpoint model identity differs from the registered configuration')
-            try:
-                ready = runtime_http(endpoint, '/ready', timeout=2, health=True)
-            except HTTPError as exc:
-                if exc.code == 404:
-                    reason = 'Non-generating /ready endpoint unsupported; inference readiness is unverified'
+            headers = sglang_auth_headers(config)
+        except ValueError:
+            probes['metadata']['status'] = 'authentication_configuration_error'
+            reason = 'SGLang authentication file unavailable or invalid; configure SGLANG_API_KEY_FILE'
+        else:
+            info, probes['metadata'], reason = sglang_probe(endpoint, '/get_model_info', headers)
+            info = info if isinstance(info, dict) else {}
+            if probes['metadata']['status'] == 'ok':
+                available = True
+                if not identity or info.get('model_path') != identity:
+                    reason = 'SGLang endpoint model identity missing or differs from the registered configuration; inference readiness is unverified'
+                    probes['metadata']['status'] = 'identity_unverified'
                 else:
-                    ready, reason = False, f'Readiness endpoint HTTP {exc.code}'
-        except Exception as exc:
-            reason = str(exc)[:300]
+                    ready, probes['readiness'], reason = sglang_probe(endpoint, '/ready', headers, health=True)
+            elif probes['metadata']['status'] == 'unavailable':
+                available = False
     else:
-        reason = 'Local SGLang endpoint could not be established from existing configuration'
+        reason = 'Local SGLang endpoint could not be established from existing configuration; set SGLANG_URL to the existing published loopback origin'
     identity_ok = bool(identity and info.get('model_path') == identity)
     loaded = process is True and identity_ok
     uncertain = process is None or (process is False and available) or (process is True and not identity_ok)
     state = ('unknown' if uncertain else 'unloaded' if process is False else
              'ready' if ready is True else 'error' if ready is False else 'loaded')
+    # Endpoint readiness cannot establish readiness of this registered service
+    # while process/identity observations disagree or are missing.
+    if uncertain:
+        ready = None
+        if reason is None:
+            reason = 'SGLang process and endpoint observations do not agree; inference readiness is unverified'
     health = health_record('sglang', available, loaded if not uncertain else None, ready, reason,
-                           'active' if process is True else 'inactive' if process is False else 'unknown')
+                           processes['service_status'])
+    health.update(container_status=processes['container_status'], process_running=process,
+                  probes=probes, source='systemd and Docker process observations; loopback GET /get_model_info and /ready')
     metadata = intel.sglang_metadata(config, info if identity_ok else {})
     return {'name': QWEN_NAME, 'runtime': 'SGLang', 'key': 'sglang',
             'installed': True if loaded else None,

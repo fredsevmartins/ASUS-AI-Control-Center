@@ -83,7 +83,10 @@ class IntelligenceTests(unittest.TestCase):
     def test_sglang_identity_readiness_and_timeout(self):
         cfg = {'model-path': 'Org/Qwen-27B-NVFP4', 'port': '30000'}
         def observe(side_effect, process=True):
-            with patch.object(core, 'sglang_state', return_value=process), \
+            processes = {'running': process, 'service_status': 'active' if process else 'inactive',
+                         'container_status': 'running' if process else 'stopped'}
+            with patch.object(core, 'sglang_process_observation', return_value=processes), \
+                 patch.object(core, 'sglang_auth_headers', return_value={}), \
                  patch.object(core, 'qwen_configuration', return_value=(cfg, 'http://127.0.0.1:30000')), \
                  patch.object(core, 'runtime_http', side_effect=side_effect) as api:
                 result = core.sglang_observation()
