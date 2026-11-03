@@ -71,3 +71,19 @@ Review and merge the audited changes before distributing a release. Keep the
 checkout and installation paths trusted, and never run the installer with sudo.
 See [SECURITY.md](SECURITY.md) for the local-process, launch-token and NAS trust
 boundaries. No installed application or host configuration was changed by the audit.
+
+## Desktop application launcher
+
+The checkout includes `desktop_launcher.py`: Chromium application-window mode
+(1440 × 960 requested), Firefox normal-window fallback, per-user backend reuse,
+startup error dialogs and a private single-use authentication handoff. The premium
+interface is unchanged. Closing the window retains the backend; use
+`python3 desktop_launcher.py --stop` to stop it.
+
+Install menu/desktop icons from a normal user terminal with
+`python3 desktop/install_desktop.py`. This backs up matching launchers and points
+at the checkout without replacing installed v5 files. Keep the checkout in place.
+Do not run the legacy installer for this integration. Installation and real GX10
+window validation are **BLOCKED / NOT VERIFIED** in the development sandbox.
+See [desktop experience](docs/design/DESKTOP-EXPERIENCE.md) for security,
+compatibility, troubleshooting and the exact acceptance procedure.

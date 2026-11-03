@@ -178,3 +178,99 @@ reader acceptance remain **NOT VERIFIED**; release readiness is withheld.
 [Desktop-window investigation](docs/design/DESKTOP-EXPERIENCE.md) documents the
 recommended candidate without modifying the installed shortcut or backend.
 No live model operations, runtime/service/Docker/NAS changes or installation ran.
+
+## Desktop launcher — 2026-11-03
+
+Required additional checks:
+
+```sh
+python3 -m unittest discover -s tests -p test_desktop_launcher.py -v
+python3 -m py_compile desktop_launcher.py desktop/install_desktop.py
+```
+
+The full suite passes **117 Python tests**, including 16 desktop launcher cases.
+All three JavaScript suites, Python compilation, JS/shell syntax and whitespace
+checks pass. Generated desktop-entry validation also passes. The optional
+read-only security scanner completed; its heuristic history findings are not a
+new security certification. Desktop tests mock browser processes, HTTP transport and backend
+adapters; temporary directories contain all test lock/state files. They cover
+first launch, repeated clicks, an existing owner, reopening after window close,
+startup failure and timeout cleanup, missing/failing browsers, paths with spaces,
+shutdown/restart, lock contention and authenticated single-use handoff/expiry.
+Supervisor tests verify loopback binding, click coalescing and HTTP shutdown.
+They do not establish actual process/window behavior in a desktop session.
+
+Both prescribed browser commands again report **BLOCKED**, exit 2 (Playwright
+missing). A fresh random loopback bind reports PermissionError. Chromium and
+Firefox version commands fail in snap-confine; mounted package manifests report
+156.0.8078.47 and 157.0.1-1 respectively. CUA inventories no apps/browsers.
+No screenshots or real desktop acceptance evidence were produced. No installer
+was run, no account launchers changed, and no runtime operations were performed.
+
+Installation is blocked by the current checkout-/tmp-only write permissions.
+Real first launch/double-click/window close/restart, window dimensions/chrome,
+GNOME icon/menu integration, themes/navigation/gauges, high-DPI and keyboard/mouse
+acceptance remain **NOT VERIFIED**. Run the exact workstation validation command
+and checklist in [DESKTOP-EXPERIENCE.md](docs/design/DESKTOP-EXPERIENCE.md).
+
+## Native utility composition — 2026-11-03
+
+The frontend now uses memory-led monitoring, a master-detail model manager,
+registered/NAS/component inventory regions, instrumentation, profile disclosures,
+log rows and grouped preferences. The three existing JavaScript suites pass with
+added selection/filter/refresh/escaping and DOM action-order checks. The browser
+fixture now selects model rows before exercising the unchanged simulated actions;
+its original preflight, risk, failure and recovery coverage is retained.
+
+All 117 Python tests pass. Python/JavaScript/shell syntax and whitespace checks
+pass. Both browser runs remain BLOCKED (exit 2: missing Playwright), a fresh random
+loopback bind is denied, and fresh CUA inventory contains no apps/browsers.
+No rendered screenshots or real desktop evidence exist for this redesign.
+The detector used degraded regex mode and emitted advisory design-token findings;
+computed CSS/contrast were not evaluated. Independent source review identified
+and prompted fixes for dark-library responsive specificity, polling focus loss,
+inspector navigation focus and visual/DOM action order. This is not visual approval.
+
+Manual acceptance must include list/inspector independent scrolling, focus through
+five-second refreshes, model selection/filter fallback, keyboard Arrow/Home/End,
+Library-to-inspector navigation, profile disclosures, both themes, narrow and short
+windows, 200% zoom, gauge/chart readability and computed contrast. Do not run any
+live lifecycle operation to test presentation; use the guarded fixture in Demo Mode.
+Backend, authentication, runtime and desktop-launcher behavior were not changed.
+
+### Premium glass finalization (2026-11-03)
+
+Socket-free validation: 117 Python tests and the three JavaScript suites pass. Gauge band boundary and unknown-value assertions, compact card states, and a mocked details request that cannot trigger lifecycle actions are covered. Browser acceptance is BLOCKED: Playwright is not installed and loopback socket creation is denied. Firefox and the standalone desktop window are NOT VERIFIED. The existing browser fixture still contains master-detail expectations and needs updating before it can validate this revision; no browser pass is claimed. Validate dialog keyboard/focus behavior, both themes, responsive layouts, and computed contrast when the fixture and browser prerequisites are available. No live model operations were performed.
+
+## Glass visibility correction — 2026-11-03
+
+The 117 Python tests, three JavaScript suites and prescribed compilation,
+syntax and whitespace checks passed. The fixture now targets the compact cards
+and details dialog instead of the retired master-detail rows, checks computed
+surface radius, shadow, border and background in both themes at five widths,
+checks grid columns and details focus return, and captures Overview and dialog
+screenshots. These new browser assertions have **not run**.
+
+Both prescribed browser commands returned **BLOCKED** (exit 2: Playwright is
+not installed); a fresh loopback socket attempt was denied and the computer-use
+inventory contained no browser or application. No previous screenshots were
+available in the workspace. Actual Firefox appearance, comparison, glass,
+contrast, responsive layout and modal/grid acceptance remain **NOT VERIFIED**.
+The design detector ran in degraded regex mode with palette/type/radius
+advisories; it cannot evaluate computed styles or contrast. No live runtime or
+lifecycle operation was performed. Run the guarded fixture and compare its
+screenshots with the prior Firefox images on a permitted workstation before
+claiming visual acceptance or release readiness.
+
+## Complete premium desktop implementation — 2026-11-03
+
+117 Python tests and all three JavaScript suites pass; compilation, JS/shell syntax
+and whitespace checks pass. Inspector group/provenance assertions are included.
+The browser runner now captures all seven pages, both themes and five widths
+(1440/1024/768/390/320), plus search, empty, details and confirmation at each size.
+It also checks the inspector evidence-region keyboard focus path. These browser
+assertions have NOT executed: both commands exit 2 because Playwright is absent;
+fresh loopback, system-browser, cached ARM64 browser and connector attempts are
+blocked. No screenshots exist for this pass. Exact commands, evidence boundaries
+and remaining accessibility gates are in
+[FINAL_VISUAL_ACCEPTANCE.md](docs/design/FINAL_VISUAL_ACCEPTANCE.md).

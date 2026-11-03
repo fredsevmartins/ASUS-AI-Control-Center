@@ -59,3 +59,48 @@
 - Exclude Linux guest counters already included in CPU user time.
 - Add mocked state, rollback and API regression coverage and a frontend navigation regression check.
 - Document architecture, safety constraints, test coverage and prioritized work.
+
+## 2026-11-03 — Desktop launcher integration
+
+- Added a user-session Chromium app-window launcher with Firefox normal-window
+  fallback, bounded startup, private control socket, duplicate-owner locking,
+  repeated-click coalescing, backend reuse and explicit Stop action.
+- Added single-use expiring browser handoff tickets without placing reusable
+  session tokens in browser arguments or persistent launcher configuration.
+- Added a dedicated SVG icon and checkout-only user desktop/menu installer with
+  timestamped backups; stable v5 files and the legacy installer are unchanged.
+- Added mocked launcher lifecycle/security regressions and desktop documentation.
+- Installation and actual graphical acceptance remain blocked by workspace write,
+  loopback, Snap and browser-tooling restrictions; no claim of hidden chrome or
+  release readiness. Refresh requires reopening from the icon.
+
+## 2026-11-03 — Professional desktop frontend composition
+
+- Replaced equal-weight overview cards with integrated memory instrumentation and
+  compact secondary telemetry; tightened navigation and application chrome.
+- Replaced model card grids with persistent selection and a single inspector,
+  retaining evidence, details and existing protected actions.
+- Added aligned registered/NAS inventory presentation and component view labeling;
+  changed workspaces to disclosures, Activity to log rows and Settings to groups.
+- Refined solid light/dark surfaces and responsive desktop/mobile composition.
+- Extended mocked frontend and browser-fixture assertions. Rendered acceptance
+  remains blocked; backend and previous desktop launcher work are unchanged.
+
+### Premium glass UI finalization — 2026-11-03
+
+- Added restrained rounded, layered surfaces and utilization-colored gauges with neutral unavailable states.
+- Replaced the model inspector with compact responsive cards and a separate metadata details dialog. Existing lifecycle confirmations remain in place.
+- Socket-free Python and JavaScript suites pass; browser and standalone validation remain blocked as documented in TESTING.md.
+
+## Complete premium desktop presentation — 2026-11-03
+
+- Unified environmental background, translucent navigation and rounded materials
+  across all seven pages, with distinct light/dark tokens.
+- Refined semicircular scale ticks without changing telemetry or utilization bands.
+- Compact model cards with stronger name hierarchy, aligned facts/action footers
+  and focus state; grouped metadata inspector with keyboard-scrollable evidence.
+- Refined NAS records, performance panels, workspace disclosures, activity and
+  grouped preferences; preserved operational and authentication contracts.
+- Expanded guarded screenshot matrix; source-review cascade defects corrected.
+- 117 Python tests and three JS suites pass. Visual acceptance remains BLOCKED;
+  classification IMPLEMENTED_NOT_VISUALLY_VALIDATED. No screenshots fabricated.

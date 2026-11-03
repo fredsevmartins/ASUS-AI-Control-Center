@@ -227,3 +227,15 @@ for (const savedTheme of ['light', 'dark']) {
   assert.equal(stored.get('ai-manager-theme'), savedTheme === 'dark' ? 'light' : 'dark');
 }
 console.log('Appearance preference and accessible toggle state regressions passed');
+
+// Utilization thresholds remain visual indicators, including exact boundaries.
+{
+  const fs = require('fs'), vm = require('vm'), assert = require('assert');
+  const src = fs.readFileSync('web/app.js', 'utf8');
+  const code = src.slice(src.indexOf('function gaugePercent('), src.indexOf('function memoryGaugeReading(')) + src.slice(src.indexOf('function gaugeBand('), src.indexOf('function gaugeMarkup('));
+  const ctx = {}; vm.createContext(ctx); vm.runInContext(code, ctx);
+  for (const [value, band] of [[null,'unavailable'],[-1,'unavailable'],[0,'low'],[59.9,'low'],[60,'medium'],[84.9,'medium'],[85,'high'],[100,'high'],[101,'unavailable']]) assert.equal(ctx.gaugeBand(value), band);
+  const css = fs.readFileSync('web/style.css','utf8');
+  assert(css.includes('data-band=low') && css.includes('data-band=medium') && css.includes('data-band=high') && css.includes('body.dark'));
+  assert(css.includes('repeat(3,minmax(0,1fr))') && css.includes('repeat(2,minmax(0,1fr))'));
+}

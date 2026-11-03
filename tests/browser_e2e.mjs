@@ -54,18 +54,92 @@ try {
     await page.locator(`.nav-item[data-page="${section}"]`).click();
     assert.equal(await page.locator('#'+section).isVisible(),true);
   }
+  // Complete visual matrix before simulated lifecycle changes alter the fixture.
+  await mkdir(artifactDir,{recursive:true});
+  for (const theme of ['light','dark']) {
+    if ((await page.locator('body').getAttribute('class')||'').includes('dark') !== (theme==='dark')) await page.locator('#theme-btn').click();
+    for (const width of [1440,1024,768,390,320]) {
+      await page.setViewportSize({width,height:1000});
+      for (const section of ['dashboard','models','library','performance','workspaces','activity','settings']) {
+        await page.locator(`.nav-item[data-page="${section}"]`).click();
+        assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${section} overflow at ${theme}/${width}`);
+        await page.screenshot({path:path.join(artifactDir,`fixture-${section}-${theme}-${width}.png`),fullPage:true});
+      }
+      await page.locator('.nav-item[data-page="models"]').click();
+      await page.locator('#model-search').fill('qwen');
+      await page.screenshot({path:path.join(artifactDir,`fixture-search-${theme}-${width}.png`),fullPage:true});
+      await page.locator('#model-search').fill('no matching model');
+      await page.screenshot({path:path.join(artifactDir,`fixture-empty-${theme}-${width}.png`),fullPage:true});
+      await page.locator('#model-search').fill('');
+      await page.locator('[data-details-key="qwen3:8b"]').click();
+      await page.waitForFunction(()=>document.querySelector('#details-content')?.textContent.includes('Representative'));
+      await page.screenshot({path:path.join(artifactDir,`fixture-details-${theme}-${width}.png`),fullPage:true});
+      await page.locator('#details-close').press('Escape');
+      await page.locator('.model-action[data-id="qwen3:8b"][data-action="switch"]').click();
+      await page.screenshot({path:path.join(artifactDir,`fixture-confirmation-${theme}-${width}.png`),fullPage:true});
+      await page.locator('#modal-cancel').click();
+    }
+  }
+  checks.push('Seven-page screenshot matrix, search, empty, details and confirmation: both themes at five widths');
+  await page.setViewportSize({width:1440,height:1000});
+  await page.locator('.nav-item[data-page="settings"]').click();
   assert.equal(await page.locator('#workspace-grid .workspace-card').count(),6);
   await page.locator('#settings-theme').click();
   checks.push('All seven sections, fixture library/activity and informational workspaces');
+  await page.locator('.nav-item[data-page="dashboard"]').click();
+  for (const theme of ['light','dark']) {
+    if ((await page.locator('body').getAttribute('class')||'').includes('dark') !== (theme==='dark')) await page.locator('#theme-btn').click();
+    for (const width of [1440,1024,768,390,320]) {
+      await page.setViewportSize({width,height:1000});
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`Overview overflow at ${theme}/${width}`);
+      for (const instrument of ['memory','gpu','cpu']) assert(await page.locator(`#overview-${instrument}-gauge svg`).isVisible());
+      assert(await page.locator('#loaded-main').isVisible());
+      assert.equal(await page.locator('#memory-chart').evaluate(el=>el.getBoundingClientRect().height),184);
+      for (const selector of ['.overview-instruments','.overview-history','.overview-runtime','.overview-storage','.overview-shortcuts .panel']) {
+        const surface=await page.locator('#dashboard '+selector).evaluate(el=>{const s=getComputedStyle(el);return {radius:parseFloat(s.borderTopLeftRadius),shadow:s.boxShadow,background:s.backgroundColor,border:s.borderTopStyle};});
+        assert(surface.radius>=16 && surface.shadow!=='none' && surface.background!=='rgba(0, 0, 0, 0)' && surface.border!=='none',`${theme}/${width}: ${selector} lacks surface depth`);
+      }
+    }
+    await page.setViewportSize({width:1440,height:1000});
+    await mkdir(artifactDir,{recursive:true});
+    await page.screenshot({path:path.join(artifactDir,`fixture-overview-${theme}.png`),fullPage:true});
+  }
+  await page.locator('#memory-chart').focus();
+  await page.locator('#memory-chart').press('End');
+  assert((await page.locator('#overview-timeline-selection').textContent()).includes('GiB'));
+  assert.equal(await page.locator('#runtime-summary .status-line').count(),2);
+  assert.equal(await page.locator('#storage-summary progress').count(),1);
+  for (const destination of ['models','library','performance','activity']) {
+    await page.locator(`#dashboard .quick-grid [data-link="${destination}"]`).click();
+    assert(await page.locator('#'+destination).isVisible());
+    await page.locator('.nav-item[data-page="dashboard"]').click();
+  }
+  for (const destination of ['models','library']) {
+    await page.locator(`#dashboard .overview-records [data-link="${destination}"]`).click();
+    assert(await page.locator('#'+destination).isVisible());
+    await page.locator('.nav-item[data-page="dashboard"]').click();
+  }
+  await page.setViewportSize({width:1440,height:1000});
+  checks.push('Overview light/dark responsive gauges, compact history keyboard selection, storage and all six navigation links');
   await page.locator('.nav-item[data-page="models"]').click();
   await page.locator('#model-search').fill('does not exist');
   assert.equal(await page.locator('.empty-state').isVisible(),true);
   await page.locator('#model-search').fill('');
   await page.locator('[data-filter="loaded"]').click();
-  assert.equal(await page.locator('.model-card').count(),2);
+  assert.equal(await page.locator('#model-cards .model-card').count(),2);
   await page.locator('[data-filter="all"]').click();
-  await page.locator('.model-card details').first().locator('summary').click();
-  await page.waitForFunction(()=>document.querySelector('.detail-content')?.textContent.includes('Representative'));
+  assert.equal(await page.locator('.model-list-row').count(),0);
+  const details=page.locator('[data-details-key="qwen3:8b"]');
+  await details.click();
+  assert(await page.locator('#details-modal').isVisible());
+  await page.waitForFunction(()=>document.querySelector('#details-content')?.textContent.includes('Representative'));
+  await page.screenshot({path:path.join(artifactDir,'fixture-model-details.png'),fullPage:true});
+  await page.locator('#details-close').press('Tab');
+  assert(await page.locator('#details-content').evaluate(el=>el===document.activeElement));
+  await page.locator('#details-content').press('Shift+Tab');
+  assert(await page.locator('#details-close').evaluate(el=>el===document.activeElement));
+  await page.locator('#details-close').press('Escape');
+  assert(await details.evaluate(el=>el===document.activeElement));
   checks.push('Search, filters, empty state and metadata provenance/details');
 
   await mkdir(artifactDir,{recursive:true});
@@ -74,6 +148,8 @@ try {
     for(const width of [1440,390,320]){
       await page.setViewportSize({width,height:1000});
       assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),`Horizontal overflow at ${theme}/${width}`);
+      const columns=await page.locator('#model-cards').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
+      assert.equal(columns,width===1440?3:1,`Model grid columns at ${theme}/${width}`);
     }
     await page.setViewportSize({width:1440,height:1000});
     await page.screenshot({path:path.join(artifactDir,`fixture-models-${theme}.png`),fullPage:true});
@@ -135,6 +211,7 @@ try {
   await offline.waitForFunction(()=>document.querySelector('#system-state')?.textContent==='Connection unavailable');
   await offline.locator('.nav-item[data-page="models"]').click();
   assert.equal(await offline.locator('.model-action').count(),0);
+  await offline.screenshot({path:path.join(artifactDir,'fixture-unavailable.png'),fullPage:true});
   await offline.close();
   checks.push('Connection failure disables model actions');
   assert.deepEqual(external,[]);

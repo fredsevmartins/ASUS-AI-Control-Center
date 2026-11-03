@@ -5,7 +5,7 @@ let modelFilter='all', connectionHealthy=false, submitting=false, modalTrigger=n
 const TOKEN=document.querySelector('meta[name="session-token"]').content;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 let state=null, library=null, activePage='dashboard', libraryView='groups', modalData=null, lastOperation='';
-const pages={dashboard:['Overview','Workstation Overview','Hardware, runtimes and storage in one place.'],models:['Model Manager','Model Manager','Manage local AI models with clear, deliberate actions.'],library:['Model Library','Model Library','Discover and inspect model assets on your NAS.'],performance:['Performance','Performance Center','An at-a-glance view of your local hardware.'],workspaces:['Workspaces','AI Workspaces','Purpose-built presets for your workflows.'],activity:['Activity','Activity','Inspect local operations and recovery attempts.'],settings:['Settings','Settings','Personalize your local control center.']};
+const pages={dashboard:['Overview','Workstation','Memory, compute and runtime observations.'],models:['Model Manager','Model Manager','Manage local AI models with clear, deliberate actions.'],library:['Model Library','Model Library','Discover and inspect model assets on your NAS.'],performance:['Performance','Performance','System instrumentation · Current session'],workspaces:['Workspaces','Workspaces','Planning profiles for local AI workflows.'],activity:['Activity','Activity','Inspect local operations and recovery attempts.'],settings:['Settings','Settings','Personalize your local control center.']};
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function gib(n){return Number.isFinite(n)?(n/1073741824).toFixed(1)+' GiB':'—';}
 function pct(n,total){return total?Math.min(100,Math.max(0,100*n/total)):0;}
@@ -37,8 +37,9 @@ function memoryGaugeReading(memory) {
   if (!memory || !Number.isFinite(memory.total) || !Number.isFinite(memory.used) || memory.total <= 0 || memory.used < 0 || memory.used > memory.total) return null;
   return {percent: memory.used / memory.total * 100, used: memory.used, total: memory.total};
 }
+function gaugeBand(value) { return gaugePercent(value) === null ? 'unavailable' : value < 60 ? 'low' : value < 85 ? 'medium' : 'high'; }
 function gaugeMarkup(id, title) {
-  return `<div class="gauge-heading"><h2>${title}</h2><span>TELEMETRY</span></div><div class="gauge-visual"><svg viewBox="0 0 240 140" aria-hidden="true" focusable="false"><defs><linearGradient id="${id}-gradient" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#5275df"/><stop offset="1" stop-color="#8964e8"/></linearGradient></defs><path class="gauge-track" d="M 24 118 A 96 96 0 0 1 216 118" pathLength="100"/><path class="gauge-arc" d="M 24 118 A 96 96 0 0 1 216 118" pathLength="100" stroke="url(#${id}-gradient)" stroke-dasharray="100 100"/></svg><div class="gauge-center"><strong class="gauge-value">—</strong><span class="gauge-unit"></span><small class="gauge-percent">Waiting for telemetry</small></div></div><div class="gauge-scale" aria-hidden="true"><span>0%</span><span>50%</span><span>100%</span></div><div class="gauge-detail">Telemetry unavailable</div><span class="gauge-accessible sr-only" role="status"></span>`;
+  return `<div class="gauge-heading"><h2>${title}</h2><span aria-hidden="true"></span></div><div class="gauge-visual"><svg viewBox="0 0 240 140" aria-hidden="true" focusable="false"><path class="gauge-ticks" d="M 12 118 h 5 M 26 65 l 5 3 M 65 26 l 3 5 M 120 10 v 5 M 175 26 l -3 5 M 214 65 l -5 3 M 228 118 h -5"/><path class="gauge-track" d="M 24 118 A 96 96 0 0 1 216 118" pathLength="100"/><path class="gauge-arc" d="M 24 118 A 96 96 0 0 1 216 118" pathLength="100" stroke="currentColor" stroke-dasharray="100 100"/></svg><div class="gauge-center"><strong class="gauge-value">—</strong><span class="gauge-unit"></span><small class="gauge-percent">Waiting for telemetry</small></div></div><div class="gauge-scale" aria-hidden="true"><span>0%</span><span>50%</span><span>100%</span></div><div class="gauge-detail">Telemetry unavailable</div><span class="gauge-accessible sr-only" role="status"></span>`;
 }
 function initGauges() {
   for (const [id,title] of [['overview-memory-gauge','Unified Memory'],['overview-gpu-gauge','GPU Utilization'],['overview-cpu-gauge','CPU Utilization'],['performance-memory-gauge','Unified Memory'],['performance-gpu-gauge','GPU Utilization'],['performance-cpu-gauge','CPU Utilization']]) {
@@ -53,6 +54,7 @@ function updateGauge(id, title, percent, value, unit, detail) {
   card.querySelector('.gauge-percent').textContent = valid ? `${percent.toFixed(1)}% ${title === 'Unified Memory' ? 'used' : 'utilization'}` : 'Unavailable';
   card.querySelector('.gauge-detail').textContent = detail || 'Telemetry unavailable';
   card.querySelector('.gauge-accessible').textContent = valid ? `${title}: ${value} ${unit}, ${percent.toFixed(1)} percent. ${detail}` : `${title}: telemetry unavailable. ${detail || ''}`;
+  card.dataset.band = gaugeBand(percent);
   card.classList.toggle('gauge-animated', valid && card.dataset.hasValue === 'true');
   arc.style.strokeDashoffset = String(100-(valid ? percent : 0));
   arc.style.visibility = valid && percent > 0 ? 'visible' : 'hidden';
@@ -76,6 +78,7 @@ initGauges();
 function renderStatus(){if(!state)return;const g=gpuValues(),loaded=state.models.filter(x=>x.loaded).length;renderGauges(state.memory,g,state.cpu);
 $('#loaded-main').textContent=loaded;$('#loaded-sub').textContent=`${state.models.length} registered models`;$('#runtime-summary').innerHTML=statusSummary();$('#storage-summary').innerHTML=storageRows();$('#system-state').textContent=state.operation.busy?`Running: ${state.operation.job}`:state.errors.length?'Some runtime checks unavailable':'Monitoring local system';$('#refresh-tag').textContent=`Updated ${new Date(state.time*1000).toLocaleTimeString()}`;$('#connection-dot').style.background=state.errors.length?'#db9d36':'#39cea2';renderModels();renderPerformance();drawCharts();
 const current=JSON.stringify(state.operation);if(current!==lastOperation){if(lastOperation&&state.operation.error)toast('Operation failed: '+state.operation.error,9000);else if(lastOperation&&!state.operation.busy&&state.operation.message!=='Ready')toast(state.operation.message,7000);lastOperation=current;}}
+let selectedModelKey=null, renderedModelKey=null;
 function modelBlocked(model) {
   return !connectionHealthy || submitting || state.operation.busy || model.uncertain || ['starting','stopping','unknown','busy'].includes(model.state) || (model.state==='error'&&!model.loaded);
 }
@@ -99,7 +102,8 @@ function detailHTML(m){
   const meta=m.metadata||{};
   const fields=[['Model name','name'],['Runtime','runtime'],['Family','family'],['Parameters','parameters'],['Architecture','architecture'],['Quantization','quantization'],['Weight format','format'],['Stored size','weight_bytes'],['Storage / model identifier','storage'],['Maximum context','context_window'],['Active / configured context','configured_context'],['Runtime allocation','loaded_bytes'],['Compatibility','compatibility']];
   const config=Object.entries(m.runtime_config||{}).map(([k,v])=>`<div><dt>${escapeHTML(k)}</dt><dd>${escapeHTML(v??'Unavailable')}</dd></div>`).join('');
-  return `<dl class="metadata-list">${fields.map(([label,key])=>evidenceHTML(label,key,meta[key])).join('')}</dl>${m.loading?'<p role="status">Retrieving model metadata…</p>':''}${m.metadata_error?`<p class="card-warning">Metadata discovery: ${escapeHTML(m.metadata_error)}</p>`:''}<h4>Runtime configuration</h4><dl class="metadata-list">${config||'<dt>Unavailable</dt>'}</dl><h4>Resource requirement</h4><p>${escapeHTML(m.requirement?.kind||'Unknown requirement')} · ${gib(m.requirement?.bytes)}</p><p>${escapeHTML(m.requirement?.method||'Open details to retrieve available runtime metadata.')}</p><h4>Operational status</h4><p>${escapeHTML(m.health?.readiness||'Not verified')} · State: ${escapeHTML(modelState(m))}</p><p>Evidence: ${escapeHTML(m.health?.source||'Runtime observations; inference execution is not probed')}</p><p>Last successful check: ${escapeHTML(m.health?.last_success||'Unavailable')}</p>${m.health?.failure_reason?`<p class="card-warning">${escapeHTML(m.health.failure_reason)}</p>`:''}<h4>Recent operations</h4>${(m.recent_operations||[]).map(e=>`<p>${escapeHTML(e.time)} · ${escapeHTML(e.operation)} · ${escapeHTML(e.stage)}${e.detail?' · '+escapeHTML(e.detail):''}</p>`).join('')||'<p>No recorded operations in the recent history.</p>'}`;
+  const groups=[['Model identity',fields.slice(0,7)],['Storage & context',fields.slice(7)]];
+  return `${groups.map(([title,items])=>`<h4>${title}</h4><dl class="metadata-list">${items.map(([label,key])=>evidenceHTML(label,key,meta[key])).join('')}</dl>`).join('')}${m.loading?'<p role="status">Retrieving model metadata…</p>':''}${m.metadata_error?`<p class="card-warning">Metadata discovery: ${escapeHTML(m.metadata_error)}</p>`:''}<h4>Runtime configuration</h4><dl class="metadata-list">${config||'<dt>Unavailable</dt>'}</dl><h4>Resource requirement</h4><p>${escapeHTML(m.requirement?.kind||'Unknown requirement')} · ${gib(m.requirement?.bytes)}</p><p>${escapeHTML(m.requirement?.method||'Open details to retrieve available runtime metadata.')}</p><h4>Operational status</h4><p>${escapeHTML(m.health?.readiness||'Not verified')} · State: ${escapeHTML(modelState(m))}</p><p>Evidence: ${escapeHTML(m.health?.source||'Runtime observations; inference execution is not probed')}</p><p>Last successful check: ${escapeHTML(m.health?.last_success||'Unavailable')}</p>${m.health?.failure_reason?`<p class="card-warning">${escapeHTML(m.health.failure_reason)}</p>`:''}<h4>Recent operations</h4>${(m.recent_operations||[]).map(e=>`<p>${escapeHTML(e.time)} · ${escapeHTML(e.operation)} · ${escapeHTML(e.stage)}${e.detail?' · '+escapeHTML(e.detail):''}</p>`).join('')||'<p>No recorded operations in the recent history.</p>'}`;
 }
 function currentMetadata(model,cached){
   const meta={...(cached||{}),...(model.metadata||{})};
@@ -114,7 +118,7 @@ function modelCardHTML(m,expanded=false){
   const facts=[['Parameters','parameters'],['Quantization','quantization'],['Context window','context_window']];
   const status=modelState(m),disabled=modelBlocked(m),canAct=!['starting','stopping','unknown','busy'].includes(status)&&(status!=='error'||m.loaded);
   const processFacts=m.runtime==='SGLang'?`<div><dt>Service process</dt><dd>${escapeHTML(m.health?.service_status||'unknown')}</dd></div><div><dt>Container process</dt><dd>${escapeHTML(m.health?.container_status||'unknown')}</dd></div>`:'';
-  return `<article class="model-card ${m.loaded?'is-loaded':''}"><div class="model-header"><span class="pill ${m.uncertain||status==='error'?'attention':m.loaded?'':'off'}">${escapeHTML(status.charAt(0).toUpperCase()+status.slice(1))}</span><span class="runtime-label">${escapeHTML(m.runtime)}</span></div><h3>${escapeHTML(m.name)}</h3><p>${m.embedding?(m.capabilities?.value?.includes('embedding')?'Embedding model':'Embedding model (inferred from name)'):'Registered inference model'}</p><dl class="model-facts">${facts.map(([l,k])=>evidenceHTML(l,k,meta[k])).join('')}<div><dt>Installation</dt><dd>${m.installed===true?'Registered':'Unverified'}</dd></div><div><dt>Runtime memory</dt><dd>${escapeHTML(m.memory||'Unavailable')}</dd></div>${processFacts}<div><dt>Readiness</dt><dd>${escapeHTML(m.health?.readiness||'Not verified')}</dd></div><div><dt>Last health check</dt><dd>${escapeHTML(m.health?.checked_at?new Date(m.health.checked_at).toLocaleTimeString():'Unavailable')}</dd></div><div><dt>Storage / identifier</dt><dd>${escapeHTML(metadataValue('storage',meta.storage))}</dd></div></dl>${m.health?.failure_reason?`<p class="card-warning">${escapeHTML(m.health.failure_reason)}</p>`:''}<details data-key="${escapeHTML(m.key)}" ${expanded?'open':''}><summary>Model details</summary><div class="detail-content">${detailHTML({...m,...detail,health:m.health,state:m.state,metadata:meta,requirement:m.requirement||detail?.requirement})}</div></details><div class="model-actions">${canAct?`<button class="${m.loaded?'secondary':'primary'} small model-action" data-id="${escapeHTML(m.key)}" data-action="${m.loaded?'unload':'load'}" ${disabled?'disabled':''}>${m.loaded?'Unload':'Load'} model</button>${!m.loaded?`<button class="secondary small model-action" data-id="${escapeHTML(m.key)}" data-action="switch" ${disabled?'disabled':''}>Switch to…</button>`:''}`:'<span class="card-warning">Refresh runtime status before operating.</span>'}</div></article>`;
+  return `<article class="model-card"><div class="model-header"><span class="runtime-label">${escapeHTML(m.runtime)}</span><span class="pill ${m.uncertain||status==='error'?'attention':m.loaded?'':'off'}">${escapeHTML(status.charAt(0).toUpperCase()+status.slice(1))}</span></div><h3>${escapeHTML(m.name)}</h3><dl class="compact-facts"><div><dt>Parameters</dt><dd>${escapeHTML(metadataValue('parameters',meta.parameters))}</dd></div><div><dt>Quantization</dt><dd>${escapeHTML(metadataValue('quantization',meta.quantization))}</dd></div><div><dt>Runtime memory</dt><dd>${escapeHTML(m.memory||'Unavailable')}</dd></div></dl><div class="model-actions">${canAct?`<button class="${m.loaded?'secondary':'primary'} small model-action" data-id="${escapeHTML(m.key)}" data-action="${m.loaded?'unload':'load'}" ${disabled?'disabled':''}>${m.loaded?'Unload':'Load'}</button>${!m.loaded?`<button class="secondary small model-action" data-id="${escapeHTML(m.key)}" data-action="switch" ${disabled?'disabled':''}>Switch</button>`:''}`:'<span class="card-warning">Refresh runtime status before operating.</span>'}<button class="secondary small model-details-button" data-details-key="${escapeHTML(m.key)}">Details</button></div></article>`;
 }
 async function loadDetails(key){
   const cached=modelDetails.get(key);
@@ -124,12 +128,29 @@ async function loadDetails(key){
   catch(e){modelDetails.set(key,{metadata_error:e.message,_fetchedAt:Date.now()});}
   renderModels();
 }
+function modelListHTML(models, selected) {
+  return models.map(m=>`<button class="model-list-row ${m.key===selected?'selected':''}" data-model-key="${escapeHTML(m.key)}" aria-pressed="${m.key===selected}" aria-controls="model-inspector"><span class="model-list-name">${escapeHTML(m.name)}</span><span class="model-list-runtime">${escapeHTML(m.runtime)}</span><span class="model-list-state">${escapeHTML(modelState(m))}</span><span class="model-list-memory">${escapeHTML(m.memory||'Unavailable')}</span></button>`).join('');
+}
+function selectModel(key) {
+  selectedModelKey=key;
+  loadDetails(key);
+  renderModels();
+}
+function renderRegisteredLibrary() {
+  const focusedRegistration=document.activeElement?.dataset?.registeredKey;
+  $('#registered-library').innerHTML=(state?.models||[]).map(m=>`<button class="registered-row" data-registered-key="${escapeHTML(m.key)}"><strong>${escapeHTML(m.name)}</strong><span>${escapeHTML(m.runtime)}</span><span>${escapeHTML(modelState(m))}</span><span>Inspect model →</span></button>`).join('')||'<p>No registered models observed.</p>';
+  $$('[data-registered-key]').forEach(b=>b.onclick=()=>{modelFilter='all';$('#model-search').value='';$$('[data-filter]').forEach(x=>{x.classList.toggle('selected',x.dataset.filter==='all');x.setAttribute('aria-pressed',String(x.dataset.filter==='all'));});selectModel(b.dataset.registeredKey);setPage('models');$$('.model-details-button').find(row=>row.dataset.detailsKey===b.dataset.registeredKey)?.focus();});
+  if(focusedRegistration)$$('[data-registered-key]').find(b=>b.dataset.registeredKey===focusedRegistration)?.focus();
+}
 function renderModels(){
   if(!state){$('#operation-status').innerHTML='<strong>Waiting for workstation data</strong><span>If the connection is unavailable, use Refresh to reconnect. Model actions remain disabled.</span>';return;}
   const focus=document.activeElement;
   const focusKey=focus?.dataset.id, focusAction=focus?.dataset.action;
   const focusedDetail=focus?.tagName==='SUMMARY'?focus.parentElement.dataset.key:null;
   const expanded=new Set($$('#model-cards details[open]').map(e=>e.dataset.key));
+  const focusedRow=focus?.dataset.modelKey;
+  const listScroll=$('#model-list')?.scrollTop||0;
+  const inspectorScroll=$('#model-inspector')?.scrollTop||0;
   const models=matchingModels(state.models,$('#model-search').value||'',modelFilter);
   $('#model-count').textContent=`${models.length} of ${state.models.length}`;
   const mem=memoryGaugeReading(state.memory);
@@ -137,14 +158,34 @@ function renderModels(){
   const op={...state.operation,error:actionError||state.operation.error};
   $('#operation-status').classList.toggle('has-error',!!op.error||!connectionHealthy);
   $('#operation-status').innerHTML=!connectionHealthy?'<strong>Connection unavailable — model actions paused</strong><span>Use Refresh to reconnect before taking action.</span>':op.busy?`<strong>${escapeHTML(phaseLabels[op.phase]||'Operation in progress')} · ${escapeHTML(op.job||'')}</strong><progress aria-label="Operation in progress"></progress><span>Runtime evidence is being checked. You can refresh this page while the operation continues.</span>`:op.error?`<strong>Operation failed</strong><span>${escapeHTML(op.error)}</span><span>Review Activity and refresh runtime state before retrying.</span>`:`<strong>${escapeHTML(op.message||'Ready')}</strong><span>${DEMO?'Simulation only':'Runtime monitoring connected'} · Loaded and inference-ready states are distinct</span>`;
-  $('#model-cards').innerHTML=models.length?models.map(m=>modelCardHTML(m,expanded.has(m.key))).join(''):'<div class="empty-state"><h3>No models found</h3><p>Try another search or filter. If the inventory is empty, refresh and inspect runtime status in Overview.</p></div>';
+  $('#model-cards').innerHTML=models.length?models.map(m=>modelCardHTML(m)).join(''):'<div class="empty-state"><h3>No models found</h3><p>Try another search or filter.</p></div>';
+  renderRegisteredLibrary();
   $$('.model-action').forEach(b=>b.onclick=()=>showModal(b.dataset.action,b.dataset.id));
-  $$('#model-cards details').forEach(d=>d.ontoggle=()=>{if(d.open)loadDetails(d.dataset.key);});
-  if(focusedDetail)$$('#model-cards details').find(d=>d.dataset.key===focusedDetail)?.querySelector('summary').focus();
-  if(focusKey)$$('.model-action').find(b=>b.dataset.id===focusKey&&b.dataset.action===focusAction)?.focus();
+  $$('.model-details-button').forEach(b=>b.onclick=()=>openModelDetails(b.dataset.detailsKey));
+  if(focusKey)$$('.model-action').find(b=>b.dataset.id===focusKey&&b.dataset.action===focusAction&&!b.disabled)?.focus();
+  if(focus?.dataset.detailsKey)$$('.model-details-button').find(b=>b.dataset.detailsKey===focus.dataset.detailsKey)?.focus();
 }
 $$('[data-filter]').forEach(b=>b.onclick=()=>{modelFilter=b.dataset.filter;$$('[data-filter]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b));});renderModels();});
 $('#model-search').oninput=renderModels;
+let detailsKey=null;
+function renderDetailsDialog(){
+  const m=state?.models.find(x=>x.key===detailsKey); if(!m)return;
+  const detail=modelDetails.get(m.key), meta=currentMetadata(m,detail?.metadata);
+  $('#details-title').textContent=m.name;
+  $('#details-content').innerHTML=`<p>${escapeHTML(m.runtime)} · ${escapeHTML(modelState(m))} · Installation: ${m.installed===true?'Registered':m.installed===false?'Not registered':'Unverified'}</p>${m.runtime==='SGLang'?`<p>Service: ${escapeHTML(m.health?.service_status||'unknown')} · Container: ${escapeHTML(m.health?.container_status||'unknown')}</p>`:''}${detailHTML({...m,...detail,health:m.health,state:m.state,metadata:meta,requirement:m.requirement||detail?.requirement})}`;
+}
+function openModelDetails(key){
+  detailsKey=key; $('#details-modal').classList.remove('modal-hidden'); $('#app').inert=true;
+  renderDetailsDialog(); $('#details-close').focus();
+  loadDetails(key).then(()=>{if(detailsKey===key)renderDetailsDialog();});
+}
+function closeModelDetails(){
+  const key=detailsKey; detailsKey=null; $('#details-modal').classList.add('modal-hidden'); $('#app').inert=false;
+  ($$('.model-details-button').find(b=>b.dataset.detailsKey===key)||$('#model-search')).focus();
+}
+$('#details-close').onclick=closeModelDetails;
+$('#details-backdrop').onclick=closeModelDetails;
+$('#details-modal').addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeModelDetails();}else if(e.key==='Tab'){e.preventDefault();(document.activeElement===$('#details-close')?$('#details-content'):$('#details-close')).focus();}});
 function planHTML(plan){
   return `<dl class="plan-facts"><div><dt>Available memory</dt><dd>${gib(plan.available_bytes)}</dd></div><div><dt>Target requirement</dt><dd>${gib(plan.requirement?.bytes)} · ${escapeHTML(plan.requirement?.kind||'Unknown requirement')}</dd></div><div><dt>System reserve</dt><dd>${gib(plan.reserve_bytes)}</dd></div></dl>${plan.blocked?`<p class="card-warning">${escapeHTML(plan.reasons.join(' '))}</p>`:''}<p>${escapeHTML(plan.expected_outcome)}</p><details><summary>Memory uncertainty and operational risks</summary><p>${escapeHTML(plan.requirement?.method||'Requirement unavailable')}</p><p>Currently loaded: ${escapeHTML(plan.loaded_models.map(m=>m.name).join(', ')||'None observed')}</p><p>Authorized stops: ${escapeHTML(plan.stops.map(key=>plan.loaded_models.find(m=>m.key===key)?.name||key).join(', ')||'None')}</p><p>Estimated allocation released: ${gib(plan.estimated_release_bytes)}. Projected available: ${gib(plan.projected_available_bytes)}. Actual reclaimed memory may differ.</p>${plan.warnings.map(w=>`<p>${escapeHTML(w)}</p>`).join('')}</details>`;
 }
@@ -281,7 +322,7 @@ function renderPerformance(){if(!state)return;const g=gpuValues();$('#hardware-d
 async function scanNAS(){try{$('#nas-summary').textContent='Scanning NAS metadata…';library=await request('/api/library');renderLibrary();}catch(e){$('#nas-summary').textContent='NAS scan failed: '+e.message;}}
 function renderLibrary(){if(!library)return;const items=libraryView==='groups'?library.groups:library.files;$('#nas-summary').textContent=`${library.files.length} asset files · ${library.groups.length} collections · ${library.status}`;$('#library-content').innerHTML=items.length?items.map(x=>libraryView==='groups'?`<div class="library-item"><em>${escapeHTML(x.category)}</em><strong>${escapeHTML(x.name)}</strong><small>${x.files} asset file(s) · ${gib(x.bytes)} stored</small><small>Formats: ${escapeHTML(x.formats.join(', '))}</small><small>${escapeHTML(x.classification||'Asset group')} · No executable adapter</small>${x.compatibility_hint?`<small>${escapeHTML(x.compatibility_hint.value)} · ${escapeHTML(x.compatibility_hint.confidence)}</small>`:''}${(x.missing_components||[]).map(reason=>`<small>${escapeHTML(reason)}</small>`).join('')}</div>`:`<div class="library-item"><em>${escapeHTML(x.kind||x.format)}</em><strong>${escapeHTML(x.path)}</strong><small>${gib(x.size)} · Stored on NAS</small></div>`).join(''):'<p>No model weights were discovered in the scanned directories.</p>';}
 $('#scan-btn').onclick=scanNAS;$$('[data-library]').forEach(b=>b.onclick=()=>{$$('[data-library]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b));});libraryView=b.dataset.library;renderLibrary();});
-const presets=[['⌘','Coding','Software engineering and code assistance','Suggested: Qwen3-Coder-Next'],['⌁','Scientific Research','Scientific reasoning and analysis','Suggested: reasoning-oriented LLM'],['✦','General AI','Everyday reasoning and productivity','Suggested: Qwen 3.8 / Qwen3.5'],['◩','Image Studio','Creative image workflows','Requires a compatible image runtime'],['▤','Video Studio','Generation and post-production','Requires a compatible video workflow'],['◉','Voice Studio','Text-to-speech and audio','Requires a compatible audio runtime']];$('#workspace-grid').innerHTML=presets.map(([icon,title,desc,note])=>`<article class="workspace-card glass"><div class="symbol">${icon}</div><h2>${title}</h2><p>${desc}</p><small>${note}</small></article>`).join('');
+const presets=[['⌘','Coding','Software engineering and code assistance','Suggested: Qwen3-Coder-Next'],['⌁','Scientific Research','Scientific reasoning and analysis','Suggested: reasoning-oriented LLM'],['✦','General AI','Everyday reasoning and productivity','Suggested: Qwen 3.8 / Qwen3.5'],['◩','Image Studio','Creative image workflows','Requires a compatible image runtime'],['▤','Video Studio','Generation and post-production','Requires a compatible video workflow'],['◉','Voice Studio','Text-to-speech and audio','Requires a compatible audio runtime']];$('#workspace-grid').innerHTML=presets.map(([icon,title,desc,note])=>`<details class="workspace-card"><summary><span class="workspace-title">${title}</span><span class="workspace-description">${desc}</span></summary><small>${note}</small></details>`).join('');
 async function refreshActivity(){try{const events=await request('/api/activity');$('#activity-list').innerHTML=events.length?events.map(e=>`<div class="activity-entry"><i></i><div><strong>${escapeHTML(e.operation)} · ${escapeHTML(e.stage)}</strong><small>${escapeHTML(e.model||'System')} · ${escapeHTML(e.time||'')}</small>${e.detail?`<small>${escapeHTML(e.detail)}</small>`:''}</div></div>`).join(''):'<p>No operations recorded yet.</p>';}catch(e){$('#activity-list').textContent='Activity unavailable: '+e.message+'. Use Refresh to retry.';}}
 $('#activity-refresh').onclick=refreshActivity;
 const demoState={time:Date.now()/1000,memory:{total:128*1073741824,used:52*1073741824,available:76*1073741824},cpu:14,gpu:'GPU: 28% · 46°C',errors:[],storage:[{name:'Local storage',online:true,total:2000*1073741824,free:1350*1073741824}],history:Array.from({length:30},(_,i)=>({time:Date.now()/1000-(29-i)*5,memory:(48+Math.sin(i/4)*4)*1073741824})),operation:{busy:false,job:null,message:'Ready',error:null},models:[{key:'sglang',name:'Qwen 3.8-27B NVFP4',runtime:'SGLang',memory:'Not available',loaded:true},{key:'qwen3:8b',name:'qwen3:8b',runtime:'Ollama',memory:'—',loaded:false},{key:'nomic-embed-text',name:'nomic-embed-text',runtime:'Ollama',memory:'0.3 GiB',loaded:true,embedding:true},{key:'example-unavailable',name:'Example unavailable model',runtime:'SGLang',memory:'Not available',loaded:false,uncertain:true}]};

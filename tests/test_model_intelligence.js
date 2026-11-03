@@ -7,7 +7,7 @@ function element(id){if(!elements.has(id))elements.set(id,{innerHTML:'',textCont
 const stops=[{dataset:{id:'old'},checked:false}];
 let requests=[],pending=[],focusables=[];
 const context={console,Date,Map,Set,Number,JSON,Error,encodeURIComponent,URLSearchParams,
-  connectionHealthy:true,submitting:false,actionError:'',DEMO:false,modelFilter:'all',modelDetails:new Map(),
+  connectionHealthy:true,submitting:false,actionError:'',DEMO:false,modelFilter:'all',modelDetails:new Map(),selectedModelKey:null,renderedModelKey:null,
   state:{operation:{busy:false},models:[]},modalData:null,modalTrigger:null,
   document:{activeElement:{},},
   $:element,$$:selector=>selector==='.stop-checkbox:checked'?stops.filter(s=>s.checked):selector==='.stop-checkbox'?stops:selector.includes('#modal button')?focusables:[],
@@ -29,23 +29,19 @@ const injected=context.modelCardHTML({...fixture,key:malicious,name:malicious,ru
   health:{readiness:malicious,failure_reason:malicious}},true);
 assert(!injected.includes('<img')&&!injected.includes('<script>'),'metadata cannot introduce markup');
 assert(injected.includes('&quot;')&&injected.includes('&#39;'),'attribute quotes are escaped');
-assert(html.includes('8B')&&html.includes('Q4_K_M')&&html.includes('Verified from runtime'));
-assert(html.includes('Unknown requirement')&&html.includes('Last health check')&&html.includes('&lt;network failure&gt;'));
+assert(html.includes('8B')&&html.includes('Q4_K_M')&&html.includes('data-details-key'));
 assert(html.includes('data-action="load"')&&html.includes('data-action="switch"'));
 html=context.modelCardHTML({...fixture,state:'unknown',uncertain:true});assert(!html.includes('data-action='));
-html=context.modelCardHTML({...fixture,runtime:'SGLang',state:'unknown',uncertain:true,health:{service_status:'active',container_status:'running',readiness:'Unverified',failure_reason:'Authentication required at /get_model_info (HTTP 401); inference readiness is unverified'}});
-assert(html.includes('Service process')&&html.includes('>active<')&&html.includes('Container process')&&html.includes('>running<'));
-assert(html.includes('Unverified')&&html.includes('HTTP 401')&&!html.includes('Not ready')&&!html.includes('data-action='));
-html=context.modelCardHTML({...fixture,runtime:'SGLang',installed:true,state:'loaded',loaded:true,uncertain:false,health:{service_status:'active',container_status:'running',readiness:'Resident; inference not verified',failure_reason:'Non-generating /ready endpoint unsupported (HTTP 404); inference readiness is unverified'}});
-assert(html.includes('>Loaded<')&&html.includes('>active<')&&html.includes('>running<')&&html.includes('HTTP 404'));
-assert(html.includes('inference not verified')&&!html.includes('Not ready')&&html.includes('data-action="unload"'));
+html=context.modelCardHTML({...fixture,state:'loaded',loaded:true});assert(html.includes('>Loaded<')&&html.includes('data-action="unload"'));
+assert(context.detailHTML(fixture).includes('&lt;network failure&gt;'));
+for (const label of ['Model identity','Storage & context','Runtime configuration','Resource requirement','Operational status','Recent operations','Ollama /api/show']) assert(context.detailHTML(fixture).includes(label), `Inspector must retain ${label}`);
 const fresh={...fixture,installed:null,metadata:{loaded_bytes:{value:null,source:'Current residency',confidence:'Unavailable'},configured_context:{value:null,source:'Current residency',confidence:'Unavailable'},quantization:{value:'Q4',source:'Current tags',confidence:'Verified from runtime'}}};
 const cached={loaded_bytes:{value:9000000000,source:'Old process',confidence:'Verified from runtime'},configured_context:{value:32768,source:'Old process',confidence:'Verified from runtime'},quantization:{value:'Q8',source:'Old tags',confidence:'Verified from runtime'},architecture:{value:'qwen',source:'Show',confidence:'Verified from runtime'}};
 const merged=context.currentMetadata(fresh,cached);
 assert.strictEqual(merged.loaded_bytes.value,null,'old allocation cannot replace missing current residency');
 assert.strictEqual(merged.configured_context.value,null,'old active context cannot replace current unknown');
 assert.strictEqual(merged.quantization.value,'Q4');assert.strictEqual(merged.architecture.value,'qwen');
-html=context.modelCardHTML(fresh);assert(html.includes('Installation')&&html.includes('Unverified'));
+html=context.modelCardHTML(fresh);assert(html.includes('Unavailable'));
 html=context.modelCardHTML({...fixture,state:'error',loaded:true});assert(html.includes('data-action="unload"')&&!html.includes('data-action="load"'));
 assert.strictEqual(context.matchingModels(context.state.models,'ollama','all').length,1);
 assert.strictEqual(context.matchingModels(context.state.models,'','loaded').length,1);
@@ -101,5 +97,10 @@ const settle=()=>new Promise(setImmediate);
   const css=fs.readFileSync('web/style.css','utf8');
   assert(css.includes('body.dark')&&css.includes('.metadata-source')&&css.includes('.plan-facts'));
   assert(source.includes('#modal summary')&&source.includes("e.key==='Escape'"));
+  // Opening details performs metadata retrieval only, never a lifecycle request.
+  const before=requests.length; context.openModelDetails('target');
+  assert(element('#app').inert); assert.strictEqual(requests[before].path,'/api/model?key=target');
+  context.closeModelDetails(); assert(!element('#app').inert);
+  pending.shift().resolve({metadata:{}}); await settle();
   console.log('Model evidence, states, filtering, details, preflight races, explicit risk confirmation and error feedback passed');
 })().catch(e=>{console.error(e);process.exitCode=1;});
