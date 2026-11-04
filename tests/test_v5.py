@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 import sys
 import unittest
 from pathlib import Path
@@ -16,7 +17,7 @@ class BasicTests(unittest.TestCase):
     def test_local_token_entropy(self):
         self.assertGreaterEqual(len(server.TOKEN),32)
     def test_run_job_rejects_unregistered(self):
-        with patch.object(core,'snapshot',return_value=([],0,0,'',[],None,None)),patch.object(core,'log_event'):
+        with patch.object(core,'lifecycle_lock',return_value=nullcontext()),patch.object(core,'snapshot',return_value=([],0,0,'',[],None,None)),patch.object(core,'log_event'):
             with server.LOCK:
                 server.STATE.update(busy=True,job='test',error=None)
             server.run_job('load','not-a-model',[])

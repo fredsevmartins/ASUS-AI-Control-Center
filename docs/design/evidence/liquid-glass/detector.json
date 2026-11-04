@@ -1,0 +1,178 @@
+[
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 62,
+    "snippet": "font-size: 15px is off the DESIGN.md type ramp",
+    "ignoreValue": "15px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 71,
+    "snippet": "font-size: 17px is off the DESIGN.md type ramp",
+    "ignoreValue": "17px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 72,
+    "snippet": "font-size: 9px is off the DESIGN.md type ramp",
+    "ignoreValue": "9px"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 112,
+    "snippet": "Undocumented color rgba(12,39,70,.1) is outside DESIGN.md colors",
+    "ignoreValue": "rgba(12,39,70,.1)"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 153,
+    "snippet": "font-size: clamp(26px,2.6vw,38px) has fluid endpoints 26px and 38px off the DESIGN.md type ramp",
+    "ignoreValue": "26px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 154,
+    "snippet": "font-size: clamp(36px,3.4vw,52px) has fluid endpoints 36px and 52px off the DESIGN.md type ramp",
+    "ignoreValue": "36px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 161,
+    "snippet": "font-size: 52px is off the DESIGN.md type ramp",
+    "ignoreValue": "52px"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 189,
+    "snippet": "border-radius: 4px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "4px"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 192,
+    "snippet": "border-radius: 4px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "4px"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 247,
+    "snippet": "border-radius: 10px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "10px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 248,
+    "snippet": "font-size: 16px is off the DESIGN.md type ramp",
+    "ignoreValue": "16px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 266,
+    "snippet": "font-size: 22px is off the DESIGN.md type ramp",
+    "ignoreValue": "22px"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 285,
+    "snippet": "border-radius: 10px is outside the DESIGN.md rounded scale",
+    "ignoreValue": "10px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 312,
+    "snippet": "font-size: 28px is off the DESIGN.md type ramp",
+    "ignoreValue": "28px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 334,
+    "snippet": "font-size: 26px is off the DESIGN.md type ramp",
+    "ignoreValue": "26px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/home/frederico/Projetos/ASUS-AI-Control-Center/web/style.css",
+    "line": 353,
+    "snippet": "font-size: 28px is off the DESIGN.md type ramp",
+    "ignoreValue": "28px"
+  }
+]
