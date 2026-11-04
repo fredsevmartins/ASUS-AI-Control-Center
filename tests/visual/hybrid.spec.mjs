@@ -1,7 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
-import {existsSync} from 'node:fs';
 const url=pathToFileURL(path.resolve('prototypes/liquid-glass/hybrid/index.html')).href;
 test.beforeEach(async({page})=>{await page.route('**/*',r=>new URL(r.request().url()).protocol==='file:'?r.continue():r.abort())});
 for(const theme of ['light','dark'])for(const width of [1440,1024,390])test(`${theme} ${width} computed materials and layout`,async({page})=>{
@@ -12,7 +11,7 @@ for(const theme of ['light','dark'])for(const width of [1440,1024,390])test(`${t
  await page.locator('.nav[data-view="models"]').click();expect(await page.locator('.full .model-card').count()).toBe(3);await page.locator('.full .details-button').first().focus();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');const focus=await page.locator('.full .details-button').first().evaluate(el=>getComputedStyle(el).outlineStyle);expect(focus).not.toBe('none');await page.keyboard.press('Enter');await expect(page.locator('dialog')).toBeVisible();expect(await page.locator('dialog').evaluate(el=>el.getBoundingClientRect().width<=innerWidth)).toBe(true);await page.keyboard.press('Escape');await expect(page.locator('dialog')).not.toBeVisible();
 });
 test('reduced motion disables animation',async({page})=>{await page.goto(`${url}?theme=dark`);await page.emulateMedia({reducedMotion:'reduce'});const motion=await page.locator('.instrument').evaluate(el=>getComputedStyle(el).animationName);expect(motion).toBe('none');});
-for(const theme of ['light','dark'])test(`pending approved snapshot ${theme}`,async({page},info)=>{await page.goto(`${url}?theme=${theme}`);await page.screenshot({path:info.outputPath(`candidate-${theme}.png`),animations:'disabled'});expect(existsSync(info.snapshotPath(`hybrid-${theme}.png`))||process.env.APPROVE_HYBRID_SNAPSHOTS==='1','Hybrid reference requires explicit approval').toBe(true);expect(await page.screenshot({animations:'disabled'})).toMatchSnapshot(`hybrid-${theme}.png`);});
+for(const theme of ['light','dark']) test(`approved hybrid snapshot ${theme}`,async({page})=>{await page.goto(`${url}?theme=${theme}`);await page.evaluate(()=>document.fonts.ready);expect(await page.screenshot({animations:'disabled'})).toMatchSnapshot(`hybrid-${theme}.png`);});
 
 for(const width of [320,390,768]) test(`navigation and dialog keyboard ${width}`,async({page})=>{
  await page.setViewportSize({width,height:width===320?720:width===390?844:1024});await page.goto(`${url}?theme=dark`);

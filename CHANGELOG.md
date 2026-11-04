@@ -149,3 +149,10 @@
 
 - Applied the approved Titanium palette and selective optical, frosted, and navigation glass to existing production surfaces, retaining live application data and lifecycle behavior.
 - Scoped ambiguous Overview E2E navigation selectors, added production material and responsive checks, and captured isolated browser evidence. Snapshot approval and target-device profiling remain outstanding.
+
+### Prototype fidelity correction
+
+- Matched Overview's environmental light and primary optical material to the approved Hybrid prototype while preserving production telemetry and interactions.
+- Added cross-browser computed-material contracts and captured candidate comparison evidence; remaining validation is documented in the fidelity report.
+
+- Established reviewed Hybrid and production screenshot baselines for both browser engines and fixed the fixture clock for reproducible regression checks.

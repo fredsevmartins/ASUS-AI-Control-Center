@@ -9,18 +9,17 @@
   --accent-bg:rgba(64,123,189,.08); --green:#176f4e;
   --success-bg:rgba(35,150,107,.11); --warning:#875713; --warning-bg:rgba(229,162,59,.13); --danger:#b93232;
   --band-low:#23966b; --band-medium:#bd801e; --band-high:#dc4c4c;
-  --ambient:rgba(106,139,175,.16); --ambient-low:rgba(117,123,133,.12);
-  --ambient-light:rgba(255,255,255,.85);
+  --ambient:rgba(113,165,216,.18); --rim:rgba(255,255,255,.95); --optical-shadow:rgba(42,63,87,.15);
   --nav-glass:rgba(226,231,237,.88); --instrument-glass:rgba(255,255,255,.70);
   --material:rgba(255,255,255,.78); --dialog-glass:rgba(250,251,252,.985);
-  --edge:rgba(75,95,125,.2); --highlight:rgba(255,255,255,.94);
+  --edge:rgba(68,99,130,.22); --highlight:rgba(255,255,255,.94);
   --reflection:rgba(255,255,255,.34); --reflection-fade:rgba(255,255,255,0);
   --nav-shadow:8px 0 32px rgba(25,45,74,.035);
   --panel-shadow:0 14px 32px -16px rgba(26,49,82,.26),0 3px 8px rgba(26,49,82,.04),inset 0 1px 0 var(--highlight),inset 0 -1px 0 rgba(93,127,166,.08);
   --card-shadow:0 5px 14px -8px rgba(26,49,82,.22),inset 0 1px 0 var(--highlight);
   --modal-shadow:0 32px 100px rgba(8,20,40,.3),0 6px 20px rgba(8,20,40,.12),inset 0 1px 0 var(--highlight);
   --radius:18px; --control-radius:9px; --gauge-track:#cbd3de;
-  --nav-blur:20px; --instrument-blur:18px; --secondary-blur:8px; --modal-blur:24px;
+  --nav-blur:20px; --instrument-blur:20px; --secondary-blur:8px; --modal-blur:24px;
   --text-support:12px; --text-standard:13px; --text-dense:11px;
 }
 body.dark {
@@ -32,11 +31,10 @@ body.dark {
   --accent-bg:rgba(116,181,232,.13); --green:#70d1a6;
   --success-bg:rgba(35,150,107,.16); --warning:#efbd6d; --warning-bg:rgba(229,162,59,.12); --danger:#ff9999;
   --band-low:#54c797; --band-medium:#e5a23b; --band-high:#f07575;
-  --ambient:rgba(47,94,156,.28); --ambient-low:rgba(78,92,115,.17);
-  --ambient-light:rgba(113,147,184,.045);
+  --ambient:rgba(136,196,245,.17); --rim:rgba(207,232,255,.50); --optical-shadow:rgba(0,0,0,.38);
   --nav-glass:rgba(17,26,40,.88); --instrument-glass:rgba(25,39,58,.70);
   --material:rgba(25,39,58,.78); --dialog-glass:rgba(25,39,58,.985);
-  --edge:rgba(161,190,226,.19); --highlight:rgba(216,234,255,.21);
+  --edge:rgba(174,207,238,.22); --highlight:rgba(216,234,255,.21);
   --reflection:rgba(136,182,229,.09); --reflection-fade:rgba(91,135,188,.01);
   --nav-shadow:8px 0 32px rgba(0,0,0,.12);
   --panel-shadow:0 18px 36px -16px rgba(0,0,0,.64),0 3px 8px rgba(0,0,0,.15),inset 0 1px 0 var(--highlight),inset 0 -1px 0 rgba(0,0,0,.18);
@@ -46,7 +44,7 @@ body.dark {
 }
 * { box-sizing:border-box; scrollbar-width:thin; scrollbar-color:var(--sub) transparent; }
 html { scroll-padding-top:76px; }
-body { margin:0; font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,sans-serif; color:var(--ink); background:radial-gradient(ellipse 65% 48% at 60% 4%,var(--ambient),transparent 85%),radial-gradient(ellipse 45% 55% at 96% 70%,var(--ambient-low),transparent 90%),radial-gradient(ellipse 40% 32% at 20% 48%,var(--ambient-light),transparent 90%),var(--bg); accent-color:var(--indigo); }
+body { margin:0; font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,sans-serif; color:var(--ink); background:radial-gradient(ellipse at 74% 8%,var(--ambient),transparent 38%),radial-gradient(ellipse at 95% 80%,var(--ambient),transparent 38%),var(--bg); accent-color:var(--indigo); }
 button,input { font:inherit; color:inherit; }
 button { cursor:pointer; transition:background-color .16s ease-out,border-color .16s ease-out,box-shadow .16s ease-out; }
 button:disabled { opacity:.45; cursor:not-allowed; }
@@ -133,7 +131,8 @@ nav { display:grid; gap:5px; }
 .demo-banner button { margin-left:auto; }
 .demo-banner button[aria-pressed=true] { color:var(--danger); border-color:var(--danger); }
 /* Level 2: one instrument, with memory deliberately larger than compute. */
-.overview-instruments { display:grid; grid-template-columns:minmax(0,1.55fr) repeat(2,minmax(0,1fr)) minmax(0,.72fr); min-height:282px; border-radius:24px; border:1px solid var(--edge); box-shadow:var(--panel-shadow); background:linear-gradient(115deg,var(--reflection),var(--reflection-fade) 35%,var(--reflection-fade) 70%,var(--reflection)),var(--instrument-glass); margin-bottom:14px; overflow:hidden; }
+.overview-instruments { position:relative; display:grid; grid-template-columns:minmax(0,1.55fr) repeat(2,minmax(0,1fr)) minmax(0,.72fr); min-height:282px; border-radius:24px; border:1px solid var(--rim); box-shadow:0 20px 50px var(--optical-shadow),inset 0 1px var(--rim),inset 1px 0 var(--ambient),inset -1px -1px var(--ambient); background:linear-gradient(125deg,var(--ambient),transparent 46%),linear-gradient(180deg,rgba(255,255,255,.045),transparent 24%),var(--instrument-glass); margin-bottom:14px; overflow:hidden; }
+.overview-instruments::before { content:""; position:absolute; pointer-events:none; inset:0; border-radius:inherit; background:linear-gradient(115deg,rgba(255,255,255,.10),transparent 26%); mask:linear-gradient(#000,transparent 25%); }
 .overview-instruments > article { background:none; border:0; box-shadow:none; border-radius:0; padding:20px 16px; min-width:0; display:flex; flex-direction:column; justify-content:center; }
 .overview-instruments > article + article { border-left:1px solid var(--line); }
 .overview-instruments > .gauge-card { justify-content:flex-start; }
@@ -294,7 +293,7 @@ progress.disk-track::-moz-progress-bar { background:var(--blue); border-radius:4
 /* Blur is enhancement: transparent materials still carry reflections without it. */
 @supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
   .sidebar,.topbar { -webkit-backdrop-filter:blur(var(--nav-blur)); backdrop-filter:blur(var(--nav-blur)); }
-  .overview-instruments { -webkit-backdrop-filter:blur(var(--instrument-blur)); backdrop-filter:blur(var(--instrument-blur)); }
+  .overview-instruments { -webkit-backdrop-filter:blur(var(--instrument-blur)) saturate(115%); backdrop-filter:blur(var(--instrument-blur)) saturate(115%); }
   .panel,.model-card,.workspace-card,.capacity-strip { -webkit-backdrop-filter:blur(var(--secondary-blur)); backdrop-filter:blur(var(--secondary-blur)); }
   .modal-card { -webkit-backdrop-filter:blur(var(--modal-blur)); backdrop-filter:blur(var(--modal-blur)); }
   .modal-backdrop { -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }

@@ -1,6 +1,6 @@
 # Testing
 
-Current UI evidence: [Final refinement](docs/design/LIQUID_GLASS_REFINEMENT.md). Earlier baseline: [Midnight visual acceptance](docs/design/MIDNIGHT_VISUAL_ACCEPTANCE.md). Firefox file-only Demo rendering is validated; Chromium and authenticated HTTP browser acceptance remain BLOCKED. Earlier emerald/browser-blocked sections below are historical.
+Current UI evidence: [Final prototype fidelity report](docs/design/FINAL_PROTOTYPE_FIDELITY_REPORT.md). Earlier browser-blocked sections below are historical.
 
 ## Required automated checks
 
@@ -438,3 +438,13 @@ Full UI acceptance remains **PARTIAL**. Chromium, authenticated HTTP delivery, a
 ## Hybrid production integration (2026-11-04)
 
 See [integration report](docs/design/HYBRID_PRODUCTION_INTEGRATION.md) for the current results and limitations. Run `npx playwright test tests/visual/production.spec.mjs --grep-invert "snapshot gate"` for computed materials, grid and modal keyboard checks in both configured engines. Run `AI_MANAGER_E2E_BROWSER=chromium node tests/browser_visual.mjs` and repeat with `firefox` for isolated Demo captures; set `AI_MANAGER_VISUAL_ARTIFACTS` to choose the output directory. The HTTP E2E runner uses the guarded loopback fixture. The snapshot gate deliberately fails until reviewed references are installed; do not use `--update-snapshots` to silently accept candidates.
+
+## Final prototype fidelity pass (2026-11-04)
+
+119 Python tests, the three JavaScript suites, 48 non-snapshot Playwright checks across Chromium and Firefox, and both file-only Demo visual matrices passed. The new `tests/visual/fidelity.spec.mjs` compares computed prototype and production instrument materials in both themes at 1440, 1024 and 390. Existing snapshot gates remain deliberately unapproved; no snapshots were overwritten. Chromium and Firefox HTTP E2E each passed 11 fixture groups. Eight Hybrid/production and eight older A/B prototype snapshot gates failed because their approved references are absent. Contrast sampling found 654 visible text rectangles, minimum 5.06:1; its scope excludes canvas, offscreen, disabled and interaction-state text. See [the fidelity report](docs/design/FINAL_PROTOTYPE_FIDELITY_REPORT.md) for evidence and limitations.
+
+## Approved production baselines
+
+Run `npx playwright test` without updating snapshots. The approved Linux Chromium and Firefox references cover all six pages plus Details in both themes at 1440×960 and Overview, Model Manager and Details at 390×844; Hybrid has both theme references. The fixed Demo clock, local assets, reduced motion, UTC, English locale and 1× device scale keep captures reproducible in this environment. System font and browser rasterization differences can change pixels across environments; inspect differences before intentionally updating references. Historical A/B concepts remain computed-material smoke tests and are not approved designs. Live adapters remain blocked by the fixture.
+
+Approval verification: 119 Python tests, all three JavaScript suites, all 100 Playwright tests, both five-group Demo visual matrices and both 11-group HTTP fixture E2E runs passed. Syntax and whitespace checks passed. No live model operation was executed.

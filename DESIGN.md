@@ -239,3 +239,9 @@ Blur tokens distinguish navigation 20px, instrument 18px, secondary 8px and moda
 One root and one dark token authority remain. Removed redundant action and gauge-secondary declarations and the identical dark gauge rule; operational typography now uses support/standard/dense tokens. No layout declarations, HTML, telemetry or application JavaScript changed.
 
 Firefox rendered-background sampling found green badge text below AA and prompted #176F4E in Light Mode. Final sampling: 654 visible text rectangles, minimum 5.01:1, no failures at the conservative 4.5:1 threshold. This covers sampled visible DOM text, not all interaction states, canvas text, scroll positions or assistive technology. See the refinement report for evidence and remaining gates.
+
+## Final prototype fidelity correction
+
+The instrument now uses the approved Hybrid ambient colors and radial positions, .70 optical fill, 20px blur with 115% saturation, rim, layered shadow and masked highlight. Its 24px production radius and telemetry layout remain. Other production surfaces retain their existing treatment; see [the fidelity report](docs/design/FINAL_PROTOTYPE_FIDELITY_REPORT.md) for comparisons and outstanding validation. Earlier alpha and blur values in this document describe historical iterations, not the current instrument.
+
+The Hybrid Titanium production design and Light/Dark comparisons were explicitly approved. Approved Linux Chromium and Firefox screenshot references are maintained under `tests/visual/`; see [testing guidance](TESTING.md#approved-production-baselines).
