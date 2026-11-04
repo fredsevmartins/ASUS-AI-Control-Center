@@ -144,3 +144,8 @@
 - Update six-page navigation and guarded browser coverage. All 119 Python tests
   and three JavaScript suites pass; real rendered acceptance remains blocked.
 - Preserve backend, runtime adapters, NAS protections and desktop launcher.
+
+## Hybrid production UI integration — 2026-11-04
+
+- Applied the approved Titanium palette and selective optical, frosted, and navigation glass to existing production surfaces, retaining live application data and lifecycle behavior.
+- Scoped ambiguous Overview E2E navigation selectors, added production material and responsive checks, and captured isolated browser evidence. Snapshot approval and target-device profiling remain outstanding.

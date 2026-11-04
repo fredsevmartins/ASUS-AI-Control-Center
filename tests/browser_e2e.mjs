@@ -132,7 +132,7 @@ try {
     await page.locator('.nav-item[data-page="dashboard"]').click();
   }
   for (const destination of ['models','library']) {
-    await page.locator(`#dashboard .overview-records [data-link="${destination}"]`).click();
+    await page.locator(`#dashboard .overview-records .panel-head [data-link="${destination}"]`).click();
     assert(await page.locator('#'+destination).isVisible());
     await page.locator('.nav-item[data-page="dashboard"]').click();
   }

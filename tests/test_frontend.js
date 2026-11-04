@@ -263,7 +263,7 @@ console.log('Simplified Library evidence, escaping and empty-state regressions p
 // Source contracts are deliberately separate from computed browser acceptance.
 assert.equal((css.match(/:root\s*\{/g)||[]).length,1,'one light token authority');
 assert.equal((css.match(/body\.dark\s*\{/g)||[]).length,1,'one dark token authority');
-for(const token of ['--bg:#f5f6f8','--bg:#0b1120','--surface:#172235','--blue:#407bbd','--ink:#17212f','--ink:#f1f5f9']) assert(css.includes(token),token);
+for(const token of ['--bg:#edf0f3','--bg:#090e17','--surface:#19273a','--brand-accent:#2868b2','--brand-accent:#4589d4','--ink:#172333','--ink:#f2f6fa']) assert(css.includes(token),token);
 for(const token of ['--nav-glass:','--instrument-glass:','--material:','--dialog-glass:','--reflection:','--panel-shadow:','--modal-shadow:']) assert(css.includes(token),token);
 assert(css.includes('prefers-reduced-transparency:reduce') && css.includes('@supports not'), 'solid material fallbacks');
 assert(css.includes('.overview-records { display:grid; grid-template-columns:repeat(4,minmax(0,1fr))'));

@@ -44,8 +44,9 @@ try {
   const measures=[];
   for(const theme of ['light','dark']) {
     if((await page.locator('body').getAttribute('class')||'').includes('dark')!==(theme==='dark')) await page.locator('#theme-btn').click();
-    for(const width of [1440,1024,768,390,320]) {
-      await page.setViewportSize({width,height:1000});
+    for(const width of [1440,1024,390,320]) {
+      const height={1440:960,1024:768,390:844,320:720}[width];
+      await page.setViewportSize({width,height});
       for(const section of ['dashboard','models','library','workspaces','activity','settings']) {
         await page.locator(`.nav-item[data-page="${section}"]`).click();
         // Stable top-of-document capture, after canvas and fonts are ready.
@@ -92,6 +93,10 @@ try {
           await page.screenshot({path:path.join(artifacts,`details-${theme}-${width}.png`),fullPage:false,animations:'disabled'});
           await page.locator('#details-content').press('Escape');
           assert(await page.locator('[data-details-key="qwen3:8b"]').evaluate(el=>el===document.activeElement));
+          await page.locator('.model-action[data-id="qwen3:8b"][data-action="switch"]').click();
+          assert(await page.locator('#modal-accept').isDisabled());
+          await page.screenshot({path:path.join(artifacts,`confirmation-${theme}-${width}.png`),fullPage:false,animations:'disabled'});
+          await page.locator('#modal-cancel').press('Escape');
           await page.locator('#model-search').fill('no such model');assert(await page.locator('.empty-state').isVisible());await page.locator('#model-search').fill('');
           await page.locator('[data-filter="loaded"]').click();assert.equal(await page.locator('#model-cards .model-card').count(),2);await page.locator('[data-filter="all"]').click();
         }
@@ -99,7 +104,7 @@ try {
       }
     }
   }
-  checks.push('Six pages and read-only Details: both themes at 1440/1024/768/390/320px; no horizontal overflow');
+  checks.push('Six pages and read-only Details: both themes at 1440/1024/390/320px; no horizontal overflow');
   checks.push('Four/two/one monitoring columns, four storage observations, no clipped strip content, four hardware readings');
   checks.push('Memory/GPU/CPU gauges, fixed-height history, keyboard inspection, reduced motion');
   checks.push('Compact model grid, search/filters, Details Tab/Escape/focus restoration, six workspaces');

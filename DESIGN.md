@@ -1,11 +1,11 @@
 ---
 name: ASUS AI Control Center
-description: Midnight Blue and Graphite workstation instrumentation with restrained optical glass.
+description: Midnight Titanium and Frosted Titanium with selective optical glass.
 colors:
-  bg: '#f5f6f8'
+  bg: '#edf0f3'
   surface: '#fff'
-  raised: '#eceef1'
-  ink: '#17212f'
+  raised: '#f3f6f9'
+  ink: '#172333'
   sub: '#526174'
   line: 'rgba(75,95,125,.16)'
   blue: '#407bbd'
@@ -28,11 +28,11 @@ colors:
   band-low: '#23966b'
   band-medium: '#bd801e'
   band-high: '#dc4c4c'
-  dark-bg: '#0b1120'
-  dark-surface: '#172235'
-  dark-raised: '#222e40'
-  dark-ink: '#f1f5f9'
-  dark-sub: '#a8b8cc'
+  dark-bg: '#090e17'
+  dark-surface: '#19273a'
+  dark-raised: '#24364c'
+  dark-ink: '#f2f6fa'
+  dark-sub: '#b7c5d6'
   dark-line: 'rgba(173,196,227,.16)'
   dark-indigo: '#91c4ed'
   dark-action-hover: '#3c79b9'
@@ -109,6 +109,8 @@ components:
 ---
 
 # Design System: ASUS AI Control Center
+
+Current integration: [Hybrid production integration](docs/design/HYBRID_PRODUCTION_INTEGRATION.md). This supersedes historical palette and browser-status descriptions below. The authoritative current tokens and material values are in `web/style.css`.
 
 ## Overview
 
@@ -230,7 +232,7 @@ NAS assets remain non-runnable, with compatibility and â€œNo executable adapterâ
 
 ## Final color and material refinement
 
-Light Mode now uses #F5F6F8, neutral #ECEEF1 raised controls, #17212F ink and #526174 supporting text. Blue remains concentrated in interactions and history. A desaturated ambient blue at alpha .16, graphite light at .12 and white environmental light replace the broad pale-blue wash. White reflection alpha falls from .48 to .34 with a fully transparent middle, allowing the environment to carry through. Dark foundation #0B1120/#172235/#222E40 and semantic gauge bands remain unchanged; instrument alpha .56 and inset highlight alpha .21 modestly improve separation.
+Light Mode now uses #EDF0F3, neutral #F3F6F9 raised controls, #172333 ink and #526174 supporting text. Blue remains concentrated in interactions and history. A desaturated ambient blue at alpha .16, graphite light at .12 and white environmental light replace the broad pale-blue wash. White reflection alpha falls from .48 to .34 with a fully transparent middle, allowing the environment to carry through. Dark foundation #090E17/#19273a/#24364C and semantic gauge bands remain unchanged; instrument alpha .56 and inset highlight alpha .21 modestly improve separation.
 
 Blur tokens distinguish navigation 20px, instrument 18px, secondary 8px and modal 24px. Secondary material remains alpha .52/.58; dialogs retain .985 to prevent background text ghosting. Opaque fallbacks include the generic glass and capacity strip; reduced transparency removes environmental gradients and material blur. Reduced motion, focus and keyboard behavior remain intact.
 

@@ -101,3 +101,7 @@ storage and runtime telemetry. Emerald accents, deep blue and black surfaces
 support both themes. Compact model cards retain Details and confirmed operations;
 Library uses NAS asset rows with expandable evidence, and Workspaces shows six
 informational cards. Browser validation remains BLOCKED in this environment.
+
+## Hybrid production UI
+
+The frontend uses the Midnight Titanium / Frosted Titanium material system, with selective CSS optical glass. See [integration evidence and limitations](docs/design/HYBRID_PRODUCTION_INTEGRATION.md). Demo Mode is representative; it is not live telemetry.

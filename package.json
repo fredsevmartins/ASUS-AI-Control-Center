@@ -1,0 +1,28 @@
+{
+  "name": "asus-ai-control-center",
+  "version": "1.0.0",
+  "description": "Local-first workstation dashboard for the ASUS GX10 (Ubuntu ARM64). The Python standard-library backend and dependency-free HTML/CSS/JavaScript frontend provide Overview, Model Manager, Model Library, Performance, Workspaces, Activity and Settings. The interface is English-only and uses local assets.",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "visual:existing": "node tests/browser_visual.mjs",
+    "visual:prototype": "playwright test tests/visual/prototype.spec.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fredsevmartins/ASUS-AI-Control-Center.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/fredsevmartins/ASUS-AI-Control-Center/issues"
+  },
+  "homepage": "https://github.com/fredsevmartins/ASUS-AI-Control-Center#readme",
+  "devDependencies": {
+    "@dpawlikowski/liquid-glass": "0.3.0",
+    "@playwright/test": "1.64.1"
+  },
+  "private": true
+}

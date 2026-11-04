@@ -16,3 +16,5 @@ operations.jsonl
 lifecycle.lock
 playwright-report/
 test-results/
+
+node_modules/

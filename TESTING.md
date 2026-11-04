@@ -434,3 +434,7 @@ The first sample found Light Mode green badges at 4.28–4.49:1. After changing 
 Both HTTP browser commands were rechecked with the provisioned package: **BLOCKED**, exit 2, loopback socket access denied. Sandboxed Chromium file rendering: **BLOCKED**, exit 2, browser could not launch. Runtime version/readiness and NAS access were not exercised by this frontend-only task. No stable application, service, launcher, authentication or runtime configuration changed.
 
 Full UI acceptance remains **PARTIAL**. Chromium, authenticated HTTP delivery, actual reduced-transparency OS preference, forced colors, assistive technology, 200% zoom, all scroll/interaction-state contrast and performance require workstation validation. No release READY claim follows from the passing Firefox Demo fixture.
+
+## Hybrid production integration (2026-11-04)
+
+See [integration report](docs/design/HYBRID_PRODUCTION_INTEGRATION.md) for the current results and limitations. Run `npx playwright test tests/visual/production.spec.mjs --grep-invert "snapshot gate"` for computed materials, grid and modal keyboard checks in both configured engines. Run `AI_MANAGER_E2E_BROWSER=chromium node tests/browser_visual.mjs` and repeat with `firefox` for isolated Demo captures; set `AI_MANAGER_VISUAL_ARTIFACTS` to choose the output directory. The HTTP E2E runner uses the guarded loopback fixture. The snapshot gate deliberately fails until reviewed references are installed; do not use `--update-snapshots` to silently accept candidates.
