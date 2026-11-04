@@ -19,7 +19,7 @@ def exec_quote(value):
 
 def entry():
     command = '/usr/bin/python3 ' + exec_quote(BASE / 'desktop_launcher.py')
-    icon = str(BASE / 'desktop/asus-ai-control-center.svg').replace('\\', '\\\\')
+    icon = str(BASE / 'desktop/mascot.png').replace('\\', '\\\\')
     return f'''[Desktop Entry]
 Version=1.0
 Type=Application
