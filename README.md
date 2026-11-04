@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/ai-control-center-banner.svg" alt="AI Control Center with Brazilian jewel beetle mascot" width="100%">
+  <img src="docs/assets/banner.png" alt="AI Control Center with Brazilian jewel beetle mascot" width="100%">
 </p>
 
 <h1 align="center">AI Control Center</h1>
