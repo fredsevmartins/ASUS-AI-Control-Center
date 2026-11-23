@@ -6,9 +6,7 @@
 <p align="center"><strong>Your local AI, under control.</strong></p>
 <p align="center">A local-first desktop dashboard for managing installed AI models, monitoring workstation resources and browsing a read-only model library.</p>
 
-> **Project status:** Active development. The application interface and some filenames still use the historical name **ASUS AI Control Center**. This project is independently developed and is **not affiliated with or endorsed by ASUS**.
->
-> **Security / release status:** The repository remains private. A public-release security review is not yet complete. The source does not currently include a verified top-level LICENSE file; do not assume a particular redistribution license from promotional artwork.
+> **Project status:** Active development. The application interface and some filenames still use the historical name **ASUS AI Control Center**. This project is independently developed and is **not affiliated with or endorsed 
 
 ## Why this project exists
 
